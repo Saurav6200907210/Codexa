@@ -106,14 +106,10 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   return (
-    <div className="relative min-h-screen bg-[#09090b] overflow-hidden pb-20">
+    <div className="relative min-h-screen bg-white overflow-hidden pb-20">
       {/* 3D Cyber grid and noise background overlays */}
       <div className="cyber-grid" />
       <div className="noise-bg" />
-
-      {/* Aurora glow backdrops */}
-      <div className="aurora-glow top-[-20%] left-[-10%] bg-cyan-500/10" />
-      <div className="aurora-glow bottom-[-20%] right-[-10%] bg-emerald-500/10" />
 
       {/* Mouse Follow spotlight */}
       <div 
@@ -129,57 +125,57 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* Hero Section */}
       <section id="hero" className="max-w-7xl mx-auto px-6 pt-24 pb-20 md:pt-32 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
         <div className="lg:col-span-7 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/35 bg-cyan-500/10 text-cyan-300 text-xs font-semibold animate-pulse">
-            <Cpu className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 bg-zinc-50 text-zinc-800 text-xs font-semibold">
+            <Cpu className="w-3.5 h-3.5 text-zinc-900" />
             <span>AI-Powered GitHub Explainer</span>
           </div>
-          <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-white">
+          <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-zinc-950">
             Understand Any <br />
-            <span className="text-gradient">GitHub Repository</span> <br />
+            <span>GitHub Repository</span> <br />
             in Minutes.
           </h1>
-          <p className="text-sm md:text-base text-zinc-400 max-w-lg leading-relaxed">
+          <p className="text-sm md:text-base text-zinc-500 max-w-lg leading-relaxed">
             Paste any public GitHub repository URL, and watch RepoSamjho explain code flows, 
             folder layouts, database structures, and setup instructions in simple, beginner-friendly language.
           </p>
 
           <div className="max-w-xl space-y-3">
-            <div className="flex flex-col sm:flex-row gap-3 p-1.5 bg-zinc-900 border border-white/5 rounded-2xl shadow-xl">
+            <div className="flex flex-col sm:flex-row gap-3 p-1.5 bg-zinc-50 border border-zinc-200 rounded-2xl shadow-sm">
               <div className="flex-1 flex items-center gap-2 px-3">
-                <Search className="w-4 h-4 text-zinc-500" />
+                <Search className="w-4 h-4 text-zinc-400" />
                 <input
                   type="text"
                   placeholder="https://github.com/owner/repository"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAnalyze()}
-                  className="bg-transparent border-0 outline-none text-white text-xs w-full placeholder:text-zinc-500"
+                  className="bg-transparent border-0 outline-none text-zinc-800 text-xs w-full placeholder:text-zinc-400"
                 />
               </div>
               <button
                 onClick={() => handleAnalyze()}
                 disabled={loading}
-                className="glow-btn bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-zinc-950 font-bold px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-transform text-xs border-0 shrink-0"
+                className="glow-btn bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-95 transition-transform text-xs border-0 shrink-0"
               >
                 <span>Explain Repository</span>
-                <ArrowRight className="w-4.5 h-4.5" />
+                <ArrowRight className="w-4.5 h-4.5 text-white" />
               </button>
             </div>
             
             {error && (
-              <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg">
+              <div className="text-xs text-red-500 bg-red-50 border border-red-100 px-3 py-2 rounded-lg">
                 ⚠️ {error}
               </div>
             )}
 
             {recent.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-zinc-500 pt-1">
+              <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-zinc-400 pt-1">
                 <span>Recently Analyzed:</span>
                 {recent.map((r) => (
                   <button
                     key={r.id}
                     onClick={() => handleAnalyze(`https://github.com/${r.fullName}`)}
-                    className="bg-zinc-900 border border-white/5 hover:border-cyan-500/30 hover:text-white px-2.5 py-0.5 rounded-md transition-colors cursor-pointer text-[10px]"
+                    className="bg-zinc-50 border border-zinc-200 hover:border-zinc-300 hover:text-zinc-800 px-2.5 py-0.5 rounded-md transition-colors cursor-pointer text-[10px] text-zinc-600 font-bold"
                   >
                     {r.fullName}
                   </button>
@@ -199,7 +195,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* How it Works Section */}
       <section id="how-it-works" className="max-w-7xl mx-auto px-6 py-20 relative z-10">
         <div className="text-center max-w-xl mx-auto mb-12">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white">How RepoSamjho Works</h2>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-950">How RepoSamjho Works</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -209,10 +205,10 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
             { step: "03", title: "Diagram Maps", desc: "Architecture diagrams aur dependency flowchart automatically generate hote hain." },
             { step: "04", title: "Learn & Export", desc: "Pure summary to read karein ya use PDF/Markdown file mein export karein." },
           ].map((item, idx) => (
-            <div key={idx} className="glass-card rounded-2xl p-6 relative border border-white/5 space-y-4 glow-border">
-              <span className="text-3xl font-black text-cyan-500/10 block absolute top-4 right-6">{item.step}</span>
-              <h3 className="text-base font-bold text-white pt-2">{item.title}</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed">{item.desc}</p>
+            <div key={idx} className="glass-card rounded-2xl p-6 relative border border-zinc-250 space-y-4">
+              <span className="text-3xl font-black text-zinc-900/5 block absolute top-4 right-6">{item.step}</span>
+              <h3 className="text-base font-bold text-zinc-900 pt-2">{item.title}</h3>
+              <p className="text-zinc-500 text-xs leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -221,45 +217,45 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* Bento Grid */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[180px]">
-          <div className="md:col-span-7 md:row-span-2 glass-card rounded-2xl p-6 flex flex-col justify-between border border-white/5 glow-border">
+          <div className="md:col-span-7 md:row-span-2 glass-card rounded-2xl p-6 flex flex-col justify-between border border-zinc-250">
             <div className="space-y-2">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                <Layers className="w-4.5 h-4.5 text-cyan-400" />
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center border border-zinc-200">
+                <Layers className="w-4.5 h-4.5 text-zinc-700" />
               </div>
-              <h3 className="text-lg font-bold text-white pt-1">Full Folder Breakdown</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed max-w-sm">
+              <h3 className="text-lg font-bold text-zinc-900 pt-1">Full Folder Breakdown</h3>
+              <p className="text-zinc-500 text-xs leading-relaxed max-w-sm">
                 Codebase structures analyzed folder-by-folder in plain Hinglish definitions.
               </p>
             </div>
           </div>
 
-          <div className="md:col-span-5 md:row-span-1 glass-card rounded-2xl p-6 flex items-start gap-4 border border-white/5 glow-border">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shrink-0">
-              <Map className="w-4.5 h-4.5 text-emerald-400" />
+          <div className="md:col-span-5 md:row-span-1 glass-card rounded-2xl p-6 flex items-start gap-4 border border-zinc-250">
+            <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center border border-zinc-200 shrink-0">
+              <Map className="w-4.5 h-4.5 text-zinc-700" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-bold text-white">Architecture Maps</h3>
-              <p className="text-zinc-400 text-xs">Visual dependencies and graphs mapping code flows.</p>
+              <h3 className="text-base font-bold text-zinc-900">Architecture Maps</h3>
+              <p className="text-zinc-500 text-xs">Visual dependencies and graphs mapping code flows.</p>
             </div>
           </div>
 
-          <div className="md:col-span-5 md:row-span-2 glass-card rounded-2xl p-6 flex flex-col justify-between border border-white/5 glow-border">
+          <div className="md:col-span-5 md:row-span-2 glass-card rounded-2xl p-6 flex flex-col justify-between border border-zinc-250">
             <div className="space-y-2">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                <Database className="w-4.5 h-4.5 text-cyan-400" />
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center border border-zinc-200">
+                <Database className="w-4.5 h-4.5 text-zinc-700" />
               </div>
-              <h3 className="text-lg font-bold text-white pt-1">Database Relations</h3>
-              <p className="text-zinc-400 text-xs">ORM details (Drizzle, Prisma) maps schema fields.</p>
+              <h3 className="text-lg font-bold text-zinc-900 pt-1">Database Relations</h3>
+              <p className="text-zinc-500 text-xs">ORM details (Drizzle, Prisma) maps schema fields.</p>
             </div>
           </div>
 
-          <div className="md:col-span-7 md:row-span-1 glass-card rounded-2xl p-6 flex items-center gap-4 border border-white/5 glow-border">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shrink-0">
-              <Key className="w-4.5 h-4.5 text-emerald-400" />
+          <div className="md:col-span-7 md:row-span-1 glass-card rounded-2xl p-6 flex items-center gap-4 border border-zinc-250">
+            <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center border border-zinc-200 shrink-0">
+              <Key className="w-4.5 h-4.5 text-zinc-700" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-base font-bold text-white">Setup Instructions</h3>
-              <p className="text-zinc-400 text-xs">Explains environment configurations and npm scripts.</p>
+              <h3 className="text-base font-bold text-zinc-900">Setup Instructions</h3>
+              <p className="text-zinc-500 text-xs">Explains environment configurations and npm scripts.</p>
             </div>
           </div>
         </div>
@@ -268,7 +264,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* Demo Section */}
       <section id="demo" className="max-w-7xl mx-auto px-6 py-20 relative z-10">
         <div className="text-center max-w-xl mx-auto mb-12">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white">Interactive Repository Explorer</h2>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-950">Interactive Repository Explorer</h2>
         </div>
         <div className="max-w-4xl mx-auto">
           <InteractiveExplorer />
@@ -278,19 +274,19 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* FAQ */}
       <section id="faq" className="max-w-4xl mx-auto px-6 py-20 relative z-10">
         <div className="text-center max-w-xl mx-auto mb-12">
-          <h2 className="text-2xl font-extrabold text-white">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-extrabold text-zinc-950">Frequently Asked Questions</h2>
         </div>
         <div className="space-y-4">
           {FAQ_ITEMS.map((faq, idx) => (
-            <div key={idx} className="glass-card rounded-2xl border border-white/5 overflow-hidden">
+            <div key={idx} className="glass-card rounded-2xl border border-zinc-200 overflow-hidden animate-fade-in">
               <button
                 onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
-                className="w-full text-left p-5 font-bold text-xs text-white flex justify-between items-center cursor-pointer bg-transparent border-0"
+                className="w-full text-left p-5 font-bold text-xs text-zinc-900 flex justify-between items-center cursor-pointer bg-transparent border-0"
               >
                 <span>{faq.q}</span>
               </button>
               {expandedFaq === idx && (
-                <div className="p-5 border-t border-white/5 text-xs text-zinc-400 bg-black/20">
+                <div className="p-5 border-t border-zinc-200 text-xs text-zinc-500 bg-zinc-50">
                   {faq.a}
                 </div>
               )}
@@ -300,16 +296,16 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       </section>
 
       {loading && (
-        <div className="fixed inset-0 bg-[#09090b]/95 backdrop-blur-2xl flex flex-col items-center justify-center z-50 p-6">
+        <div className="fixed inset-0 bg-white/95 backdrop-blur-2xl flex flex-col items-center justify-center z-50 p-6">
           <div className="max-w-md w-full text-center space-y-6">
             <div className="relative w-20 h-20 mx-auto mb-4">
-              <div className="absolute inset-0 rounded-full border-4 border-dashed border-cyan-500 animate-spin" />
-              <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-cyan-500 to-emerald-500 animate-pulse flex items-center justify-center">
-                <Cpu className="w-7 h-7 text-zinc-950 font-bold" />
+              <div className="absolute inset-0 rounded-full border-4 border-dashed border-zinc-900 animate-spin" />
+              <div className="absolute inset-4 rounded-full bg-zinc-950 animate-pulse flex items-center justify-center">
+                <Cpu className="w-7 h-7 text-white" />
               </div>
             </div>
-            <h3 className="text-lg font-bold text-white">Analyzing Repository</h3>
-            <div className="p-4 rounded-2xl bg-cyan-500/5 border border-cyan-500/10 text-cyan-300 font-mono text-xs">
+            <h3 className="text-lg font-bold text-zinc-950">Analyzing Repository</h3>
+            <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-zinc-700 font-mono text-xs">
               🚀 {LOADING_STEPS[loadingStep]}
             </div>
           </div>

@@ -28,21 +28,19 @@ export default function TechMarquee() {
       <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-950 to-transparent z-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 mb-6">
-        <h3 className="text-center text-xs font-bold uppercase tracking-widest text-indigo-400/80">
+        <h3 className="text-center text-[10px] font-bold uppercase tracking-widest text-zinc-500">
           Trusted Technologies & Frameworks Supported
         </h3>
       </div>
 
       <div className="flex overflow-hidden w-full relative">
-        <div className="marquee-content gap-4 flex items-center">
+        <div className="marquee-content gap-3 flex items-center">
           {techList.map((tech, idx) => (
             <div
               key={idx}
-              className="px-6 py-3 rounded-2xl glass-card flex items-center justify-center font-semibold text-sm hover:border-pink-500/30 transition-colors duration-300"
+              className="px-5 py-2 rounded-xl bg-white text-zinc-950 flex items-center justify-center font-bold text-xs shadow-md border border-white"
             >
-              <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                {tech}
-              </span>
+              <span>{tech}</span>
             </div>
           ))}
         </div>

@@ -5,7 +5,7 @@ const REDESIGN_STEPS = [
   {
     phase: "tree",
     title: "1. Repository Tree Loaded",
-    desc: "Vercel/NextJS workspace directory node successfully loaded.",
+    desc: "Workspace directory node successfully loaded.",
     sidebarState: "root",
   },
   {
@@ -87,16 +87,16 @@ export default function FakeIDE() {
   const isExpanded = currentStep.sidebarState === "expanded" || currentStep.sidebarState === "open_file";
 
   return (
-    <div className="w-full rounded-2xl border border-white/5 bg-zinc-950/80 shadow-2xl backdrop-blur-xl overflow-hidden text-xs font-mono select-none glow-border">
+    <div className="w-full rounded-2xl border border-zinc-200 bg-white shadow-xl overflow-hidden text-xs font-mono select-none">
       {/* Title bar */}
-      <div className="px-4 py-3 bg-zinc-900/60 border-b border-white/5 flex items-center justify-between">
+      <div className="px-4 py-3 bg-zinc-50 border-b border-zinc-200 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-800 block"></span>
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-800 block"></span>
-          <span className="w-2.5 h-2.5 rounded-full bg-zinc-800 block"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-zinc-300 block"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-zinc-300 block"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-zinc-300 block"></span>
         </div>
-        <div className="text-[10px] text-zinc-400 flex items-center gap-1.5 bg-black/40 px-3 py-1 rounded border border-white/5">
-          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+        <div className="text-[10px] text-zinc-600 flex items-center gap-1.5 bg-zinc-100 px-3 py-1 rounded border border-zinc-200">
+          <Terminal className="w-3.5 h-3.5 text-zinc-900" />
           <span>RepoSamjho AI IDE</span>
         </div>
         <div className="w-12"></div>
@@ -104,24 +104,24 @@ export default function FakeIDE() {
 
       <div className="grid grid-cols-12 min-h-[360px]">
         {/* Sidebar */}
-        <div className="col-span-4 border-r border-white/5 bg-black/20 p-3 space-y-2">
-          <div className="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Workspace</div>
-          <div className="space-y-1 text-zinc-400">
-            <div className="flex items-center gap-1.5 text-white">
+        <div className="col-span-4 border-r border-zinc-200 bg-zinc-50/50 p-3 space-y-2">
+          <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider">Workspace</div>
+          <div className="space-y-1 text-zinc-500">
+            <div className="flex items-center gap-1.5 text-zinc-800">
               {isExpanded ? (
-                <FolderOpen className="w-3.5 h-3.5 text-cyan-400" />
+                <FolderOpen className="w-3.5 h-3.5 text-zinc-600" />
               ) : (
-                <Folder className="w-3.5 h-3.5 text-cyan-500" />
+                <Folder className="w-3.5 h-3.5 text-zinc-400" />
               )}
               <span>src</span>
             </div>
             {isExpanded && (
               <div className="pl-3.5 space-y-1">
-                <div className="flex items-center gap-1.5 text-zinc-300">
-                  <FolderOpen className="w-3.5 h-3.5 text-emerald-400" />
+                <div className="flex items-center gap-1.5 text-zinc-600">
+                  <FolderOpen className="w-3.5 h-3.5 text-zinc-400" />
                   <span>db</span>
                 </div>
-                <div className="pl-3.5 flex items-center gap-1 text-cyan-400 font-semibold">
+                <div className="pl-3.5 flex items-center gap-1 text-zinc-900 font-semibold">
                   <FileCode className="w-3.5 h-3.5" />
                   <span>schema.ts</span>
                 </div>
@@ -131,24 +131,24 @@ export default function FakeIDE() {
         </div>
 
         {/* Content area */}
-        <div className="col-span-8 p-4 flex flex-col justify-between bg-black/40">
+        <div className="col-span-8 p-4 flex flex-col justify-between bg-white">
           <div className="space-y-3">
-            <div className="flex items-center gap-1.5 border-b border-white/5 pb-2">
-              <FileCode className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-[10px] text-zinc-400">src/db/schema.ts</span>
+            <div className="flex items-center gap-1.5 border-b border-zinc-150 pb-2">
+              <FileCode className="w-3.5 h-3.5 text-zinc-600" />
+              <span className="text-[10px] text-zinc-500">src/db/schema.ts</span>
             </div>
 
             {/* Step view */}
             {currentStep.phase === "tree" && (
-              <div className="py-8 text-center text-zinc-500 space-y-2">
-                <Terminal className="w-8 h-8 text-cyan-500/50 mx-auto animate-pulse" />
+              <div className="py-8 text-center text-zinc-400 space-y-2">
+                <Terminal className="w-8 h-8 text-zinc-300 mx-auto animate-pulse" />
                 <p className="text-[10px]">Ready. Mapping structures...</p>
               </div>
             )}
 
             {currentStep.phase === "expand" && (
-              <div className="space-y-1 text-zinc-500">
-                <p className="text-[10px] text-cyan-400 animate-pulse">Expanding folder modules...</p>
+              <div className="space-y-1 text-zinc-400">
+                <p className="text-[10px] text-zinc-900 animate-pulse">Expanding folder modules...</p>
                 <p>➔ src/components/</p>
                 <p>➔ src/db/</p>
                 <p>➔ src/lib/</p>
@@ -158,27 +158,27 @@ export default function FakeIDE() {
             {currentStep.phase === "open" && typedCode.length > 0 && (
               <div className="space-y-1 font-mono text-[11px]">
                 {typedCode.map((line, i) => (
-                  <div key={i} className="text-zinc-300">{line}</div>
+                  <div key={i} className="text-zinc-800">{line}</div>
                 ))}
               </div>
             )}
 
             {currentStep.phase === "scan" && (
               <div className="space-y-2 py-4">
-                <div className="flex items-center gap-1.5 text-emerald-400">
-                  <Shield className="w-4 h-4 animate-spin" />
+                <div className="flex items-center gap-1.5 text-emerald-600">
+                  <Shield className="w-4 h-4" />
                   <span className="font-bold">AI Scanning files...</span>
                 </div>
-                <div className="p-2.5 rounded bg-emerald-500/5 border border-emerald-500/10 text-emerald-300 text-[10px]">
+                <div className="p-2.5 rounded bg-zinc-50 border border-zinc-100 text-zinc-600 text-[10px]">
                   💡 Target file exported analyses object. Validated Drizzle pg-core connections.
                 </div>
               </div>
             )}
 
             {currentStep.phase === "architecture" && (
-              <div className="space-y-2 p-2 bg-black/40 rounded border border-white/5 text-[10px]">
-                <p className="text-cyan-400 font-bold">➔ Generated Architecture Flow</p>
-                <pre className="text-zinc-400 leading-relaxed font-semibold">
+              <div className="space-y-2 p-2 bg-zinc-50 rounded border border-zinc-100 text-[10px]">
+                <p className="text-zinc-900 font-bold">➔ Generated Architecture Flow</p>
+                <pre className="text-zinc-600 leading-relaxed font-semibold">
                   {`[Client View] ➔ [API Endpoint]\n       └➔ [Drizzle ORM] ➔ [PostgreSQL]`}
                 </pre>
               </div>
@@ -186,25 +186,25 @@ export default function FakeIDE() {
 
             {currentStep.phase === "dependency" && (
               <div className="space-y-2 text-[10px]">
-                <div className="flex items-center gap-1 text-cyan-400 font-bold">
+                <div className="flex items-center gap-1 text-zinc-900 font-bold">
                   <GitFork className="w-3.5 h-3.5" />
                   <span>Dependency Linking:</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  <span className="bg-zinc-800 px-2 py-0.5 rounded text-white">drizzle-orm</span>
-                  <span className="bg-zinc-800 px-2 py-0.5 rounded text-white">pg</span>
-                  <span className="bg-zinc-800 px-2 py-0.5 rounded text-white">express</span>
+                  <span className="bg-zinc-100 px-2 py-0.5 rounded text-zinc-700">drizzle-orm</span>
+                  <span className="bg-zinc-100 px-2 py-0.5 rounded text-zinc-700">pg</span>
+                  <span className="bg-zinc-100 px-2 py-0.5 rounded text-zinc-700">express</span>
                 </div>
               </div>
             )}
 
             {currentStep.phase === "docs" && (
               <div className="space-y-2 py-2">
-                <div className="flex items-center gap-1 text-cyan-400 font-bold">
+                <div className="flex items-center gap-1 text-zinc-900 font-bold">
                   <FileText className="w-4 h-4" />
                   <span>Hinglish Documentation Done:</span>
                 </div>
-                <p className="text-zinc-400 leading-relaxed text-[10px]">
+                <p className="text-zinc-500 leading-relaxed text-[10px]">
                   💡 analyses table mein repositories ki complete detailed history aur folder details save ho gayi hain.
                 </p>
               </div>
@@ -212,15 +212,15 @@ export default function FakeIDE() {
           </div>
 
           {/* AI Progress Box */}
-          <div className="mt-4 p-3 rounded-xl bg-zinc-900 border border-white/5">
+          <div className="mt-4 p-3 rounded-xl bg-zinc-950 text-white border border-zinc-800">
             <div className="flex items-center gap-2 mb-1">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
               </span>
               <span className="font-bold text-white text-[10px] uppercase tracking-wider">{currentStep.title}</span>
             </div>
-            <p className="text-[10px] text-zinc-400">{currentStep.desc}</p>
+            <p className="text-[10px] text-zinc-300">{currentStep.desc}</p>
           </div>
         </div>
       </div>

@@ -61,12 +61,12 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-6 text-center">
-        <div className="space-y-4 max-w-sm glass-card p-6 rounded-2xl border border-white/5">
-          <p className="text-gray-400 text-sm">No analysis result loaded. Please start from the landing page.</p>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="space-y-4 max-w-sm glass-card p-6 rounded-2xl border border-zinc-200">
+          <p className="text-zinc-500 text-sm">No analysis result loaded. Please start from the landing page.</p>
           <button
             onClick={() => onNavigate("landing")}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded-xl text-xs cursor-pointer"
+            className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2 px-4 rounded-xl text-xs cursor-pointer border-0"
           >
             Go Back
           </button>
@@ -76,15 +76,16 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-200 bg-grid-pattern pb-20 relative">
+    <div className="min-h-screen bg-white text-zinc-800 pb-20 relative">
+      <div className="cyber-grid" />
       <Navbar onNavigate={onNavigate} />
 
       <div className="max-w-7xl mx-auto px-6 pt-28 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         <aside className="lg:col-span-3 hidden lg:block space-y-6">
-          <div className="sticky top-28 glass-card p-5 rounded-2xl border border-white/5 space-y-4 max-h-[calc(100vh-140px)] overflow-y-auto">
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-              <BookOpen className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-300">Navigation</span>
+          <div className="sticky top-28 glass-card p-5 rounded-2xl border border-zinc-200 bg-white space-y-4 max-h-[calc(100vh-140px)] overflow-y-auto">
+            <div className="flex items-center gap-2 border-b border-zinc-100 pb-2">
+              <BookOpen className="w-4 h-4 text-zinc-900" />
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-700">Navigation</span>
             </div>
 
             <nav className="space-y-1 text-xs">
@@ -106,8 +107,8 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
                   }}
                   className={`w-full text-left py-2 px-3 rounded-lg transition-colors cursor-pointer flex items-center gap-2 bg-transparent border-0 ${
                     activeSection === item.id
-                      ? "bg-indigo-500/10 text-indigo-300 font-semibold border-l-2 border-indigo-500"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                      ? "bg-zinc-950 text-white font-bold"
+                      : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
                   }`}
                 >
                   <span>{item.label}</span>
@@ -115,19 +116,19 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
               ))}
             </nav>
 
-            <div className="border-t border-white/5 pt-4 space-y-2">
+            <div className="border-t border-zinc-100 pt-4 space-y-2">
               <button
                 onClick={handleExportMarkdown}
-                className="w-full bg-white/5 hover:bg-white/10 text-white font-semibold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-white/5"
+                className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-zinc-200"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Export Markdown</span>
               </button>
               <button
                 onClick={handleExportPDF}
-                className="w-full bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-semibold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="w-full bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer border-0"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-3.5 h-3.5 text-white" />
                 <span>Export PDF</span>
               </button>
             </div>
@@ -135,15 +136,15 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
         </aside>
 
         <main className="lg:col-span-9 space-y-12">
-          <div className="flex items-center justify-between border-b border-white/5 pb-4">
+          <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
             <button
               onClick={() => onNavigate("landing")}
-              className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-0"
+              className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer bg-transparent border-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to home</span>
             </button>
-            <div className="flex items-center gap-2 text-xs text-gray-400 font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+            <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200">
               <span>{data.repo.fullName}</span>
             </div>
           </div>
