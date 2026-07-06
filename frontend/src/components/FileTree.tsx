@@ -20,16 +20,17 @@ function fileEmoji(name: string): string {
   return "📄";
 }
 
-function Node({ node, depth }: { node: TreeNode; depth: number }) {
+function Node({ node, depth, onFileClick }: { node: TreeNode; depth: number; onFileClick?: (path: string) => void }) {
   const [open, setOpen] = useState(depth < 1);
   if (node.type === "file") {
     return (
       <div
-        className="flex items-center gap-2 rounded px-2 py-1 text-sm text-zinc-650 hover:bg-zinc-50"
+        onClick={() => onFileClick?.(node.path)}
+        className="flex items-center gap-2 rounded px-2 py-1 text-sm text-zinc-650 hover:bg-zinc-100 hover:text-cyan-600 cursor-pointer transition-colors"
         style={{ paddingLeft: `${depth * 14 + 8}px` }}
       >
         <span>{fileEmoji(node.name)}</span>
-        <span className="truncate font-mono text-xs text-zinc-700">{node.name}</span>
+        <span className="truncate font-mono text-xs font-semibold">{node.name}</span>
       </div>
     );
   }
@@ -52,7 +53,7 @@ function Node({ node, depth }: { node: TreeNode; depth: number }) {
       {open && node.children && (
         <div>
           {node.children.map((child) => (
-            <Node key={child.path} node={child} depth={depth + 1} />
+            <Node key={child.path} node={child} depth={depth + 1} onFileClick={onFileClick} />
           ))}
         </div>
       )}
@@ -60,11 +61,11 @@ function Node({ node, depth }: { node: TreeNode; depth: number }) {
   );
 }
 
-export function FileTree({ tree }: { tree: TreeNode }) {
+export function FileTree({ tree, onFileClick }: { tree: TreeNode; onFileClick?: (path: string) => void }) {
   return (
     <div className="max-h-[520px] overflow-auto rounded-xl border border-zinc-200 bg-white p-4">
       {tree.children?.map((child) => (
-        <Node key={child.path} node={child} depth={0} />
+        <Node key={child.path} node={child} depth={0} onFileClick={onFileClick} />
       ))}
     </div>
   );

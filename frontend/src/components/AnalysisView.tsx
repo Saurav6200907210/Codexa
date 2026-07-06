@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { AnalysisResult } from "../types";
 import { Reveal } from "./Reveal";
 import { Rich } from "./Rich";
@@ -21,6 +22,93 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
   const { repo, stats, projectType, techStack } = data;
   const maxLang = Math.max(1, ...stats.languages.map((l) => l.count));
   const isHinglish = lang === "hi";
+
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+
+  const getFileExplanation = (path: string): { summary: string; points: string[]; role: string } => {
+    // 1. Check if we already have it in data.files
+    const existing = data.files.find(f => f.path === path);
+    if (existing) {
+      return {
+        summary: existing.summary,
+        points: existing.points,
+        role: existing.role
+      };
+    }
+
+    // 2. Otherwise generate a dynamic explanation
+    const filename = path.split("/").pop() || path;
+    const nameLower = filename.toLowerCase();
+    const pathLower = path.toLowerCase();
+    
+    let summary = `Ye file \`${filename}\` code flow ke liye ek key part hai.`;
+    const points: string[] = [];
+    let role = "Source File";
+
+    if (nameLower.endsWith(".json")) {
+      role = "Configuration File";
+      summary = `Ye project ki configuration settings file \`${filename}\` hai.`;
+      points.push(
+        "Isme JSON formatted structured key-value configurations store kiye gaye hain.",
+        "Dependency libraries, build variables aur typescript environment settings control karti hai.",
+        "Is file ke badalne se runtime behaviors aur library version constraints change ho sakte hain."
+      );
+    } else if (nameLower.endsWith(".config.js") || nameLower.endsWith(".config.ts") || nameLower.endsWith(".config.mjs")) {
+      role = "Module Configuration";
+      summary = `Ye tool configure karne ki configuration file \`${filename}\` hai.`;
+      points.push(
+        "Build engines (Vite/Next), CSS styling rules (Tailwind/PostCSS) ya database migrations settings init karti hai.",
+        "Server-side optimization parameters, entry routes proxies aur base paths control karti hai."
+      );
+    } else if (pathLower.includes("db/") || pathLower.includes("database/") || nameLower.includes("schema")) {
+      role = "Database Schema / Connection";
+      summary = `Ye database integrity aur structure maintain karne ki logic file \`${filename}\` hai.`;
+      points.push(
+        "Database tables schemas, entity columns datatypes aur index constraints mappings store karti hai.",
+        "Drizzle/Prisma client hooks provide karti hai jisse frontend-backend type-safe queries kar sakein.",
+        "Relation configurations aur defaults hooks (jaise defaultNow()) define kiye gaye hain."
+      );
+    } else if (pathLower.includes("routes/") || pathLower.includes("api/")) {
+      role = "API Endpoint Route";
+      summary = `Ye HTTP requests processing endpoints register karne wali routing file \`${filename}\` hai.`;
+      points.push(
+        "Kaunse request paths (GET, POST, DELETE etc.) kaunse backend actions run karenge, yeh handle karti hai.",
+        "Database handlers trigger karti hai request responses dynamically retrieve/update karne ke liye.",
+        "JSON payloads wrap karke secure status headers ke sath output return karti hai."
+      );
+    } else if (pathLower.includes("components/") || pathLower.includes("ui/") || pathLower.includes("shared/")) {
+      role = "Reusable UI Component";
+      summary = `Ye front-end presentation layer component file \`${filename}\` hai.`;
+      points.push(
+        "TypeScript/React reusable visual structure define karti hai jo application shell layout me use hota hai.",
+        "Props interfaces define karke structural elements dynamically bind karti hai.",
+        "Modern CSS animations (jaise Framer Motion hooks) aur responsive rules include karti hai."
+      );
+    } else if (pathLower.includes("pages/") || pathLower.includes("app/") || pathLower.includes("views/")) {
+      role = "Page Router View";
+      summary = `Ye specific route rendering page view component file \`${filename}\` hai.`;
+      points.push(
+        "URL targets matching UI layout render karti hai.",
+        "Internal components import karke pages structures grid compose karti hai.",
+        "Client side routing state transitions and redirect triggers attach karti hai."
+      );
+    } else if (pathLower.includes("lib/") || pathLower.includes("services/") || pathLower.includes("utils/")) {
+      role = "Helper / Utility Module";
+      summary = `Ye reusable core function logic code file \`${filename}\` hai.`;
+      points.push(
+        "Modular utility calculation, date parse aur helpers helper exports rakhti hai.",
+        "Third party SDK clients initialize karti hai aur custom exceptions checks handles validate karti hai.",
+        "Main calculations aur process flows layers decouple karke clean maintain karti hai."
+      );
+    } else {
+      points.push(
+        `Code language aur extensions parsing files settings evaluate karti hai.`,
+        `Repository architecture timeline patterns integration steps define karti hai.`
+      );
+    }
+
+    return { summary, points, role };
+  };
 
   return (
     <div className="space-y-16">
@@ -248,7 +336,7 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
             </div>
           </Reveal>
           <Reveal className="lg:col-span-3" delay={100}>
-            <FileTree tree={data.tree} />
+            <FileTree tree={data.tree} onFileClick={setSelectedFile} />
           </Reveal>
         </div>
       </section>
@@ -536,6 +624,89 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
               </div>
             </Reveal>
           </section>
+        );
+      })()}
+
+      {/* Dynamic File Explainer Modal */}
+      {selectedFile && (() => {
+        const expl = getFileExplanation(selectedFile);
+        const filename = selectedFile.split("/").pop() || selectedFile;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm transition-opacity">
+            <div className="glass-card w-full max-w-lg bg-white border border-zinc-200 rounded-2xl shadow-2xl p-6 relative overflow-hidden animate-in fade-in zoom-in duration-200">
+              <div className="absolute top-4 right-4">
+                <button
+                  onClick={() => setSelectedFile(null)}
+                  className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-750 transition-colors cursor-pointer border-0 bg-transparent text-lg font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Header */}
+              <div className="flex items-start gap-3 mb-4">
+                <span className="text-2xl mt-1">📄</span>
+                <div>
+                  <h3 className="text-lg font-extrabold text-zinc-950 font-mono truncate max-w-[320px]">
+                    {filename}
+                  </h3>
+                  <code className="text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
+                    {selectedFile}
+                  </code>
+                </div>
+              </div>
+
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                <span className="rounded-full bg-cyan-50 border border-cyan-200 px-3 py-1 text-[10px] font-bold text-cyan-700">
+                  {expl.role}
+                </span>
+                <span className="rounded-full bg-zinc-100 border border-zinc-200 px-3 py-1 text-[10px] font-bold text-zinc-650">
+                  {selectedFile.split(".").pop()?.toUpperCase()} File
+                </span>
+              </div>
+
+              {/* Content sections */}
+              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
+                
+                {/* 1. Overview */}
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <span>📝</span> Code me kya ho raha hai?
+                  </h4>
+                  <p className="text-xs text-zinc-600 leading-relaxed bg-zinc-50 p-3 rounded-lg border border-zinc-150">
+                    {expl.summary}
+                  </p>
+                </div>
+
+                {/* 2. Key Details */}
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <span>💡</span> Key Functions & Details:
+                  </h4>
+                  <ul className="space-y-2">
+                    {expl.points.map((pt, idx) => (
+                      <li key={idx} className="flex gap-2 text-xs text-zinc-650 leading-relaxed">
+                        <span className="text-cyan-600 font-bold shrink-0">▸</span>
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+              </div>
+
+              {/* Footer action */}
+              <div className="border-t border-zinc-100 pt-4 mt-6 flex justify-end">
+                <button
+                  onClick={() => setSelectedFile(null)}
+                  className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2 px-5 rounded-xl text-xs cursor-pointer border-0 transition-colors"
+                >
+                  Close View
+                </button>
+              </div>
+            </div>
+          </div>
         );
       })()}
     </div>
