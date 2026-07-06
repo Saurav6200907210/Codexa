@@ -73,7 +73,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
       </Reveal>
 
       {/* 1. Summary */}
-      <section>
+      <section id="summary" className="scroll-mt-24">
         <SectionTitle n="📖" title="Ek Line Mein Summary" sub="Sabse pehle poore project ka overview." />
         <Reveal>
           <div className="glass rounded-2xl p-6 text-lg leading-relaxed text-slate-200">
@@ -84,7 +84,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
 
       {/* 2. Tech stack detail */}
       {data.techStack.length > 0 && (
-        <section>
+        <section id="tech-stack" className="scroll-mt-24">
           <SectionTitle n="🧰" title="Tech Stack — Kaunse Tools Use Hue" sub="Har tool kis kaam ke liye laga hai." />
           <div className="grid gap-4 sm:grid-cols-2">
             {data.techStack.map((t, i) => (
@@ -103,7 +103,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
       )}
 
       {/* 3. Workflow timeline */}
-      <section>
+      <section id="workflow" className="scroll-mt-24">
         <SectionTitle
           n="🔄"
           title="Workflow — Project Kaise Chalta Hai"
@@ -137,7 +137,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
       </section>
 
       {/* 4. Folder by folder */}
-      <section>
+      <section id="folders" className="scroll-mt-24">
         <SectionTitle
           n="📁"
           title="Folder by Folder Breakdown"
@@ -176,7 +176,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
       </section>
 
       {/* 5. Key files code-wise */}
-      <section>
+      <section id="files" className="scroll-mt-24">
         <SectionTitle
           n="🔍"
           title="Important Files — Code Wise Samjho"
@@ -219,7 +219,7 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
       </section>
 
       {/* 6. Languages + tree */}
-      <section>
+      <section id="explorer" className="scroll-mt-24">
         <SectionTitle n="🗂️" title="Poora File Structure" sub="Languages ka mix aur complete folder tree." />
         <div className="grid gap-6 lg:grid-cols-5">
           <Reveal className="lg:col-span-2">
