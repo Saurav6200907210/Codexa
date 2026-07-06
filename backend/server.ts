@@ -38,8 +38,21 @@ app.get("/api/recent", async (req, res) => {
       })
       .from(analyses)
       .orderBy(desc(analyses.createdAt))
-      .limit(8);
-    res.json({ recent: rows });
+      .limit(50);
+
+    const seen = new Set<string>();
+    const uniqueRows = [];
+    for (const row of rows) {
+      if (!seen.has(row.fullName)) {
+        seen.add(row.fullName);
+        uniqueRows.push(row);
+      }
+      if (uniqueRows.length >= 8) {
+        break;
+      }
+    }
+
+    res.json({ recent: uniqueRows });
   } catch (e) {
     console.error("Recent fetch error:", e);
     res.json({ recent: [] });
