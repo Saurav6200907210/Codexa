@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import FakeIDE from "./FakeIDE";
+import DataFlowAnimation from "./DataFlowAnimation";
 import TechMarquee from "./TechMarquee";
 import InteractiveExplorer from "./InteractiveExplorer";
 import { 
@@ -186,7 +186,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
         </div>
 
         <div className="lg:col-span-5 relative">
-          <FakeIDE />
+          <DataFlowAnimation />
         </div>
       </section>
 
