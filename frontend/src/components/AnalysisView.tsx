@@ -24,51 +24,53 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
   return (
     <div className="space-y-16">
       {/* Repo header */}
-      <Reveal>
-        <div className="glass-card rounded-2xl p-6 sm:p-8 bg-white border border-zinc-200">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <a
-                href={repo.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-2xl font-extrabold text-zinc-950 hover:text-cyan-600 sm:text-3xl"
-              >
-                {repo.fullName} ↗
-              </a>
-              <p className="mt-2 max-w-2xl text-zinc-600 text-sm leading-relaxed">
-                {repo.description || "Is repo ki koi description available nahi hai."}
-              </p>
-            </div>
-            <span className="rounded-full bg-cyan-50 border border-cyan-200 px-4 py-1.5 text-xs font-bold text-cyan-700">
-              {data.projectType}
-            </span>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-2 text-sm">
-            <Stat type="stars" label="⭐ Stars" value={repo.stars.toLocaleString()} />
-            <Stat type="forks" label="🍴 Forks" value={repo.forks.toLocaleString()} />
-            <Stat type="files" label="📄 Files" value={stats.totalFiles.toLocaleString()} />
-            <Stat type="folders" label="📁 Folders" value={stats.totalFolders.toLocaleString()} />
-            {repo.language && <Stat type="language" label="💻 Language" value={repo.language} />}
-            {repo.license && <Stat type="license" label="⚖️ License" value={repo.license} />}
-          </div>
-
-          {data.techStack.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {data.techStack.map((t) => (
-                <span
-                  key={t.name}
-                  title={t.reason}
-                  className="cursor-help rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs text-zinc-700 font-bold transition hover:border-cyan-500/30 hover:bg-cyan-50"
+      <section id="overview" className="scroll-mt-24">
+        <Reveal>
+          <div className="glass-card rounded-2xl p-6 sm:p-8 bg-white border border-zinc-200">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <a
+                  href={repo.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-2xl font-extrabold text-zinc-950 hover:text-cyan-600 sm:text-3xl"
                 >
-                  {t.emoji} {t.name}
-                </span>
-              ))}
+                  {repo.fullName} ↗
+                </a>
+                <p className="mt-2 max-w-2xl text-zinc-600 text-sm leading-relaxed">
+                  {repo.description || "Is repo ki koi description available nahi hai."}
+                </p>
+              </div>
+              <span className="rounded-full bg-cyan-50 border border-cyan-200 px-4 py-1.5 text-xs font-bold text-cyan-700">
+                {data.projectType}
+              </span>
             </div>
-          )}
-        </div>
-      </Reveal>
+
+            <div className="mt-5 flex flex-wrap gap-2 text-sm">
+              <Stat type="stars" label="⭐ Stars" value={repo.stars.toLocaleString()} />
+              <Stat type="forks" label="🍴 Forks" value={repo.forks.toLocaleString()} />
+              <Stat type="files" label="📄 Files" value={stats.totalFiles.toLocaleString()} />
+              <Stat type="folders" label="📁 Folders" value={stats.totalFolders.toLocaleString()} />
+              {repo.language && <Stat type="language" label="💻 Language" value={repo.language} />}
+              {repo.license && <Stat type="license" label="⚖️ License" value={repo.license} />}
+            </div>
+
+            {data.techStack.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {data.techStack.map((t) => (
+                  <span
+                    key={t.name}
+                    title={t.reason}
+                    className="cursor-help rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs text-zinc-700 font-bold transition hover:border-cyan-500/30 hover:bg-cyan-50"
+                  >
+                    {t.emoji} {t.name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </Reveal>
+      </section>
 
       {/* 1. Summary */}
       <section id="summary" className="scroll-mt-24">

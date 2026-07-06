@@ -9,14 +9,14 @@ export function Rich({ text }: { text: string }) {
       nodes.push(
         <code
           key={i}
-          className="rounded bg-indigo-500/15 px-1.5 py-0.5 font-mono text-[0.85em] text-indigo-200"
+          className="rounded bg-indigo-50 border border-indigo-100/50 px-1.5 py-0.5 font-mono text-[0.85em] text-indigo-700"
         >
           {part.slice(1, -1)}
         </code>
       );
     } else if (part.startsWith("**") && part.endsWith("**")) {
       nodes.push(
-        <strong key={i} className="font-semibold text-white">
+        <strong key={i} className="font-bold text-slate-900">
           {part.slice(2, -2)}
         </strong>
       );

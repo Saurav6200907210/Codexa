@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import { 
   ArrowLeft, Download, FileText, BookOpen
 } from "lucide-react";
+import { translateToEnglish } from "../lib/translator";
 
 interface AnalysisPageProps {
   data: AnalysisResult | null;
@@ -13,28 +14,31 @@ interface AnalysisPageProps {
 
 export default function AnalysisPage({ data, onNavigate }: AnalysisPageProps) {
   const [activeSection, setActiveSection] = useState("overview");
+  const [lang, setLang] = useState<"en" | "hi">("hi");
+
+  const displayData = data && lang === "en" ? translateToEnglish(data) : data;
 
   const handleExportMarkdown = () => {
-    if (!data) return;
-    const text = `# Analysis of ${data.repo.fullName}
+    if (!displayData) return;
+    const text = `# Analysis of ${displayData.repo.fullName}
 
 ## Project Overview
-${data.summary}
+${displayData.summary}
 
 ## Tech Stack
-${data.techStack.map(t => `- **${t.name}**: ${t.reason}`).join("\n")}
+${displayData.techStack.map(t => `- **${t.name}**: ${t.reason}`).join("\n")}
 
 ## Workflow
-${data.workflow.map(w => `${w.step}. **${w.title}**: ${w.description}`).join("\n")}
+${displayData.workflow.map(w => `${w.step}. **${w.title}**: ${w.description}`).join("\n")}
 
 ## Folders
-${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).join("\n")}
+${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).join("\n")}
 `;
     const blob = new Blob([text], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${data.repo.name}-analysis.md`;
+    a.download = `${displayData.repo.name}-analysis.md`;
     a.click();
   };
 
@@ -136,7 +140,7 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
         </aside>
 
         <main className="lg:col-span-9 space-y-12">
-          <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
+          <div className="flex flex-wrap items-center justify-between border-b border-zinc-200 pb-4 gap-4">
             <button
               onClick={() => onNavigate("landing")}
               className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer bg-transparent border-0"
@@ -144,14 +148,39 @@ ${data.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} files)`).
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to home</span>
             </button>
-            <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200">
-              <span>{data.repo.fullName}</span>
+            
+            <div className="flex items-center gap-4">
+              {/* Language Selector */}
+              <div className="flex items-center gap-1 bg-zinc-100 p-1 rounded-xl border border-zinc-200">
+                <button
+                  onClick={() => setLang("en")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                    lang === "en"
+                      ? "bg-zinc-950 text-white shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => setLang("hi")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                    lang === "hi"
+                      ? "bg-zinc-950 text-white shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+                  }`}
+                >
+                  Hinglish
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200">
+                <span>{displayData.repo.fullName}</span>
+              </div>
             </div>
           </div>
 
-          <div id="overview" className="scroll-mt-24">
-            <AnalysisView data={data} />
-          </div>
+          <AnalysisView data={displayData} />
         </main>
       </div>
     </div>
