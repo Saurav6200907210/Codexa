@@ -50,7 +50,7 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
       summary = `Ye project ki configuration settings file \`${filename}\` hai.`;
       points.push(
         "Isme JSON formatted structured key-value configurations store kiye gaye hain.",
-        "Dependency libraries, build variables aur typescript environment settings control karti hai.",
+        "Dependency libraries, build variables aur environment settings control karti hai.",
         "Is file ke badalne se runtime behaviors aur library version constraints change ho sakte hain."
       );
     } else if (nameLower.endsWith(".config.js") || nameLower.endsWith(".config.ts") || nameLower.endsWith(".config.mjs")) {
@@ -82,7 +82,7 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
       points.push(
         "TypeScript/React reusable visual structure define karti hai jo application shell layout me use hota hai.",
         "Props interfaces define karke structural elements dynamically bind karti hai.",
-        "Modern CSS animations (jaise Framer Motion hooks) aur responsive rules include karti hai."
+        "Modern CSS/HTML styling aur responsive rules include karti hai."
       );
     } else if (pathLower.includes("pages/") || pathLower.includes("app/") || pathLower.includes("views/")) {
       role = "Page Router View";
@@ -100,14 +100,240 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
         "Third party SDK clients initialize karti hai aur custom exceptions checks handles validate karti hai.",
         "Main calculations aur process flows layers decouple karke clean maintain karti hai."
       );
-    } else {
+    } else if (nameLower.endsWith(".html") || nameLower.endsWith(".htm")) {
+      role = "HTML Layout / Template";
+      summary = `Ye browser ke liye visual structure define karne wali HTML template page \`${filename}\` hai.`;
       points.push(
-        `Code language aur extensions parsing files settings evaluate karti hai.`,
-        `Repository architecture timeline patterns integration steps define karti hai.`
+        "Application structure ka core entry skeleton define karti hai.",
+        "Favicons, browser headers, page viewport aur essential metadata/scripts references inject karti hai.",
+        "Dynamic components mounting point setup (like `#root` or `#app`) provide karti hai."
+      );
+    } else if (nameLower.endsWith(".css") || nameLower.endsWith(".scss") || nameLower.endsWith(".sass") || nameLower.endsWith(".less")) {
+      role = "Stylesheet / Styling Rules";
+      summary = `Ye application ke components visual theme aur layouts design karne wali stylesheet file \`${filename}\` hai.`;
+      points.push(
+        "Modern styling attributes, animations keyframes, media queries aur variables control karti hai.",
+        "Components margins, custom grids, dark/light theme behaviors aur standard layout parameters adjust karti hai."
+      );
+    } else if (nameLower.endsWith(".md") || nameLower.endsWith(".mdx")) {
+      role = "Documentation File";
+      summary = `Ye markdown syntax based instruction / documentation guide file \`${filename}\` hai.`;
+      points.push(
+        "Developers aur users ke liye project installation setup, code configurations aur run scripts explain karti hai.",
+        "Formatting patterns, headings, lists aur tables use karke clean documentation provide karti hai."
+      );
+    } else if (nameLower.endsWith(".yml") || nameLower.endsWith(".yaml") || nameLower.endsWith(".toml")) {
+      role = "Build & Deployment Configuration";
+      summary = `Ye build pipelines aur deployment automations control karne wali YAML/TOML structured format config file \`${filename}\` hai.`;
+      points.push(
+        "GitHub CI/CD Actions workflows, packages versions specifications aur dynamic parameters rules configure karti hai.",
+        "Application release cycle steps aur tests environment initialization settings track karti hai."
+      );
+    } else if (/\.(png|jpe?g|gif|svg|ico|webp)$/i.test(nameLower)) {
+      role = "Static Media Asset";
+      summary = `Ye application UI layouts me load hone wali image / icon graphical asset file \`${filename}\` hai.`;
+      points.push(
+        "Interface graphics, visual diagrams, logo icons aur assets standard formats define karti hai.",
+        "Web optimization assets pipeline ke through build artifacts cache storage me load hoti hai."
+      );
+    } else {
+      const ext = filename.split(".").pop() || "";
+      role = `${ext.toUpperCase()} Source File`;
+      summary = `Ye project runtime behavior execute karne wali logic source file \`${filename}\` hai.`;
+      points.push(
+        `Is source code module me essential execution behaviors aur methods logic write kiye gaye hain.`,
+        `Functions definitions aur components modules import karke application code structure configure karti hai.`,
+        `Dynamic operations parameters register karke dependencies standard logic bind karti hai.`
       );
     }
 
     return { summary, points, role };
+  };
+
+  const getFileDetailedExplanation = (path: string): { title: string; content: string }[] => {
+    const filename = path.split("/").pop() || path;
+    const nameLower = filename.toLowerCase();
+    const pathLower = path.toLowerCase();
+    const ext = filename.split(".").pop()?.toUpperCase() || "File";
+
+    let descType = "Frontend/Backend Source Logic";
+    let isConfig = nameLower.endsWith(".json") || nameLower.endsWith(".config.js") || nameLower.endsWith(".config.ts") || nameLower.endsWith(".config.mjs") || nameLower.includes(".gitignore") || nameLower.includes("eslint");
+    let isDB = pathLower.includes("db/") || pathLower.includes("database/") || nameLower.includes("schema");
+    let isAPI = pathLower.includes("routes/") || pathLower.includes("api/");
+    let isComponent = pathLower.includes("components/") || pathLower.includes("ui/") || pathLower.includes("shared/");
+    let isPage = pathLower.includes("pages/") || pathLower.includes("app/") || pathLower.includes("views/");
+    let isUtil = pathLower.includes("lib/") || pathLower.includes("services/") || pathLower.includes("utils/") || pathLower.includes("helpers/");
+    let isHTML = nameLower.endsWith(".html") || nameLower.endsWith(".htm");
+    let isCSS = nameLower.endsWith(".css") || nameLower.endsWith(".scss") || nameLower.endsWith(".sass") || nameLower.endsWith(".less");
+    let isMD = nameLower.endsWith(".md") || nameLower.endsWith(".mdx");
+    let isCICD = nameLower.endsWith(".yml") || nameLower.endsWith(".yaml") || nameLower.endsWith(".toml");
+    let isAsset = /\.(png|jpe?g|gif|svg|ico|webp)$/i.test(nameLower);
+
+    if (isConfig) descType = "Configuration File";
+    else if (isDB) descType = "Database Schema / Entity Models";
+    else if (isAPI) descType = "API Route / Server Request Handler";
+    else if (isComponent) descType = "Reusable UI component";
+    else if (isPage) descType = "App Page Router / View Layout";
+    else if (isUtil) descType = "Core Utility / Business logic helper";
+    else if (isHTML) descType = "HTML Skeleton Template";
+    else if (isCSS) descType = "Styling Sheet Rules";
+    else if (isMD) descType = "Documentation Guide / Readme";
+    else if (isCICD) descType = "Build Workflow pipeline settings";
+    else if (isAsset) descType = "Static Media resource";
+
+    const sections: { title: string; content: string }[] = [];
+
+    // 1. File Overview
+    sections.push({
+      title: "1. File Overview",
+      content: `• **Why this file exists:** Ye file \`${filename}\` is project me key configurations, logic patterns ya presentations compile karne ke liye banayi gayi hai.
+• **What problem it solves:** Iska main objective repository implementation structure and behaviors code consistency standardize karna hai.
+• **What would happen if this file did not exist:** Agar ye file project me nahi hogi, toh is file se define hone wala behavior break ho jayega aur application execution run time fail ho sakti hai.
+• **File Category:** Ye ek **${descType}** category ki file hai.`
+    });
+
+    // 2. Where This File Fits In The Project
+    let chain = "Browser → App.tsx → Layout.tsx → Current File";
+    if (isConfig) chain = "Package Engine (npm/vite) → Configuration CLI → Current File";
+    else if (isDB) chain = "Server Instance → Connection Driver → Models Schema → Current File";
+    else if (isAPI) chain = "Client Fetch HTTP → Router Handler Middleware → Current File";
+    else if (isComponent) chain = "App.tsx → Pages/Views Layout → UI Grid → Current File";
+    else if (isPage) chain = "URL Address bar Routing → Router Switcher → Current File";
+    else if (isUtil) chain = "Main Server/Client Action → Business Services Handler → Current File";
+    
+    sections.push({
+      title: "2. Where This File Fits In The Project",
+      content: `**Execution Chain Workflow:**
+\`\`\`
+${chain}
+\`\`\`
+• **Who imports this file:** Is file ko main package engines, framework wrapper, ya target components modules import karte hain.
+• **Which files use it:** Project ke context folders, sub-directories aur relative routes files is file ke values/logic consume karte hain.
+• **Which files depend on it:** Relational imports aur setup packages config settings parameters ispar dynamically dependencies generate karti hain.`
+    });
+
+    // 3. What Happens Inside This File
+    let flowStr = "Imports\n     ↓\nVariables & Constants\n     ↓\nHelper Functions\n     ↓\nLogic Execution\n     ↓\nExport Elements";
+    if (isComponent || isPage) flowStr = "Imports\n     ↓\nProps Types definition\n     ↓\nReact Hooks (State/Effects)\n     ↓\nEvents handlers & internal Logic\n     ↓\nJSX UI Elements layout\n     ↓\nDefault Exports";
+    
+    sections.push({
+      title: "3. What Happens Inside This File",
+      content: `**Execution flow of javascript/module compilation inside file:**
+\`\`\`
+${flowStr}
+\`\`\`
+• Sabse pehle compiler essential third-party components aur layout models resolve karta hai.
+• Uske baad internal states settings, logic hooks and constants functions stack process structure initiate karti hain.
+• Final components render, return parameters ya configure object structure parse karke client output format standard set hota hai.`
+    });
+
+    // 4. Imports Explained
+    sections.push({
+      title: "4. Imports Explained",
+      content: `• **Standard React / Third-Party modules:** External dependencies files loading parameters aur packages resolve karne ke liye standard hooks (jaise useState, useEffect) import hote hain.
+• **Local styles / Components path:** Local helper icons, styling models, custom buttons controllers dynamically import ho rahe hain.
+• **Utility parameters:** Database drivers, variables methods structure parse configurations clean environment implement karti hain.`
+    });
+
+    // 5. Functions Explained
+    sections.push({
+      title: "5. Functions Explained",
+      content: `• **Core helper methods / Component execution:** Component/Module state rendering parameters aur logical evaluations runs karti hain.
+• **Who calls it:** Browser user layout events ya layout router lifecycle mounts.
+• **Inputs & Outputs:** Inputs configurations structures aur props parameter target maps accept karti hai, aur compile parameters / JSX element node UI return output generate karti hai.
+• **Post Execution:** Final layout renders or values update variables stack trigger updates dynamically updates.`
+    });
+
+    // 6. Component Breakdown
+    sections.push({
+      title: "6. Component Breakdown",
+      content: `• **UI Presentation View Block:** Standard layouts container blocks templates display and design system rules update rules rules.
+• **Displayed Data:** Key variables properties values aur configuration keys labels values screens visual update dynamically load rules.
+• **User Interactions:** Clicks hooks triggers, key handlers inputs changes, forms submits callbacks methods maps rules variables layout.`
+    });
+
+    // 7. Code Flow
+    sections.push({
+      title: "7. Code Flow",
+      content: `**Step-by-step code execution flow:**
+\`\`\`
+Imports Resolving
+       ↓
+Local Configurations & Constants Initialization
+       ↓
+Local Hook states allocation & Event Binding
+       ↓
+Dynamic Data computation & logic flow trigger
+       ↓
+JSX template layouts compilation
+       ↓
+DOM Paint (Browser UI Render)
+\`\`\``
+    });
+
+    // 8. Data Flow
+    sections.push({
+      title: "8. Data Flow",
+      content: `**Data Workflow origin diagram:**
+\`\`\`
+External Environment / Git API
+           ↓
+Backend Controllers / Databases
+           ↓
+Static Files / Pages Routing Context
+           ↓
+Current File Target Logic
+           ↓
+DOM State Render / Configuration Load
+\`\`\``
+    });
+
+    // 9. Beginner Friendly Explanation
+    sections.push({
+      title: "9. Beginner Friendly Explanation (Hindi + English)",
+      content: `Socho ye file ek **kitchen key blueprint** ya **recipe card** jaisi hai! 🍳
+• Jaise kitchen me food recipe banane ke liye ingredients require hotey hain (jo hamare *Imports* hain).
+• Recipe ke instructions step by step follow hotey hain (jo hamari *Functions* logic hai).
+• Aur last me delicious food plate ready hokar plate server hoti hai (jo hamara *JSX UI output* ya *Config structure* hai!).
+Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish nahi ban payegi! Isliye ye file project structure flow me essential role represent karti hai.`
+    });
+
+    // 10. Important Concepts Used
+    sections.push({
+      title: "10. Important Concepts Used",
+      content: `✓ **Modular Programming:** Code reuse and structure clarity modules break maps code rules.
+✓ **TypeScript Type Safety:** Proper types templates definitions variables consistency compile safety targets rules.
+✓ **State & Data Bindings:** Dynamic state UI events triggers hooks.
+✓ **Configuration Parsing:** Key-value attributes standard mapping settings.`
+    });
+
+    // 11. If I Remove This File
+    sections.push({
+      title: "11. If I Remove This File",
+      content: `• **What will break:** Is file ka dependent code flow compile load crash errors throws variables properties.
+• **Which pages stop working:** Core pages layouts and views screens templates.
+• **Will the project compile:** Code compiler errors like "Module not found" or "undefined imports exceptions errors" screen targets trace returns.`
+    });
+
+    // 12. Interview Notes
+    sections.push({
+      title: "12. Interview Notes & Expected Q&A",
+      content: `• **Q: Is file ka project architectural setup me primary role kya hai?**
+  * **A:** Ye file application configuration properties state declarations or reusable layout widgets component bindings rules control karti hai.
+• **Q: Imports resolution parameters kaise behavior control karte hain?**
+  * **A:** Modules clean decouple rules follow references imports optimize components state code size trace update logic load parameters.`
+    });
+
+    // 13. Key Takeaways
+    sections.push({
+      title: "13. Key Takeaways",
+      content: `1. Codebase clarity maintain modules helper templates functions decouple karti hai.
+2. Type check parameters TypeScript variables code accuracy double ensure parameters.
+3. Clean configuration keys environment changes adapt logic settings.
+4. Project modules workflow execution chain properly maps structure layout dependencies.`
+    });
+
+    return sections;
   };
 
   return (
@@ -627,88 +853,133 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
         );
       })()}
 
-      {/* Dynamic File Explainer Modal */}
-      {selectedFile && (() => {
-        const expl = getFileExplanation(selectedFile);
-        const filename = selectedFile.split("/").pop() || selectedFile;
-        return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm transition-opacity">
-            <div className="glass-card w-full max-w-lg bg-white border border-zinc-200 rounded-2xl shadow-2xl p-6 relative overflow-hidden animate-in fade-in zoom-in duration-200">
-              <div className="absolute top-4 right-4">
-                <button
-                  onClick={() => setSelectedFile(null)}
-                  className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-750 transition-colors cursor-pointer border-0 bg-transparent text-lg font-bold"
-                >
-                  ✕
-                </button>
-              </div>
+  {/* Dynamic File Explainer Modal */}
+  {selectedFile && (() => {
+    const sections = getFileDetailedExplanation(selectedFile);
+    const filename = selectedFile.split("/").pop() || selectedFile;
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm transition-opacity">
+        <div className="glass-card w-full max-w-4xl bg-white border border-zinc-200 rounded-2xl shadow-2xl p-6 relative overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+          <div className="absolute top-4 right-4">
+            <button
+              onClick={() => setSelectedFile(null)}
+              className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-750 transition-colors cursor-pointer border-0 bg-transparent text-lg font-bold"
+            >
+              ✕
+            </button>
+          </div>
 
-              {/* Header */}
-              <div className="flex items-start gap-3 mb-4">
-                <span className="text-2xl mt-1">📄</span>
-                <div>
-                  <h3 className="text-lg font-extrabold text-zinc-950 font-mono truncate max-w-[320px]">
-                    {filename}
-                  </h3>
-                  <code className="text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
-                    {selectedFile}
-                  </code>
-                </div>
-              </div>
-
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                <span className="rounded-full bg-cyan-50 border border-cyan-200 px-3 py-1 text-[10px] font-bold text-cyan-700">
-                  {expl.role}
-                </span>
-                <span className="rounded-full bg-zinc-100 border border-zinc-200 px-3 py-1 text-[10px] font-bold text-zinc-650">
-                  {selectedFile.split(".").pop()?.toUpperCase()} File
-                </span>
-              </div>
-
-              {/* Content sections */}
-              <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
-                
-                {/* 1. Overview */}
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <span>📝</span> Code me kya ho raha hai?
-                  </h4>
-                  <p className="text-xs text-zinc-600 leading-relaxed bg-zinc-50 p-3 rounded-lg border border-zinc-150">
-                    {expl.summary}
-                  </p>
-                </div>
-
-                {/* 2. Key Details */}
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <span>💡</span> Key Functions & Details:
-                  </h4>
-                  <ul className="space-y-2">
-                    {expl.points.map((pt, idx) => (
-                      <li key={idx} className="flex gap-2 text-xs text-zinc-650 leading-relaxed">
-                        <span className="text-cyan-600 font-bold shrink-0">▸</span>
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-              </div>
-
-              {/* Footer action */}
-              <div className="border-t border-zinc-100 pt-4 mt-6 flex justify-end">
-                <button
-                  onClick={() => setSelectedFile(null)}
-                  className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2 px-5 rounded-xl text-xs cursor-pointer border-0 transition-colors"
-                >
-                  Close View
-                </button>
-              </div>
+          {/* Header */}
+          <div className="flex items-start gap-3 mb-4 shrink-0">
+            <span className="text-2xl mt-1">📄</span>
+            <div>
+              <h3 className="text-lg font-extrabold text-zinc-950 font-mono truncate max-w-[500px]">
+                {filename}
+              </h3>
+              <code className="text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
+                {selectedFile}
+              </code>
             </div>
           </div>
-        );
-      })()}
+
+          {/* Tabs / Badges */}
+          <div className="flex flex-wrap gap-2 mb-4 shrink-0">
+            <span className="rounded-full bg-cyan-50 border border-cyan-200 px-3 py-1 text-[10px] font-bold text-cyan-700">
+              {selectedFile.split(".").pop()?.toUpperCase()} File
+            </span>
+            <span className="rounded-full bg-zinc-100 border border-zinc-200 px-3 py-1 text-[10px] font-bold text-zinc-650">
+              Detailed Code Explainer
+            </span>
+          </div>
+
+          {/* Content sections layout with two panels: Sidebar Index & Content */}
+          <div className="flex gap-6 overflow-hidden flex-1 min-h-0">
+            {/* Left Sidebar Table of Contents */}
+            <div className="hidden md:block w-64 border-r border-zinc-200 pr-4 overflow-y-auto shrink-0 space-y-1.5 py-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2">Sections Index</div>
+              {sections.map((sec, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    const el = document.getElementById(`sec-${idx}`);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-650 hover:bg-zinc-50 hover:text-zinc-950 transition-colors truncate block"
+                >
+                  {sec.title}
+                </button>
+              ))}
+            </div>
+
+            {/* Right Scrollable Content panel */}
+            <div className="flex-1 overflow-y-auto pr-2 space-y-6 scroll-smooth py-1">
+              {sections.map((sec, idx) => (
+                <div id={`sec-${idx}`} key={idx} className="bg-zinc-50/50 p-5 rounded-xl border border-zinc-150 shadow-sm transition hover:shadow-md">
+                  <h4 className="text-sm font-extrabold text-zinc-950 flex items-center gap-2 mb-3 pb-2 border-b border-zinc-200">
+                    {sec.title}
+                  </h4>
+                  <div className="text-xs text-zinc-750 leading-relaxed font-sans whitespace-pre-wrap">
+                    {sec.content.split("\n").map((line, lineIdx) => {
+                      if (line.trim().startsWith("```")) return null;
+                      if (line.startsWith("• ")) {
+                        return (
+                          <div key={lineIdx} className="flex gap-2 items-start mt-1.5">
+                            <span className="text-cyan-600 font-bold shrink-0">•</span>
+                            <span><Rich text={line.slice(2)} /></span>
+                          </div>
+                        );
+                      }
+                      if (line.startsWith("✓ ")) {
+                        return (
+                          <div key={lineIdx} className="flex gap-2 items-start mt-1.5">
+                            <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                            <span><Rich text={line.slice(2)} /></span>
+                          </div>
+                        );
+                      }
+                      if (line.startsWith("  * ") || line.startsWith("  • ")) {
+                        return (
+                          <div key={lineIdx} className="flex gap-2 items-start mt-1 pl-4">
+                            <span className="text-zinc-400 font-bold shrink-0">◦</span>
+                            <span><Rich text={line.slice(4)} /></span>
+                          </div>
+                        );
+                      }
+                      if (line.trim() === "") {
+                        return <div key={lineIdx} className="h-2" />;
+                      }
+                      if (line.includes("→") || line.includes("↓") || line.includes("▼") || line.startsWith(" ") || line.startsWith("📄") || line.startsWith("✓")) {
+                        return (
+                          <div key={lineIdx} className="font-mono text-[11px] bg-zinc-900 text-cyan-400 px-3 py-2 rounded-lg my-2 overflow-x-auto whitespace-pre border border-zinc-800">
+                            {line.replace(/`/g, "")}
+                          </div>
+                        );
+                      }
+                      return (
+                        <p key={lineIdx} className="mt-1">
+                          <Rich text={line} />
+                        </p>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer action */}
+          <div className="border-t border-zinc-100 pt-4 mt-4 flex justify-end shrink-0">
+            <button
+              onClick={() => setSelectedFile(null)}
+              className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2.5 px-6 rounded-xl text-xs cursor-pointer border-0 transition-colors"
+            >
+              Close View
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  })()}
     </div>
   );
 }
