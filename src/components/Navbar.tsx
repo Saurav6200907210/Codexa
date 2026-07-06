@@ -72,7 +72,7 @@ export default function Navbar() {
         {/* Action Button & GitHub */}
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com/Saurav6200907210/Codexa"
+            href="https://github.com/Saurav6200907210/Codexa.git"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-xl border border-white/5 hover:border-white/15 hover:bg-white/5 transition-all text-gray-400 hover:text-white"
