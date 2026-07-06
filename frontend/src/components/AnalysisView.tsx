@@ -17,9 +17,10 @@ function SectionTitle({ n, title, sub }: { n: string; title: string; sub: string
   );
 }
 
-export function AnalysisView({ data }: { data: AnalysisResult }) {
-  const { repo, stats } = data;
+export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" | "hi" }) {
+  const { repo, stats, projectType, techStack } = data;
   const maxLang = Math.max(1, ...stats.languages.map((l) => l.count));
+  const isHinglish = lang === "hi";
 
   return (
     <div className="space-y-16">
@@ -251,6 +252,292 @@ export function AnalysisView({ data }: { data: AnalysisResult }) {
           </Reveal>
         </div>
       </section>
+
+      {/* 7. Learn Deeply */}
+      {(() => {
+        // --- RECURSIVE FILE EXTRACTOR FROM TREE ---
+        const getAllFilesFromTree = (node: any): string[] => {
+          const files: string[] = [];
+          const traverse = (n: any) => {
+            if (n.type === "file") {
+              files.push(n.path);
+            } else if (n.children) {
+              n.children.forEach(traverse);
+            }
+          };
+          traverse(node);
+          return files;
+        };
+
+        const allFiles = getAllFilesFromTree(data.tree);
+
+        // 1. Config & Project Setup files
+        const configFiles = allFiles.filter(p => 
+          p.endsWith(".json") || p.endsWith(".config.js") || p.endsWith(".config.ts") || p.endsWith(".config.mjs") || p.includes(".gitignore") || p.includes(".oxlintrc") || p.endsWith("eslint.config.js")
+        );
+
+        // 2. Database Layer files
+        const dbFiles = allFiles.filter(p => 
+          (p.includes("db/") || p.includes("database/") || p.toLowerCase().includes("schema") || p.includes("models/")) && !configFiles.includes(p)
+        );
+
+        // 3. API / Route files
+        const apiFiles = allFiles.filter(p => 
+          (p.includes("api/") || p.includes("routes/") || p.includes("controllers/") || p.toLowerCase().endsWith("server.ts") || p.toLowerCase().endsWith("server.js") || p.toLowerCase().endsWith("app.js")) && !configFiles.includes(p) && !dbFiles.includes(p)
+        );
+
+        // 4. Core logic / Services / Utils / Middleware
+        const coreFiles = allFiles.filter(p => 
+          (p.includes("lib/") || p.includes("services/") || p.includes("utils/") || p.includes("helpers/") || p.includes("middleware/") || p.includes("middlewares/") || p.toLowerCase().includes("analyzer") || p.toLowerCase().includes("github") || p.toLowerCase().includes("knowledge") || p.toLowerCase().includes("translator")) && 
+          !configFiles.includes(p) && !dbFiles.includes(p) && !apiFiles.includes(p)
+        );
+
+        // 5. Global Layout UI / Shell components
+        const layoutFiles = allFiles.filter(p => 
+          (p.toLowerCase().includes("layout") || p.toLowerCase().includes("navbar") || p.toLowerCase().includes("sidebar") || p.toLowerCase().includes("header") || p.toLowerCase().includes("commandpalette")) && 
+          !configFiles.includes(p) && !dbFiles.includes(p) && !apiFiles.includes(p) && !coreFiles.includes(p)
+        );
+
+        // 6. UI Components
+        const componentFiles = allFiles.filter(p => 
+          (p.includes("components/") || p.includes("ui/") || p.includes("shared/")) && 
+          !configFiles.includes(p) && !dbFiles.includes(p) && !apiFiles.includes(p) && !coreFiles.includes(p) && !layoutFiles.includes(p)
+        );
+
+        // 7. Pages / Views / Core Router components
+        const pageFiles = allFiles.filter(p => 
+          (p.includes("pages/") || p.includes("app/") || p.includes("views/") || p.toLowerCase().endsWith("app.tsx") || p.toLowerCase().endsWith("main.tsx") || p.toLowerCase().endsWith("index.html") || p.toLowerCase().includes("stores/")) && 
+          !configFiles.includes(p) && !dbFiles.includes(p) && !apiFiles.includes(p) && !coreFiles.includes(p) && !layoutFiles.includes(p) && !componentFiles.includes(p)
+        );
+
+        // 8. Other / Assets / CSS Styles
+        const otherFiles = allFiles.filter(p => 
+          !configFiles.includes(p) && !dbFiles.includes(p) && !apiFiles.includes(p) && !coreFiles.includes(p) && !layoutFiles.includes(p) && !componentFiles.includes(p) && !pageFiles.includes(p)
+        );
+
+        // Build Complete Timeline Flow (Every file path mapping is included)
+        const timelineSteps: string[] = ["Project Initialization Configs"];
+        if (configFiles.length > 0) timelineSteps.push(...configFiles.map(f => f.split("/").pop() || f));
+        if (dbFiles.length > 0) {
+          timelineSteps.push("Database Schema & Connection");
+          timelineSteps.push(...dbFiles.map(f => f.split("/").pop() || f));
+        }
+        if (coreFiles.length > 0) {
+          timelineSteps.push("Core Business Logic / Engine");
+          timelineSteps.push(...coreFiles.map(f => f.split("/").pop() || f));
+        }
+        if (apiFiles.length > 0) {
+          timelineSteps.push("API Routes & Request Handlers");
+          timelineSteps.push(...apiFiles.map(f => f.split("/").pop() || f));
+        }
+        if (layoutFiles.length > 0) {
+          timelineSteps.push("Global Layout Shell Components");
+          timelineSteps.push(...layoutFiles.map(f => f.split("/").pop() || f));
+        }
+        if (componentFiles.length > 0) {
+          timelineSteps.push("Reusable UI Controls & Modals");
+          timelineSteps.push(...componentFiles.map(f => f.split("/").pop() || f));
+        }
+        if (pageFiles.length > 0) {
+          timelineSteps.push("Router Pages & Global Client Store");
+          timelineSteps.push(...pageFiles.map(f => f.split("/").pop() || f));
+        }
+        if (otherFiles.length > 0) {
+          timelineSteps.push("Static Assets & Style Rules");
+          timelineSteps.push(...otherFiles.map(f => f.split("/").pop() || f));
+        }
+        timelineSteps.push("Refactoring / Build Compile", "Production Ready");
+
+        const visualTimelineStr = timelineSteps.join("\n        │\n        ▼\n");
+
+        return (
+          <section id="learn-deeply" className="scroll-mt-24">
+            <SectionTitle
+              n="🧠"
+              title="Learn Deeply — Development Flow & Folder Structure"
+              sub="Is repo ke logic aur structure ke analysis se nikala gaya logical implementation order aur development phase sequence. Isme project ki ek bhi file miss nahi ki gayi hai."
+            />
+            <Reveal>
+              <div className="glass-card rounded-2xl p-6 bg-white border border-zinc-200 space-y-8 text-sm leading-relaxed text-zinc-700">
+                
+                {/* Dynamic introductory note */}
+                <p className="text-zinc-600 text-xs italic bg-zinc-50 border-l-4 border-zinc-500 p-3 rounded-r-xl">
+                  {isHinglish ? (
+                    <>Haan, agar koi senior developer is <strong>{projectType}</strong> project ko scratch se banata, toh files aur folder architecture ka development order kuch is tarah hota. Ye folder tree aur tech stack analyze karke reconstructed flow hai.</>
+                  ) : (
+                    <>Based on our analysis of this <strong>{projectType}</strong> repository, here is how a senior developer would typically build it scratch-by-scratch. This represents the reconstructed logical flow.</>
+                  )}
+                </p>
+
+                {/* Stepper phases */}
+                <div className="space-y-6">
+                  
+                  {/* Phase 1: Configs */}
+                  {configFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-950 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🚀</span> Phase 1 — Project Initialization
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Project configs setup and initialization.</p>
+                      <div className="mt-2 text-xs text-zinc-600 space-y-1">
+                        <div className="flex flex-wrap items-center gap-1.5 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150">
+                          {configFiles.map((cfg) => (
+                            <div key={cfg} className="flex items-center gap-1.5">
+                              <span className="text-zinc-900 font-bold">📄 {cfg}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 2: Database Layer */}
+                  {dbFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🏗️</span> Phase 2 — Database Layer
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Database models aur connection connection logic define karna.</p>
+                      <div className="mt-2 grid md:grid-cols-2 gap-4">
+                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1">
+                          <span className="text-zinc-800 font-bold">Database Files:</span>
+                          {dbFiles.map(df => <div key={df} className="pl-2">📄 {df}</div>)}
+                        </div>
+                        <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
+                          <div>• Connection clients create kiye gaye aur credentials hook kiye gaye.</div>
+                          <div>• Schema tables relational schema and columns structural mapping load hui.</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 3: Core Logic */}
+                  {coreFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🌐</span> Phase 3 — Backend / Core Business Logic
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Business functions, modules utilities, middleware hooks aur calculations.</p>
+                      <div className="mt-2 grid md:grid-cols-2 gap-4">
+                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                          <span className="text-zinc-800 font-bold">Logic Files:</span>
+                          {coreFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
+                        </div>
+                        <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
+                          <div>• Custom core algorithms, helper utils files aur logic definitions register hue.</div>
+                          <div>• Internal processing layers integrate aur test kiye gaye.</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 4: API / Routing */}
+                  {apiFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🔌</span> Phase 4 — API Routes / Server Handlers
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">API request routes setup karna backend database connectivity ke sath.</p>
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                        <span className="text-zinc-800 font-bold">Routing Handlers:</span>
+                        {apiFiles.map(af => <div key={af} className="pl-2">✓ {af}</div>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 5: Global Layouts */}
+                  {layoutFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🎨</span> Phase 5 — Global Layouts & UI Shell
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Universal layouts components, navbar header headers aur main structure templates.</p>
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-0.5">
+                        {layoutFiles.map(lf => <div key={lf}>📄 {lf}</div>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 6: Components */}
+                  {componentFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🧩</span> Phase 6 — Reusable UI Components
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Isolate UI features, reusable modals, buttons aur display tables.</p>
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                        <span className="text-zinc-800 font-bold">Interface Components:</span>
+                        {componentFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 7: Pages / views */}
+                  {pageFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🏠</span> Phase 7 — Page Layout Views & Stores
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Specific pages views folder structure aur global context providers state.</p>
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                        <span className="text-zinc-800 font-bold">Client Views:</span>
+                        {pageFiles.map(pf => <div key={pf} className="pl-2">🗺️ {pf}</div>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 8: Other assets */}
+                  {otherFiles.length > 0 && (
+                    <div className="relative pl-6 border-l-2 border-zinc-200">
+                      <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-900 ring-4 ring-white" />
+                      <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                        <span>🖼️</span> Phase 8 — Static Assets & CSS Stylesheets
+                      </h4>
+                      <p className="text-xs text-zinc-500 mt-0.5">Images, SVGs assets files aur base CSS styling rules sets.</p>
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[200px] overflow-y-auto">
+                        {otherFiles.map(of => <div key={of}>📄 {of}</div>)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Final Phase */}
+                  <div className="relative pl-6">
+                    <span className="absolute -left-[9px] top-1.5 flex h-4 w-4 rounded-full bg-zinc-950 ring-4 ring-white" />
+                    <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
+                      <span>🚀</span> Final Polish & Deploy
+                    </h4>
+                    <p className="text-xs text-zinc-500 mt-0.5">Code compression bundles assets dynamic integration aur final verification steps.</p>
+                  </div>
+
+                </div>
+
+                {/* Timeline Chart */}
+                <div className="border-t border-zinc-150 pt-6">
+                  <h3 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2 mb-4">
+                    <span>📊</span> Complete Development Timeline
+                  </h3>
+                  <div className="p-4 bg-zinc-950 text-emerald-400 font-mono text-xs rounded-xl overflow-x-auto shadow-inner border border-zinc-900 leading-relaxed max-h-[400px]">
+                    {visualTimelineStr}
+                  </div>
+                </div>
+
+                {/* Footnote */}
+                <div className="text-[11px] text-zinc-400 font-sans border-t border-zinc-100 pt-4">
+                  * Ye order source tree key hierarchy aur files metadata structure ke basis par compile-time reconstruct kiya gaya hai.
+                </div>
+
+              </div>
+            </Reveal>
+          </section>
+        );
+      })()}
     </div>
   );
 }

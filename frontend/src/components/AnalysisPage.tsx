@@ -48,7 +48,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
 
   useEffect(() => {
     if (!data) return;
-    const sections = ["overview", "summary", "tech-stack", "workflow", "folders", "files", "explorer"];
+    const sections = ["overview", "summary", "tech-stack", "workflow", "folders", "files", "explorer", "learn-deeply"];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 200;
       for (const section of sections) {
@@ -101,6 +101,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
                 { id: "folders", label: "Folder Structure" },
                 { id: "files", label: "Important Code Files" },
                 { id: "explorer", label: "Interactive File Tree" },
+                { id: "learn-deeply", label: "Learn Deeply" },
               ].map((item) => (
                 <button
                   key={item.id}
@@ -180,7 +181,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
             </div>
           </div>
 
-          <AnalysisView data={displayData} />
+          <AnalysisView data={displayData} lang={lang} />
         </main>
       </div>
     </div>
