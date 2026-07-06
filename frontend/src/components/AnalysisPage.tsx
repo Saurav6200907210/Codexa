@@ -82,7 +82,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
   return (
     <div className="min-h-screen bg-white text-zinc-800 pb-20 relative">
       <div className="cyber-grid" />
-      <Navbar onNavigate={onNavigate} />
+      <Navbar onNavigate={onNavigate} currentPage="analysis" />
 
       <div className="max-w-7xl mx-auto px-6 pt-28 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
         <aside className="lg:col-span-3 hidden lg:block space-y-6">

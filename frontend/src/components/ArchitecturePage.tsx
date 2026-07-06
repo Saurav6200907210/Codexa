@@ -128,7 +128,7 @@ return (
   return (
     <div className="min-h-screen bg-white text-zinc-800 pb-20 relative">
       <div className="cyber-grid" />
-      <Navbar onNavigate={onNavigate} />
+      <Navbar onNavigate={onNavigate} currentPage="architecture" />
 
       <div className="max-w-6xl mx-auto px-6 pt-28 space-y-12 relative z-10">
         

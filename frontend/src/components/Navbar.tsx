@@ -3,9 +3,10 @@ import { Sparkles, Terminal } from "lucide-react";
 
 interface NavbarProps {
   onNavigate?: (page: "landing" | "analysis" | "architecture") => void;
+  currentPage?: "landing" | "analysis" | "architecture";
 }
 
-export default function Navbar({ onNavigate }: NavbarProps) {
+export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -50,12 +51,14 @@ export default function Navbar({ onNavigate }: NavbarProps) {
 
         {/* Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-500">
-          <button
-            onClick={() => onNavigate?.("architecture")}
-            className="hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold text-indigo-500"
-          >
-            ⚙️ App Flow Architecture
-          </button>
+          {currentPage !== "landing" && (
+            <button
+              onClick={() => onNavigate?.("architecture")}
+              className="hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold text-indigo-500"
+            >
+              ⚙️ App Flow Architecture
+            </button>
+          )}
           <button
             onClick={() => scrollToSection("features")}
             className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"

@@ -120,7 +120,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
         } as React.CSSProperties}
       />
 
-      <Navbar onNavigate={onNavigate} />
+      <Navbar onNavigate={onNavigate} currentPage="landing" />
 
       {/* Hero Section */}
       <section id="hero" className="max-w-7xl mx-auto px-6 pt-24 pb-20 md:pt-32 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
