@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LandingPage from "./components/LandingPage";
 import AnalysisPage from "./components/AnalysisPage";
+import ArchitecturePage from "./components/ArchitecturePage";
 import type { AnalysisResult } from "./types";
 
 interface RecentItem {
@@ -12,7 +13,7 @@ interface RecentItem {
 }
 
 export default function App() {
-  const [page, setPage] = useState<"landing" | "analysis">("landing");
+  const [page, setPage] = useState<"landing" | "analysis" | "architecture">("landing");
   const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(null);
   const [recent, setRecent] = useState<RecentItem[]>([]);
 
@@ -40,8 +41,10 @@ export default function App() {
           onSetAnalysis={setAnalysisData}
           onNavigate={setPage}
         />
-      ) : (
+      ) : page === "analysis" ? (
         <AnalysisPage data={analysisData} onNavigate={setPage} />
+      ) : (
+        <ArchitecturePage onNavigate={setPage} />
       )}
     </main>
   );
