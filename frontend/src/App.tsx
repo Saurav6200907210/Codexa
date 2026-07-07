@@ -22,7 +22,8 @@ export default function App() {
     // Fetch recent items from the Express backend
     const fetchRecent = async () => {
       try {
-        const res = await fetch("/api/recent");
+        const baseUrl = import.meta.env.VITE_API_URL || "";
+        const res = await fetch(`${baseUrl}/api/recent`);
         if (res.ok) {
           const json = await res.json();
           setRecent(json.recent || []);
