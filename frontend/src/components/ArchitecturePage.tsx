@@ -150,11 +150,11 @@ return (
         <div className="flex items-center justify-between border-b border-zinc-200 pb-6 flex-wrap gap-4">
           <div className="space-y-1">
             <button
-              onClick={() => onNavigate("landing")}
+              onClick={() => onNavigate("analysis")}
               className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer bg-transparent border-0 mb-2"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to home</span>
+              <span>{lang === "hi" ? "Back to Analysis (Overview)" : "Back to Analysis (Overview)"}</span>
             </button>
             <h1 className="text-3xl font-extrabold text-zinc-950 tracking-tight">App Architecture & Code Flow</h1>
             <p className="text-sm text-zinc-500">
