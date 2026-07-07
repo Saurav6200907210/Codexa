@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
-import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight } from "lucide-react";
+import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight, Github, GitBranch } from "lucide-react";
 
 interface ArchitecturePageProps {
   onNavigate: (page: "landing" | "analysis" | "architecture") => void;
@@ -224,14 +224,131 @@ return (
           </pre>
         </section>
 
-        {/* 2. Interactive Flow Pipeline */}
+        {/* 2. Premium Visual Interactive Flow Diagram */}
+        <section className="glass-card rounded-2xl p-6 bg-zinc-50/50 border border-zinc-200 space-y-6">
+          <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse" />
+              <h2 className="text-lg font-bold text-zinc-900">
+                {lang === "hi" ? "2. Interactive App Architecture Diagram" : "2. Interactive App Architecture Diagram"}
+              </h2>
+            </div>
+            <span className="bg-cyan-50 border border-cyan-200 text-cyan-700 px-3 py-1 rounded-lg text-xs font-bold tracking-wide uppercase">
+              Live Pipeline
+            </span>
+          </div>
+
+          <div className="flex flex-col items-center py-6 select-none bg-white rounded-2xl border border-zinc-150 shadow-inner p-4 sm:p-8 max-w-2xl mx-auto space-y-0">
+            {/* Card 1: GitHub Repo URL */}
+            <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
+              <div className="w-12 h-12 rounded-xl bg-zinc-950 flex items-center justify-center text-white shadow-md">
+                <GitBranch className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-zinc-900 text-sm">GitHub Repo URL</h3>
+                <p className="text-xs text-zinc-400 font-mono mt-0.5">https://github.com/user/repo</p>
+              </div>
+            </div>
+
+            {/* Connector 1 */}
+            <div className="w-0.5 h-8 border-l border-dashed border-zinc-300 my-0" />
+
+            {/* Card 2: Vite React Frontend */}
+            <div className="w-full max-w-md bg-white border-2 border-cyan-400 ring-4 ring-cyan-50 rounded-2xl p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 scale-[1.02]">
+              <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-zinc-900 text-sm">Vite React Frontend</h3>
+                <p className="text-xs text-zinc-400 font-mono mt-0.5">Port: 5173 | Client Request</p>
+              </div>
+            </div>
+
+            {/* Connector 2 */}
+            <div className="w-0.5 h-8 border-l border-dashed border-zinc-300 my-0" />
+
+            {/* Card 3: Express API Gateway */}
+            <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
+              <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white shadow-md">
+                <Terminal className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-zinc-900 text-sm">Express API Gateway</h3>
+                <p className="text-xs text-zinc-400 font-mono mt-0.5">Port: 3001 | Proxies & Auth</p>
+              </div>
+            </div>
+
+            {/* Connector 3: Branching Path */}
+            <div className="relative w-full h-12 flex justify-center my-0">
+              <svg className="w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
+                <path d="M 200 0 L 200 16" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <path d="M 200 16 L 80 16 L 80 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <path d="M 200 16 L 320 16 L 320 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <circle cx="80" cy="24" r="5" fill="#22d3ee" className="animate-ping" />
+                <circle cx="80" cy="24" r="3.5" fill="#06b6d4" />
+                <circle cx="320" cy="24" r="5" fill="#22d3ee" className="animate-ping" />
+                <circle cx="320" cy="24" r="3.5" fill="#06b6d4" />
+              </svg>
+            </div>
+
+            {/* Split cards container */}
+            <div className="flex flex-col sm:flex-row gap-6 w-full max-w-[500px] justify-between items-center z-10 relative">
+              {/* Card 4a: GitHub API */}
+              <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white shadow-md shrink-0">
+                  <Github className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">GitHub API</h3>
+                  <p className="text-[10px] text-zinc-400 font-medium truncate mt-0.5">Fetch files content</p>
+                </div>
+              </div>
+
+              {/* Card 4b: Gemini AI */}
+              <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500 flex items-center justify-center text-white shadow-md shrink-0">
+                  <Cpu className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">Gemini AI</h3>
+                  <p className="text-[10px] text-zinc-400 font-medium truncate mt-0.5">
+                    {lang === "hi" ? "Explain in Hinglish" : "Explain in English"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Connector 4: Merge Path */}
+            <div className="relative w-full h-12 flex justify-center my-0">
+              <svg className="w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
+                <path d="M 80 0 L 80 32 L 200 32 L 200 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <path d="M 320 0 L 320 32 L 200 32 L 200 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <circle cx="200" cy="32" r="5.5" fill="#22d3ee" className="animate-ping" />
+                <circle cx="200" cy="32" r="4" fill="#06b6d4" />
+              </svg>
+            </div>
+
+            {/* Card 5: PostgreSQL (Drizzle) */}
+            <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-md">
+                <Database className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-zinc-900 text-sm">PostgreSQL (Drizzle)</h3>
+                <p className="text-xs text-zinc-400 font-mono mt-0.5">Schema: analyses | Save logs</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 3. Interactive Flow Pipeline */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Steps selector */}
           <div className="lg:col-span-5 space-y-3">
             <div className="flex items-center gap-2 mb-2">
               <BookOpen className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-lg font-bold text-zinc-900">2. Execution Step Pipeline</h2>
+              <h2 className="text-lg font-bold text-zinc-900">3. Execution Step Pipeline</h2>
             </div>
             
             <div className="space-y-2">
@@ -288,11 +405,11 @@ return (
 
         </section>
 
-        {/* 3. Mermaid Flowchart as Code Block */}
+        {/* 4. Mermaid Flowchart as Code Block */}
         <section className="glass-card rounded-2xl p-6 bg-white border border-zinc-200 space-y-4">
           <div className="flex items-center gap-2 border-b border-zinc-100 pb-3">
             <Cpu className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-zinc-900">3. Mermaid System Flowchart (Architecture Graph)</h2>
+            <h2 className="text-lg font-bold text-zinc-900">4. Mermaid System Flowchart (Architecture Graph)</h2>
           </div>
           
           <div className="text-xs text-zinc-600 leading-relaxed font-medium space-y-2">

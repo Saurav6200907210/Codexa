@@ -17,7 +17,7 @@ interface AnalysisPageProps {
 export default function AnalysisPage({ data, onNavigate, lang, setLang }: AnalysisPageProps) {
   const [activeSection, setActiveSection] = useState("overview");
 
-  const displayData = data && lang === "en" ? translateToEnglish(data) : data;
+  const displayData = (data && lang === "en" ? translateToEnglish(data) : data) as AnalysisResult;
 
   const handleExportMarkdown = () => {
     if (!displayData) return;

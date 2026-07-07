@@ -20,7 +20,7 @@ interface RecentItem {
 interface LandingPageProps {
   recent: RecentItem[];
   onSetAnalysis: (data: AnalysisResult) => void;
-  onNavigate: (page: "landing" | "analysis") => void;
+  onNavigate: (page: "landing" | "analysis" | "architecture") => void;
 }
 
 const FAQ_ITEMS = [
@@ -229,7 +229,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 80 }}
         >
-          <DataFlowAnimation />
+          <DataFlowAnimation loading={loading} loadingStep={loadingStep} url={url} />
         </motion.div>
       </section>
 
