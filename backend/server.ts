@@ -79,7 +79,7 @@ app.post("/api/analyze", async (req, res) => {
 
     // Redis cache check
     const cacheKey = `analysis:${meta.owner.toLowerCase()}:${meta.name.toLowerCase()}`;
-    if (redisClient.isOpen) {
+    if (redisClient && redisClient.isOpen) {
       try {
         const cached = await redisClient.get(cacheKey);
         if (cached) {
@@ -110,7 +110,7 @@ app.post("/api/analyze", async (req, res) => {
     }
 
     // Save to Redis cache (expire in 2 hours = 7200 seconds)
-    if (redisClient.isOpen) {
+    if (redisClient && redisClient.isOpen) {
       try {
         await redisClient.setEx(cacheKey, 7200, JSON.stringify(result));
       } catch (cacheErr) {
