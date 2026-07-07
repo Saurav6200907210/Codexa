@@ -1,15 +1,49 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
-import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight, Github, GitBranch } from "lucide-react";
+import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight, Github, Settings } from "lucide-react";
+import { AnalysisResult } from "../types";
 
 interface ArchitecturePageProps {
   onNavigate: (page: "landing" | "analysis" | "architecture") => void;
   lang: "en" | "hi";
   setLang: (lang: "en" | "hi") => void;
+  data: AnalysisResult | null;
 }
 
-export default function ArchitecturePage({ onNavigate, lang, setLang }: ArchitecturePageProps) {
+export default function ArchitecturePage({ onNavigate, lang, setLang, data }: ArchitecturePageProps) {
   const [activeStep, setActiveStep] = useState<number>(1);
+
+  // Dynamic extraction based on data prop
+  const repoName = data?.repo?.fullName || "Saurav6200907210/Codexa";
+  const stars = data?.repo?.stars ?? 0;
+  const forks = data?.repo?.forks ?? 0;
+  const defaultBranch = data?.repo?.defaultBranch || "main";
+
+  const stackNames = data?.techStack?.map(t => t.name.toLowerCase()) || [];
+
+  const isNext = stackNames.some(s => s.includes("next.js") || s.includes("nextjs"));
+  const isReact = stackNames.some(s => s.includes("react"));
+  const isVue = stackNames.some(s => s.includes("vue"));
+  const frontendTitle = isNext ? "Next.js Frontend & API" : isVue ? "Vue.js SPA" : isReact ? "React Frontend Client" : "Client Frontend";
+  const frontendDesc = data?.techStack?.find(t => t.name.toLowerCase().includes("react") || t.name.toLowerCase().includes("vue") || t.name.toLowerCase().includes("next"))?.name || "HTML / JS Client";
+
+  const hasExpress = stackNames.some(s => s.includes("express"));
+  const hasDjango = stackNames.some(s => s.includes("django"));
+  const hasFastAPI = stackNames.some(s => s.includes("fastapi"));
+  const hasNode = stackNames.some(s => s.includes("node"));
+  const backendTitle = hasExpress ? "Express API Server" : hasDjango ? "Django Backend Server" : hasFastAPI ? "FastAPI Server" : hasNode ? "Node.js Backend" : "Application Logic Server";
+  const backendDesc = data?.techStack?.find(t => t.name.toLowerCase().includes("express") || t.name.toLowerCase().includes("django") || t.name.toLowerCase().includes("fastapi") || t.name.toLowerCase().includes("node"))?.name || "JavaScript Engine";
+
+  const hasDB = stackNames.some(s => s.includes("postgres") || s.includes("mongo") || s.includes("sql") || s.includes("drizzle") || s.includes("prisma") || s.includes("db") || s.includes("redis"));
+  const dbItem = data?.techStack?.find(t => t.name.toLowerCase().includes("postgres") || t.name.toLowerCase().includes("mongo") || t.name.toLowerCase().includes("sql") || t.name.toLowerCase().includes("drizzle") || t.name.toLowerCase().includes("prisma") || t.name.toLowerCase().includes("db"));
+  const dbTitle = dbItem ? dbItem.name : hasDB ? "Database Layer" : "In-Memory State Cache";
+
+  const hasDocker = stackNames.some(s => s.includes("docker"));
+  const hasActions = stackNames.some(s => s.includes("action") || s.includes("ci/cd") || s.includes("workflow"));
+
+  const srcFolder = data?.folders?.find(f => f.path.startsWith("src") || f.path.startsWith("frontend/src") || f.path.startsWith("components"));
+  const serverFolder = data?.folders?.find(f => f.path.startsWith("server") || f.path.startsWith("backend") || f.path.startsWith("api"));
+  const configFiles = data?.files?.filter(f => f.path.includes("package.json") || f.path.includes("docker") || f.path.includes("config") || f.path.includes("drizzle") || f.path.includes("prisma")).map(f => f.path.split("/").pop()) || [];
 
   const steps = [
     {
@@ -230,11 +264,11 @@ return (
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse" />
               <h2 className="text-lg font-bold text-zinc-900">
-                {lang === "hi" ? "2. Interactive App Architecture Diagram" : "2. Interactive App Architecture Diagram"}
+                {lang === "hi" ? "2. Real Repo Flow Architecture" : "2. Real Repo Flow Architecture"}
               </h2>
             </div>
             <span className="bg-cyan-50 border border-cyan-200 text-cyan-700 px-3 py-1 rounded-lg text-xs font-bold tracking-wide uppercase">
-              Live Pipeline
+              Live Diagram
             </span>
           </div>
 
@@ -242,39 +276,51 @@ return (
             {/* Card 1: GitHub Repo URL */}
             <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
               <div className="w-12 h-12 rounded-xl bg-zinc-950 flex items-center justify-center text-white shadow-md">
-                <GitBranch className="w-5 h-5" />
+                <Github className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-extrabold text-zinc-900 text-sm">GitHub Repo URL</h3>
-                <p className="text-xs text-zinc-400 font-mono mt-0.5">https://github.com/user/repo</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-extrabold text-zinc-900 text-sm truncate">{repoName}</h3>
+                <p className="text-xs text-zinc-500 font-medium mt-0.5">
+                  ⭐ {stars} Stars &bull; 🍴 {forks} Forks &bull; Branch: {defaultBranch}
+                </p>
               </div>
             </div>
 
             {/* Connector 1 */}
             <div className="w-0.5 h-8 border-l border-dashed border-zinc-300 my-0" />
 
-            {/* Card 2: Vite React Frontend */}
+            {/* Card 2: Frontend Layer */}
             <div className="w-full max-w-md bg-white border-2 border-cyan-400 ring-4 ring-cyan-50 rounded-2xl p-4 flex items-center gap-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 scale-[1.02]">
               <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md">
                 <Globe className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-extrabold text-zinc-900 text-sm">Vite React Frontend</h3>
-                <p className="text-xs text-zinc-400 font-mono mt-0.5">Port: 5173 | Client Request</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-extrabold text-zinc-900 text-sm">{frontendTitle}</h3>
+                <p className="text-xs text-zinc-650 font-semibold mt-0.5 leading-tight">{frontendDesc}</p>
+                {srcFolder && (
+                  <p className="text-[10px] text-zinc-400 font-mono mt-1 truncate">
+                    &bull; /{srcFolder.path} ({srcFolder.purpose})
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Connector 2 */}
             <div className="w-0.5 h-8 border-l border-dashed border-zinc-300 my-0" />
 
-            {/* Card 3: Express API Gateway */}
+            {/* Card 3: Backend Gateway */}
             <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
               <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white shadow-md">
                 <Terminal className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-extrabold text-zinc-900 text-sm">Express API Gateway</h3>
-                <p className="text-xs text-zinc-400 font-mono mt-0.5">Port: 3001 | Proxies & Auth</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-extrabold text-zinc-900 text-sm">{backendTitle}</h3>
+                <p className="text-xs text-zinc-550 font-medium mt-0.5 leading-tight">{backendDesc}</p>
+                {serverFolder && (
+                  <p className="text-[10px] text-zinc-400 font-mono mt-1 truncate">
+                    &bull; /{serverFolder.path} ({serverFolder.purpose})
+                  </p>
+                )}
               </div>
             </div>
 
@@ -293,26 +339,32 @@ return (
 
             {/* Split cards container */}
             <div className="flex flex-col sm:flex-row gap-6 w-full max-w-[500px] justify-between items-center z-10 relative">
-              {/* Card 4a: GitHub API */}
+              {/* Card 4a: Left Pipeline (CI/CD or config) */}
               <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white shadow-md shrink-0">
-                  <Github className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">GitHub API</h3>
-                  <p className="text-[10px] text-zinc-400 font-medium truncate mt-0.5">Fetch files content</p>
-                </div>
-              </div>
-
-              {/* Card 4b: Gemini AI */}
-              <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500 flex items-center justify-center text-white shadow-md shrink-0">
                   <Cpu className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">Gemini AI</h3>
+                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">
+                    {hasActions ? "GitHub CI/CD" : "Configurations"}
+                  </h3>
+                  <p className="text-[10px] text-zinc-400 font-medium truncate mt-0.5 font-mono">
+                    {configFiles.length > 0 ? configFiles.slice(0, 2).join(", ") : "project configs"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4b: Right Pipeline (Docker or Gemini) */}
+              <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500 flex items-center justify-center text-white shadow-md shrink-0">
+                  <Settings className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-extrabold text-zinc-900 text-xs truncate">
+                    {hasDocker ? "Dockerized Env" : "AI Summaries"}
+                  </h3>
                   <p className="text-[10px] text-zinc-400 font-medium truncate mt-0.5">
-                    {lang === "hi" ? "Explain in Hinglish" : "Explain in English"}
+                    {hasDocker ? "container configs" : "Gemini explanations"}
                   </p>
                 </div>
               </div>
@@ -328,14 +380,16 @@ return (
               </svg>
             </div>
 
-            {/* Card 5: PostgreSQL (Drizzle) */}
+            {/* Card 5: Database Layer */}
             <div className="w-full max-w-md bg-white border border-zinc-200 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md hover:border-zinc-300 transition-all duration-300 transform hover:-translate-y-0.5">
               <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-md">
                 <Database className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-extrabold text-zinc-900 text-sm">PostgreSQL (Drizzle)</h3>
-                <p className="text-xs text-zinc-400 font-mono mt-0.5">Schema: analyses | Save logs</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-extrabold text-zinc-900 text-sm">{dbTitle}</h3>
+                <p className="text-xs text-zinc-400 font-semibold mt-0.5 leading-tight">
+                  {hasDB ? "Persistent storage & caching query indexes" : "In-memory caching layer"}
+                </p>
               </div>
             </div>
           </div>

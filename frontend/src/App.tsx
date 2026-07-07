@@ -45,7 +45,7 @@ export default function App() {
       ) : page === "analysis" ? (
         <AnalysisPage data={analysisData} onNavigate={setPage} lang={lang} setLang={setLang} />
       ) : (
-        <ArchitecturePage onNavigate={setPage} lang={lang} setLang={setLang} />
+        <ArchitecturePage onNavigate={setPage} lang={lang} setLang={setLang} data={analysisData} />
       )}
     </main>
   );
