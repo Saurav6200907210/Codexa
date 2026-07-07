@@ -6,6 +6,7 @@ import { analyses } from "./schema.js";
 import { desc } from "drizzle-orm";
 import { analyzeRepo } from "./analyzer.js";
 import { fetchRepoMeta, fetchRepoTree, parseRepoUrl } from "./github.js";
+import { connectRedis, redisClient } from "./redis.js";
 
 dotenv.config();
 
@@ -75,6 +76,21 @@ app.post("/api/analyze", async (req, res) => {
 
   try {
     const meta = await fetchRepoMeta(parsed.owner, parsed.repo);
+
+    // Redis cache check
+    const cacheKey = `analysis:${meta.owner.toLowerCase()}:${meta.name.toLowerCase()}`;
+    if (redisClient.isOpen) {
+      try {
+        const cached = await redisClient.get(cacheKey);
+        if (cached) {
+          console.log(`Cache Hit for ${cacheKey}`);
+          return res.json({ result: JSON.parse(cached) });
+        }
+      } catch (cacheErr) {
+        console.warn("Failed to read from Redis cache:", cacheErr);
+      }
+    }
+
     const tree = await fetchRepoTree(meta.owner, meta.name, meta.defaultBranch);
     const result = await analyzeRepo(meta, tree);
 
@@ -93,6 +109,15 @@ app.post("/api/analyze", async (req, res) => {
       console.error("Failed to save analysis to DB:", dbErr);
     }
 
+    // Save to Redis cache (expire in 2 hours = 7200 seconds)
+    if (redisClient.isOpen) {
+      try {
+        await redisClient.setEx(cacheKey, 7200, JSON.stringify(result));
+      } catch (cacheErr) {
+        console.warn("Failed to write to Redis cache:", cacheErr);
+      }
+    }
+
     res.json({ result });
   } catch (e: any) {
     const msg = e.message || "UNKNOWN";
@@ -107,6 +132,7 @@ app.post("/api/analyze", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await connectRedis();
   console.log(`Backend server running on http://localhost:${PORT}`);
 });
