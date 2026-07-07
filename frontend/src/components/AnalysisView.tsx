@@ -41,110 +41,237 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
     const nameLower = filename.toLowerCase();
     const pathLower = path.toLowerCase();
     
-    let summary = `Ye file \`${filename}\` code flow ke liye ek key part hai.`;
+    let summary = isHinglish
+      ? `Ye file \`${filename}\` code flow ke liye ek key part hai.`
+      : `This file \`${filename}\` is a key part of the code flow.`;
     const points: string[] = [];
     let role = "Source File";
 
     if (nameLower.endsWith(".json")) {
       role = "Configuration File";
-      summary = `Ye project ki configuration settings file \`${filename}\` hai.`;
-      points.push(
-        "Isme JSON formatted structured key-value configurations store kiye gaye hain.",
-        "Dependency libraries, build variables aur environment settings control karti hai.",
-        "Is file ke badalne se runtime behaviors aur library version constraints change ho sakte hain."
-      );
+      summary = isHinglish
+        ? `Ye project ki configuration settings file \`${filename}\` hai.`
+        : `This is the configuration settings file \`${filename}\` of the project.`;
+      if (isHinglish) {
+        points.push(
+          "Isme JSON formatted structured key-value configurations store kiye gaye hain.",
+          "Dependency libraries, build variables aur environment settings control karti hai.",
+          "Is file ke badalne se runtime behaviors aur library version constraints change ho sakte hain."
+        );
+      } else {
+        points.push(
+          "Stores JSON formatted structured key-value configurations.",
+          "Controls dependency libraries, build variables, and environment settings.",
+          "Modifying this file can alter runtime behaviors and package version constraints."
+        );
+      }
     } else if (nameLower.endsWith(".config.js") || nameLower.endsWith(".config.ts") || nameLower.endsWith(".config.mjs")) {
       role = "Module Configuration";
-      summary = `Ye tool configure karne ki configuration file \`${filename}\` hai.`;
-      points.push(
-        "Build engines (Vite/Next), CSS styling rules (Tailwind/PostCSS) ya database migrations settings init karti hai.",
-        "Server-side optimization parameters, entry routes proxies aur base paths control karti hai."
-      );
+      summary = isHinglish
+        ? `Ye tool configure karne ki configuration file \`${filename}\` hai.`
+        : `This is the tool configuration file \`${filename}\`.`;
+      if (isHinglish) {
+        points.push(
+          "Build engines (Vite/Next), CSS styling rules (Tailwind/PostCSS) ya database migrations settings init karti hai.",
+          "Server-side optimization parameters, entry routes proxies aur base paths control karti hai."
+        );
+      } else {
+        points.push(
+          "Initializes settings for build engines (Vite/Next), CSS styling rules (Tailwind/PostCSS), or database migrations.",
+          "Controls server-side optimization parameters, entry route proxies, and base paths."
+        );
+      }
     } else if (pathLower.includes("db/") || pathLower.includes("database/") || nameLower.includes("schema")) {
       role = "Database Schema / Connection";
-      summary = `Ye database integrity aur structure maintain karne ki logic file \`${filename}\` hai.`;
-      points.push(
-        "Database tables schemas, entity columns datatypes aur index constraints mappings store karti hai.",
-        "Drizzle/Prisma client hooks provide karti hai jisse frontend-backend type-safe queries kar sakein.",
-        "Relation configurations aur defaults hooks (jaise defaultNow()) define kiye gaye hain."
-      );
+      summary = isHinglish
+        ? `Ye database integrity aur structure maintain karne ki logic file \`${filename}\` hai.`
+        : `This is the logic file \`${filename}\` to maintain database integrity and structure.`;
+      if (isHinglish) {
+        points.push(
+          "Database tables schemas, entity columns datatypes aur index constraints mappings store karti hai.",
+          "Drizzle/Prisma client hooks provide karti hai jisse frontend-backend type-safe queries kar sakein.",
+          "Relation configurations aur defaults hooks (jaise defaultNow()) define kiye gaye hain."
+        );
+      } else {
+        points.push(
+          "Maps database table schemas, entity columns datatypes, and index constraints.",
+          "Provides Drizzle/Prisma client hooks so the frontend and backend can perform type-safe queries.",
+          "Defines relation configurations and default hooks (like defaultNow())."
+        );
+      }
     } else if (pathLower.includes("routes/") || pathLower.includes("api/")) {
       role = "API Endpoint Route";
-      summary = `Ye HTTP requests processing endpoints register karne wali routing file \`${filename}\` hai.`;
-      points.push(
-        "Kaunse request paths (GET, POST, DELETE etc.) kaunse backend actions run karenge, yeh handle karti hai.",
-        "Database handlers trigger karti hai request responses dynamically retrieve/update karne ke liye.",
-        "JSON payloads wrap karke secure status headers ke sath output return karti hai."
-      );
+      summary = isHinglish
+        ? `Ye HTTP requests processing endpoints register karne wali routing file \`${filename}\` hai.`
+        : `This is the routing file \`${filename}\` that registers HTTP request processing endpoints.`;
+      if (isHinglish) {
+        points.push(
+          "Kaunse request paths (GET, POST, DELETE etc.) kaunse backend actions run karenge, yeh handle karti hai.",
+          "Database handlers trigger karti hai request responses dynamically retrieve/update karne ke liye.",
+          "JSON payloads wrap karke secure status headers ke sath output return karti hai."
+        );
+      } else {
+        points.push(
+          "Handles which backend actions run for specific request paths (GET, POST, DELETE, etc.).",
+          "Triggers database handlers to dynamically retrieve or update request responses.",
+          "Wraps JSON payloads and returns output with secure status headers."
+        );
+      }
     } else if (pathLower.includes("components/") || pathLower.includes("ui/") || pathLower.includes("shared/")) {
       role = "Reusable UI Component";
-      summary = `Ye front-end presentation layer component file \`${filename}\` hai.`;
-      points.push(
-        "TypeScript/React reusable visual structure define karti hai jo application shell layout me use hota hai.",
-        "Props interfaces define karke structural elements dynamically bind karti hai.",
-        "Modern CSS/HTML styling aur responsive rules include karti hai."
-      );
+      summary = isHinglish
+        ? `Ye front-end presentation layer component file \`${filename}\` hai.`
+        : `This is the front-end presentation layer component file \`${filename}\`.`;
+      if (isHinglish) {
+        points.push(
+          "TypeScript/React reusable visual structure define karti hai jo application shell layout me use hota hai.",
+          "Props interfaces define karke structural elements dynamically bind karti hai.",
+          "Modern CSS/HTML styling aur responsive rules include karti hai."
+        );
+      } else {
+        points.push(
+          "Defines reusable TypeScript/React visual structures used inside the application shell layout.",
+          "Defines props interfaces to dynamically bind structural elements.",
+          "Includes modern CSS/HTML styling and responsive design rules."
+        );
+      }
     } else if (pathLower.includes("pages/") || pathLower.includes("app/") || pathLower.includes("views/")) {
       role = "Page Router View";
-      summary = `Ye specific route rendering page view component file \`${filename}\` hai.`;
-      points.push(
-        "URL targets matching UI layout render karti hai.",
-        "Internal components import karke pages structures grid compose karti hai.",
-        "Client side routing state transitions and redirect triggers attach karti hai."
-      );
+      summary = isHinglish
+        ? `Ye specific route rendering page view component file \`${filename}\` hai.`
+        : `This is the specific route rendering page view component file \`${filename}\`.`;
+      if (isHinglish) {
+        points.push(
+          "URL targets matching UI layout render karti hai.",
+          "Internal components import karke pages structures grid compose karti hai.",
+          "Client side routing state transitions and redirect triggers attach karti hai."
+        );
+      } else {
+        points.push(
+          "Renders the UI layout matching target URLs.",
+          "Imports internal components to compose page structures and grids.",
+          "Attaches client-side routing state transitions and redirect triggers."
+        );
+      }
     } else if (pathLower.includes("lib/") || pathLower.includes("services/") || pathLower.includes("utils/")) {
       role = "Helper / Utility Module";
-      summary = `Ye reusable core function logic code file \`${filename}\` hai.`;
-      points.push(
-        "Modular utility calculation, date parse aur helpers helper exports rakhti hai.",
-        "Third party SDK clients initialize karti hai aur custom exceptions checks handles validate karti hai.",
-        "Main calculations aur process flows layers decouple karke clean maintain karti hai."
-      );
+      summary = isHinglish
+        ? `Ye reusable core function logic code file \`${filename}\` hai.`
+        : `This is the reusable core function logic code file \`${filename}\`.`;
+      if (isHinglish) {
+        points.push(
+          "Modular utility calculation, date parse aur helpers helper exports rakhti hai.",
+          "Third party SDK clients initialize karti hai aur custom exceptions checks handles validate karti hai.",
+          "Main calculations aur process flows layers decouple karke clean maintain karti hai."
+        );
+      } else {
+        points.push(
+          "Contains modular utility calculations, date parsers, and helper exports.",
+          "Initializes third-party SDK clients and validates custom exception checks.",
+          "Decouples main calculations and process flow layers to keep the code clean."
+        );
+      }
     } else if (nameLower.endsWith(".html") || nameLower.endsWith(".htm")) {
       role = "HTML Layout / Template";
-      summary = `Ye browser ke liye visual structure define karne wali HTML template page \`${filename}\` hai.`;
-      points.push(
-        "Application structure ka core entry skeleton define karti hai.",
-        "Favicons, browser headers, page viewport aur essential metadata/scripts references inject karti hai.",
-        "Dynamic components mounting point setup (like `#root` or `#app`) provide karti hai."
-      );
+      summary = isHinglish
+        ? `Ye browser ke liye visual structure define karne wali HTML template page \`${filename}\` hai.`
+        : `This is the HTML template page \`${filename}\` defining visual structure for the browser.`;
+      if (isHinglish) {
+        points.push(
+          "Application structure ka core entry skeleton define karti hai.",
+          "Favicons, browser headers, page viewport aur essential metadata/scripts references inject karti hai.",
+          "Dynamic components mounting point setup (like `#root` or `#app`) provide karti hai."
+        );
+      } else {
+        points.push(
+          "Defines the core entry skeleton of the application structure.",
+          "Injects favicons, browser headers, page viewport, and essential metadata/script references.",
+          "Provides setup for dynamic component mounting points (like `#root` or `#app`)."
+        );
+      }
     } else if (nameLower.endsWith(".css") || nameLower.endsWith(".scss") || nameLower.endsWith(".sass") || nameLower.endsWith(".less")) {
       role = "Stylesheet / Styling Rules";
-      summary = `Ye application ke components visual theme aur layouts design karne wali stylesheet file \`${filename}\` hai.`;
-      points.push(
-        "Modern styling attributes, animations keyframes, media queries aur variables control karti hai.",
-        "Components margins, custom grids, dark/light theme behaviors aur standard layout parameters adjust karti hai."
-      );
+      summary = isHinglish
+        ? `Ye application ke components visual theme aur layouts design karne wali stylesheet file \`${filename}\` hai.`
+        : `This is the stylesheet file \`${filename}\` that designs visual themes and layouts of application components.`;
+      if (isHinglish) {
+        points.push(
+          "Modern styling attributes, animations keyframes, media queries aur variables control karti hai.",
+          "Components margins, custom grids, dark/light theme behaviors aur standard layout parameters adjust karti hai."
+        );
+      } else {
+        points.push(
+          "Controls modern styling attributes, animation keyframes, media queries, and styling variables.",
+          "Adjusts component margins, custom grids, dark/light theme behaviors, and layout parameters."
+        );
+      }
     } else if (nameLower.endsWith(".md") || nameLower.endsWith(".mdx")) {
       role = "Documentation File";
-      summary = `Ye markdown syntax based instruction / documentation guide file \`${filename}\` hai.`;
-      points.push(
-        "Developers aur users ke liye project installation setup, code configurations aur run scripts explain karti hai.",
-        "Formatting patterns, headings, lists aur tables use karke clean documentation provide karti hai."
-      );
+      summary = isHinglish
+        ? `Ye markdown syntax based instruction / documentation guide file \`${filename}\` hai.`
+        : `This is the markdown syntax-based instruction / documentation guide file \`${filename}\`.`;
+      if (isHinglish) {
+        points.push(
+          "Developers aur users ke liye project installation setup, code configurations aur run scripts explain karti hai.",
+          "Formatting patterns, headings, lists aur tables use karke clean documentation provide karti hai."
+        );
+      } else {
+        points.push(
+          "Explains project installation setup, code configurations, and run scripts for developers and users.",
+          "Provides clean documentation using formatting patterns, headings, lists, and tables."
+        );
+      }
     } else if (nameLower.endsWith(".yml") || nameLower.endsWith(".yaml") || nameLower.endsWith(".toml")) {
       role = "Build & Deployment Configuration";
-      summary = `Ye build pipelines aur deployment automations control karne wali YAML/TOML structured format config file \`${filename}\` hai.`;
-      points.push(
-        "GitHub CI/CD Actions workflows, packages versions specifications aur dynamic parameters rules configure karti hai.",
-        "Application release cycle steps aur tests environment initialization settings track karti hai."
-      );
+      summary = isHinglish
+        ? `Ye build pipelines aur deployment automations control karne wali YAML/TOML structured format config file \`${filename}\` hai.`
+        : `This is the YAML/TOML structured config file \`${filename}\` controlling build pipelines and deployment automation.`;
+      if (isHinglish) {
+        points.push(
+          "GitHub CI/CD Actions workflows, packages versions specifications aur dynamic parameters rules configure karti hai.",
+          "Application release cycle steps aur tests environment initialization settings track karti hai."
+        );
+      } else {
+        points.push(
+          "Configures GitHub CI/CD Actions workflows, package versions specifications, and dynamic parameter rules.",
+          "Tracks application release cycle steps and test environment initialization settings."
+        );
+      }
     } else if (/\.(png|jpe?g|gif|svg|ico|webp)$/i.test(nameLower)) {
       role = "Static Media Asset";
-      summary = `Ye application UI layouts me load hone wali image / icon graphical asset file \`${filename}\` hai.`;
-      points.push(
-        "Interface graphics, visual diagrams, logo icons aur assets standard formats define karti hai.",
-        "Web optimization assets pipeline ke through build artifacts cache storage me load hoti hai."
-      );
+      summary = isHinglish
+        ? `Ye application UI layouts me load hone wali image / icon graphical asset file \`${filename}\` hai.`
+        : `This is the image/icon graphical asset file \`${filename}\` loaded in application UI layouts.`;
+      if (isHinglish) {
+        points.push(
+          "Interface graphics, visual diagrams, logo icons aur assets standard formats define karti hai.",
+          "Web optimization assets pipeline ke through build artifacts cache storage me load hoti hai."
+        );
+      } else {
+        points.push(
+          "Defines standard formats for interface graphics, visual diagrams, logo icons, and assets.",
+          "Loads assets into cache storage through the web optimization asset pipeline."
+        );
+      }
     } else {
       const ext = filename.split(".").pop() || "";
       role = `${ext.toUpperCase()} Source File`;
-      summary = `Ye project runtime behavior execute karne wali logic source file \`${filename}\` hai.`;
-      points.push(
-        `Is source code module me essential execution behaviors aur methods logic write kiye gaye hain.`,
-        `Functions definitions aur components modules import karke application code structure configure karti hai.`,
-        `Dynamic operations parameters register karke dependencies standard logic bind karti hai.`
-      );
+      summary = isHinglish
+        ? `Ye project runtime behavior execute karne wali logic source file \`${filename}\` hai.`
+        : `This is the logic source file \`${filename}\` that executes project runtime behavior.`;
+      if (isHinglish) {
+        points.push(
+          `Is source code module me essential execution behaviors aur methods logic write kiye gaye hain.`,
+          `Functions definitions aur components modules import karke application code structure configure karti hai.`,
+          `Dynamic operations parameters register karke dependencies standard logic bind karti hai.`
+        );
+      } else {
+        points.push(
+          `Essential execution behaviors and methods logic are written in this source code module.`,
+          `Imports function definitions and components modules to configure application code structure.`,
+          `Registers dynamic operation parameters and binds standard dependency logic.`
+        );
+      }
     }
 
     return { summary, points, role };
@@ -186,10 +313,15 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
     // 1. File Overview
     sections.push({
       title: "1. File Overview",
-      content: `• **Why this file exists:** Ye file \`${filename}\` is project me key configurations, logic patterns ya presentations compile karne ke liye banayi gayi hai.
+      content: isHinglish
+        ? `• **Why this file exists:** Ye file \`${filename}\` is project me key configurations, logic patterns ya presentations compile karne ke liye banayi gayi hai.
 • **What problem it solves:** Iska main objective repository implementation structure and behaviors code consistency standardize karna hai.
 • **What would happen if this file did not exist:** Agar ye file project me nahi hogi, toh is file se define hone wala behavior break ho jayega aur application execution run time fail ho sakti hai.
 • **File Category:** Ye ek **${descType}** category ki file hai.`
+        : `• **Why this file exists:** This file \`${filename}\` was created to compile key configurations, logic patterns, or presentation layouts in the project.
+• **What problem it solves:** Its primary objective is to standardize repository implementation structure and ensure code consistency.
+• **What would happen if this file did not exist:** If this file is missing, the functionality defined by it will break, potentially causing runtime failures during application execution.
+• **File Category:** This file belongs to the **${descType}** category.`
     });
 
     // 2. Where This File Fits In The Project
@@ -203,13 +335,21 @@ export function AnalysisView({ data, lang }: { data: AnalysisResult; lang: "en" 
     
     sections.push({
       title: "2. Where This File Fits In The Project",
-      content: `**Execution Chain Workflow:**
+      content: isHinglish
+        ? `**Execution Chain Workflow:**
 \`\`\`
 ${chain}
 \`\`\`
 • **Who imports this file:** Is file ko main package engines, framework wrapper, ya target components modules import karte hain.
 • **Which files use it:** Project ke context folders, sub-directories aur relative routes files is file ke values/logic consume karte hain.
 • **Which files depend on it:** Relational imports aur setup packages config settings parameters ispar dynamically dependencies generate karti hain.`
+        : `**Execution Chain Workflow:**
+\`\`\`
+${chain}
+\`\`\`
+• **Who imports this file:** This file is imported by the main package engines, framework wrappers, or target component modules.
+• **Which files use it:** Context directories, sub-folders, and relative route files consume the values/logic defined in this file.
+• **Which files depend on it:** Relational imports and setup package config settings depend dynamically on this module.`
     });
 
     // 3. What Happens Inside This File
@@ -218,38 +358,59 @@ ${chain}
     
     sections.push({
       title: "3. What Happens Inside This File",
-      content: `**Execution flow of javascript/module compilation inside file:**
+      content: isHinglish
+        ? `**Execution flow of javascript/module compilation inside file:**
 \`\`\`
 ${flowStr}
 \`\`\`
 • Sabse pehle compiler essential third-party components aur layout models resolve karta hai.
 • Uske baad internal states settings, logic hooks and constants functions stack process structure initiate karti hain.
 • Final components render, return parameters ya configure object structure parse karke client output format standard set hota hai.`
+        : `**Execution flow of javascript/module compilation inside file:**
+\`\`\`
+${flowStr}
+\`\`\`
+• First, the compiler resolves essential third-party components and layout modules.
+• Next, internal state configurations, logic hooks, and helper constants initiate the execution flow.
+• Finally, components are rendered, and return values or configuration objects are parsed to produce the standard client output format.`
     });
 
     // 4. Imports Explained
     sections.push({
       title: "4. Imports Explained",
-      content: `• **Standard React / Third-Party modules:** External dependencies files loading parameters aur packages resolve karne ke liye standard hooks (jaise useState, useEffect) import hote hain.
+      content: isHinglish
+        ? `• **Standard React / Third-Party modules:** External dependencies files loading parameters aur packages resolve karne ke liye standard hooks (jaise useState, useEffect) import hote hain.
 • **Local styles / Components path:** Local helper icons, styling models, custom buttons controllers dynamically import ho rahe hain.
 • **Utility parameters:** Database drivers, variables methods structure parse configurations clean environment implement karti hain.`
+        : `• **Standard React / Third-Party modules:** Standard hooks (like useState, useEffect) and packages are imported to resolve external dependency libraries.
+• **Local styles / Components path:** Helper icons, custom buttons, and local styling elements are imported.
+• **Utility parameters:** Database drivers, parsed variables, and environment configuration parameters are imported to keep code files clean.`
     });
 
     // 5. Functions Explained
     sections.push({
       title: "5. Functions Explained",
-      content: `• **Core helper methods / Component execution:** Component/Module state rendering parameters aur logical evaluations runs karti hain.
+      content: isHinglish
+        ? `• **Core helper methods / Component execution:** Component/Module state rendering parameters aur logical evaluations runs karti hain.
 • **Who calls it:** Browser user layout events ya layout router lifecycle mounts.
 • **Inputs & Outputs:** Inputs configurations structures aur props parameter target maps accept karti hai, aur compile parameters / JSX element node UI return output generate karti hai.
 • **Post Execution:** Final layout renders or values update variables stack trigger updates dynamically updates.`
+        : `• **Core helper methods / Component execution:** Executes calculations, logical checks, or manages visual component rendering states.
+• **Who calls it:** Browser user interactions, page lifecycle events, or page router triggers.
+• **Inputs & Outputs:** Receives props or configuration structures, and returns updated execution states or visual UI nodes.
+• **Post Execution:** Updates state variables dynamically to trigger UI updates and visual rerenders.`
     });
 
     // 6. Component Breakdown
     sections.push({
       title: "6. Component Breakdown",
-      content: `• **UI Presentation View Block:** Standard layouts container blocks templates display and design system rules update rules rules.
+      content: isHinglish
+        ? `• **UI Presentation View Block:** Standard layouts container blocks templates display and design system rules update rules rules.
 • **Displayed Data:** Key variables properties values aur configuration keys labels values screens visual update dynamically load rules.
 • **User Interactions:** Clicks hooks triggers, key handlers inputs changes, forms submits callbacks methods maps rules variables layout.`
+        : `• **UI Presentation View Block:** Provides visual container skeletons and layout structures following the system design rules.
+• **Displayed Data:** Renders calculated states, dynamic values, and labels on user screens.
+• **User Interactions:** Handles click events, input changes, and form submissions via event handler callback functions.`
     });
 
     // 7. Code Flow
@@ -290,47 +451,72 @@ DOM State Render / Configuration Load
 
     // 9. Beginner Friendly Explanation
     sections.push({
-      title: "9. Beginner Friendly Explanation (Hindi + English)",
-      content: `Socho ye file ek **kitchen key blueprint** ya **recipe card** jaisi hai! 🍳
+      title: isHinglish ? "9. Beginner Friendly Explanation (Hindi + English)" : "9. Beginner Friendly Explanation",
+      content: isHinglish
+        ? `Socho ye file ek **kitchen key blueprint** ya **recipe card** jaisi hai! 🍳
 • Jaise kitchen me food recipe banane ke liye ingredients require hotey hain (jo hamare *Imports* hain).
 • Recipe ke instructions step by step follow hotey hain (jo hamari *Functions* logic hai).
 • Aur last me delicious food plate ready hokar plate server hoti hai (jo hamara *JSX UI output* ya *Config structure* hai!).
 Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish nahi ban payegi! Isliye ye file project structure flow me essential role represent karti hai.`
+        : `Think of this file as a **kitchen recipe card**! 🍳
+• Just like a recipe needs ingredients to cook food, this file imports modules (which are our *Imports*).
+• Just like recipe instructions are followed step-by-step, the code follows instructions (our *Functions* logic).
+• And finally, the delicious dish is served on a plate (our *JSX UI Output* or *Config structure*!).
+If this recipe card goes missing, the chef gets confused and the dish cannot be prepared. That is why this file plays an essential role in the project!`
     });
 
     // 10. Important Concepts Used
     sections.push({
       title: "10. Important Concepts Used",
-      content: `✓ **Modular Programming:** Code reuse and structure clarity modules break maps code rules.
+      content: isHinglish
+        ? `✓ **Modular Programming:** Code reuse and structure clarity modules break maps code rules.
 ✓ **TypeScript Type Safety:** Proper types templates definitions variables consistency compile safety targets rules.
 ✓ **State & Data Bindings:** Dynamic state UI events triggers hooks.
 ✓ **Configuration Parsing:** Key-value attributes standard mapping settings.`
+        : `✓ **Modular Programming:** Breaking code into reusable blocks for clean structure.
+✓ **TypeScript Type Safety:** Using custom type definitions to prevent compile-time bugs.
+✓ **State & Data Bindings:** Syncing UI nodes dynamically based on user interaction states.
+✓ **Configuration Parsing:** Mapping structured settings parameters to configure tools.`
     });
 
     // 11. If I Remove This File
     sections.push({
       title: "11. If I Remove This File",
-      content: `• **What will break:** Is file ka dependent code flow compile load crash errors throws variables properties.
+      content: isHinglish
+        ? `• **What will break:** Is file ka dependent code flow compile load crash errors throws variables properties.
 • **Which pages stop working:** Core pages layouts and views screens templates.
 • **Will the project compile:** Code compiler errors like "Module not found" or "undefined imports exceptions errors" screen targets trace returns.`
+        : `• **What will break:** Any dependent modules or features importing this file will crash and fail.
+• **Which pages stop working:** Core screens and templates relying on this module will stop rendering.
+• **Will the project compile:** No, compilation will fail with errors like "Module not found" or "Undefined Import".`
     });
 
     // 12. Interview Notes
     sections.push({
-      title: "12. Interview Notes & Expected Q&A",
-      content: `• **Q: Is file ka project architectural setup me primary role kya hai?**
+      title: isHinglish ? "12. Interview Notes & Expected Q&A" : "12. Interview Notes",
+      content: isHinglish
+        ? `• **Q: Is file ka project architectural setup me primary role kya hai?**
   * **A:** Ye file application configuration properties state declarations or reusable layout widgets component bindings rules control karti hai.
 • **Q: Imports resolution parameters kaise behavior control karte hain?**
   * **A:** Modules clean decouple rules follow references imports optimize components state code size trace update logic load parameters.`
+        : `• **Q: What is the primary role of this file in the project structure?**
+  * **A:** This file manages application configuration properties, state declarations, or reusable layout component bindings.
+• **Q: How does proper imports resolution optimize execution?**
+  * **A:** Decouples codebase files, optimizes build size, and references packages cleanly for component state updates.`
     });
 
     // 13. Key Takeaways
     sections.push({
       title: "13. Key Takeaways",
-      content: `1. Codebase clarity maintain modules helper templates functions decouple karti hai.
+      content: isHinglish
+        ? `1. Codebase clarity maintain modules helper templates functions decouple karti hai.
 2. Type check parameters TypeScript variables code accuracy double ensure parameters.
 3. Clean configuration keys environment changes adapt logic settings.
 4. Project modules workflow execution chain properly maps structure layout dependencies.`
+        : `1. Decouples helper functions to maintain codebase modularity and clarity.
+2. Uses TypeScript type-checking to ensure variable consistency and data safety.
+3. Adapts key configurations dynamically to environment setups.
+4. Maps structural file flows to execution workflows cleanly.`
     });
 
     return sections;
@@ -713,15 +899,21 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🏗️</span> Phase 2 — Database Layer
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Database models aur connection connection logic define karna.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Database models aur connection connection logic define karna." : "Define database models and connection logic."}
+                      </p>
                       <div className="mt-2 grid md:grid-cols-2 gap-4">
                         <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1">
                           <span className="text-zinc-800 font-bold">Database Files:</span>
                           {dbFiles.map(df => <div key={df} className="pl-2">📄 {df}</div>)}
                         </div>
                         <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
-                          <div>• Connection clients create kiye gaye aur credentials hook kiye gaye.</div>
-                          <div>• Schema tables relational schema and columns structural mapping load hui.</div>
+                          <div>
+                            {isHinglish ? "• Connection clients create kiye gaye aur credentials hook kiye gaye." : "• Connection clients created and database credentials loaded/hooked."}
+                          </div>
+                          <div>
+                            {isHinglish ? "• Schema tables relational schema and columns structural mapping load hui." : "• Schema tables, relational structure and column mappings initialized."}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -734,15 +926,21 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🌐</span> Phase 3 — Backend / Core Business Logic
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Business functions, modules utilities, middleware hooks aur calculations.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Business functions, modules utilities, middleware hooks aur calculations." : "Business functions, utility modules, helper algorithms, and calculation utilities."}
+                      </p>
                       <div className="mt-2 grid md:grid-cols-2 gap-4">
                         <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
                           <span className="text-zinc-800 font-bold">Logic Files:</span>
                           {coreFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
                         </div>
                         <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
-                          <div>• Custom core algorithms, helper utils files aur logic definitions register hue.</div>
-                          <div>• Internal processing layers integrate aur test kiye gaye.</div>
+                          <div>
+                            {isHinglish ? "• Custom core algorithms, helper utils files aur logic definitions register hue." : "• Custom core algorithms, helper utilities, and backend logic definitions registered."}
+                          </div>
+                          <div>
+                            {isHinglish ? "• Internal processing layers integrate aur test kiye gaye." : "• Internal processing and validation layers integrated and verified."}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -755,7 +953,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🔌</span> Phase 4 — API Routes / Server Handlers
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">API request routes setup karna backend database connectivity ke sath.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "API request routes setup karna backend database connectivity ke sath." : "Set up API routes and server endpoints connected to the database."}
+                      </p>
                       <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
                         <span className="text-zinc-800 font-bold">Routing Handlers:</span>
                         {apiFiles.map(af => <div key={af} className="pl-2">✓ {af}</div>)}
@@ -770,7 +970,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🎨</span> Phase 5 — Global Layouts & UI Shell
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Universal layouts components, navbar header headers aur main structure templates.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Universal layouts components, navbar header headers aur main structure templates." : "Universal layouts, base app components, navigation header, and main structure templates."}
+                      </p>
                       <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-0.5">
                         {layoutFiles.map(lf => <div key={lf}>📄 {lf}</div>)}
                       </div>
@@ -784,7 +986,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🧩</span> Phase 6 — Reusable UI Components
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Isolate UI features, reusable modals, buttons aur display tables.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Isolate UI features, reusable modals, buttons aur display tables." : "Isolated user interface features, reusable modals, buttons, forms, and display tables."}
+                      </p>
                       <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
                         <span className="text-zinc-800 font-bold">Interface Components:</span>
                         {componentFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
@@ -799,7 +1003,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🏠</span> Phase 7 — Page Layout Views & Stores
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Specific pages views folder structure aur global context providers state.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Specific pages views folder structure aur global context providers state." : "Specific page views and layouts, folders structure, and global state providers."}
+                      </p>
                       <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
                         <span className="text-zinc-800 font-bold">Client Views:</span>
                         {pageFiles.map(pf => <div key={pf} className="pl-2">🗺️ {pf}</div>)}
@@ -814,7 +1020,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                       <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                         <span>🖼️</span> Phase 8 — Static Assets & CSS Stylesheets
                       </h4>
-                      <p className="text-xs text-zinc-500 mt-0.5">Images, SVGs assets files aur base CSS styling rules sets.</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">
+                        {isHinglish ? "Images, SVGs assets files aur base CSS styling rules sets." : "Images, SVGs, static asset files, and base CSS/styling rules."}
+                      </p>
                       <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[200px] overflow-y-auto">
                         {otherFiles.map(of => <div key={of}>📄 {of}</div>)}
                       </div>
@@ -827,7 +1035,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
                     <h4 className="font-extrabold text-zinc-900 text-sm flex items-center gap-2">
                       <span>🚀</span> Final Polish & Deploy
                     </h4>
-                    <p className="text-xs text-zinc-500 mt-0.5">Code compression bundles assets dynamic integration aur final verification steps.</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      {isHinglish ? "Code compression bundles assets dynamic integration aur final verification steps." : "Code bundling, asset optimization, styling cleanup, and deployment configurations."}
+                    </p>
                   </div>
 
                 </div>
@@ -844,7 +1054,9 @@ Agar ye recipe card miss ho jaye, toh cook confuse ho jayega aur standard dish n
 
                 {/* Footnote */}
                 <div className="text-[11px] text-zinc-400 font-sans border-t border-zinc-100 pt-4">
-                  * Ye order source tree key hierarchy aur files metadata structure ke basis par compile-time reconstruct kiya gaya hai.
+                  {isHinglish
+                    ? "* Ye order source tree key hierarchy aur files metadata structure ke basis par compile-time reconstruct kiya gaya hai."
+                    : "* This logical build sequence is reconstructed based on source code imports tree, configuration files, and project folder metadata."}
                 </div>
 
               </div>

@@ -9,12 +9,13 @@ import { translateToEnglish } from "../lib/translator";
 
 interface AnalysisPageProps {
   data: AnalysisResult | null;
-  onNavigate: (page: "landing" | "analysis") => void;
+  onNavigate: (page: "landing" | "analysis" | "architecture") => void;
+  lang: "en" | "hi";
+  setLang: (lang: "en" | "hi") => void;
 }
 
-export default function AnalysisPage({ data, onNavigate }: AnalysisPageProps) {
+export default function AnalysisPage({ data, onNavigate, lang, setLang }: AnalysisPageProps) {
   const [activeSection, setActiveSection] = useState("overview");
-  const [lang, setLang] = useState<"en" | "hi">("hi");
 
   const displayData = data && lang === "en" ? translateToEnglish(data) : data;
 

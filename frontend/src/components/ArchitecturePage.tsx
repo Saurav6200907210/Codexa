@@ -4,9 +4,11 @@ import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight 
 
 interface ArchitecturePageProps {
   onNavigate: (page: "landing" | "analysis" | "architecture") => void;
+  lang: "en" | "hi";
+  setLang: (lang: "en" | "hi") => void;
 }
 
-export default function ArchitecturePage({ onNavigate }: ArchitecturePageProps) {
+export default function ArchitecturePage({ onNavigate, lang, setLang }: ArchitecturePageProps) {
   const [activeStep, setActiveStep] = useState<number>(1);
 
   const steps = [
@@ -15,7 +17,9 @@ export default function ArchitecturePage({ onNavigate }: ArchitecturePageProps) 
       title: "1. UI Request (URL Input)",
       icon: <Globe className="w-5 h-5" />,
       file: "frontend/src/components/LandingPage.tsx",
-      details: "User input box mein GitHub repo URL type karta hai. Button click par `handleSubmit` trigger hota hai aur `fetch('/api/analyze')` call execute ki jaati hai.",
+      details: lang === "hi"
+        ? "User input box mein GitHub repo URL type karta hai. Button click par `handleSubmit` trigger hota hai aur `fetch('/api/analyze')` call execute ki jaati hai."
+        : "The user types the GitHub repo URL in the input box. Clicking the button triggers `handleSubmit` and executes the `fetch('/api/analyze')` API call.",
       code: `// LandingPage.tsx - handleSubmit
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -35,7 +39,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       title: "2. Backend Route Handler",
       icon: <Terminal className="w-5 h-5" />,
       file: "backend/server.ts",
-      details: "POST /api/analyze request ko accept karta hai. URL extract karke github helper functions ke through check kiya jaata hai aur metadata load hota hai.",
+      details: lang === "hi"
+        ? "POST /api/analyze request ko accept karta hai. URL extract karke github helper functions ke through check kiya jaata hai aur metadata load hota hai."
+        : "Accepts the POST /api/analyze request. Extracts the URL, validates it using GitHub helper functions, and loads the repository metadata.",
       code: `// server.ts - POST handler
 app.post("/api/analyze", async (req, res) => {
   const { url } = req.body;
@@ -56,7 +62,9 @@ app.post("/api/analyze", async (req, res) => {
       title: "3. GitHub API Fetching",
       icon: <Cpu className="w-5 h-5" />,
       file: "backend/github.ts",
-      details: "GitHub REST/GraphQL API ka use karke repository information, description, stars aur complete file tree (recursive list) collect ki jaati hai.",
+      details: lang === "hi"
+        ? "GitHub REST/GraphQL API ka use karke repository information, description, stars aur complete file tree (recursive list) collect ki jaati hai."
+        : "Uses the GitHub REST/GraphQL API to fetch repository details, description, stars, and the complete file tree structure recursively.",
       code: `// github.ts - API integrations
 export async function fetchRepoMeta(owner: string, repo: string) {
   const res = await fetch(\`https://api.github.com/repos/\${owner}/\${repo}\`);
@@ -76,7 +84,9 @@ export async function fetchRepoTree(owner: string, repo: string, branch: string)
       title: "4. Static Analysis Engine",
       icon: <BookOpen className="w-5 h-5" />,
       file: "backend/analyzer.ts & knowledge.ts",
-      details: "Bina database download kiye, file paths aur configurations ko inspect kiya jaata hai. File tree ko build karke language share, stack classification, folder classification aur logical workflow timelines taiyaar hote hain.",
+      details: lang === "hi"
+        ? "Bina database download kiye, file paths aur configurations ko inspect kiya jaata hai. File tree ko build karke language share, stack classification, folder classification aur logical workflow timelines taiyaar hote hain."
+        : "Inspects file paths and configurations without cloning the entire codebase. Builds the file tree to extract language share, stack classification, folder classification, and logical workflow timelines.",
       code: `// analyzer.ts - Core analyzer execution
 export async function analyzeRepo(meta: RepoMeta, items: GitTreeItem[]) {
   const pathSet = new Set(items.map((i) => i.path.toLowerCase()));
@@ -89,7 +99,9 @@ export async function analyzeRepo(meta: RepoMeta, items: GitTreeItem[]) {
       title: "5. Database Caching",
       icon: <Database className="w-5 h-5" />,
       file: "backend/db.ts & schema.ts",
-      details: "Drizzle ORM ke through PostgreSQL database me analysis result ko JSON format me cache/save kiya jata hai taaki next time prompt lookup quick ho sake.",
+      details: lang === "hi"
+        ? "Drizzle ORM ke through PostgreSQL database me analysis result ko JSON format me cache/save kiya jata hai taaki next time prompt lookup quick ho sake."
+        : "Caches and saves the analysis result payload in JSON format inside the PostgreSQL database using Drizzle ORM to enable fast lookups for subsequent queries.",
       code: `// schema.ts - Drizzle DB schema configuration
 export const analyses = pgTable("analyses", {
   id: serial("id").primaryKey(),
@@ -108,7 +120,9 @@ export const analyses = pgTable("analyses", {
       title: "6. Interactive Presentation",
       icon: <Eye className="w-5 h-5" />,
       file: "frontend/src/components/AnalysisPage.tsx & AnalysisView.tsx",
-      details: "Set status update hote hi AnalysisPage client components load ho jate hain. Smooth scroll listener aur Translation controller users ko dynamic Hinglish / English reading layouts toggle karne aur reports download karne ki suvidha dete hain.",
+      details: lang === "hi"
+        ? "Set status update hote hi AnalysisPage client components load ho jate hain. Smooth scroll listener aur Translation controller users ko dynamic Hinglish / English reading layouts toggle karne aur reports download karne ki suvidha dete hain."
+        : "Once the status updates, the AnalysisPage client components load. A smooth scroll listener and Translation controller allow users to toggle dynamic Hinglish / English reading layouts and download reports.",
       code: `// AnalysisPage.tsx - dynamic translator toggle
 const displayData = data && lang === "en" ? translateToEnglish(data) : data;
 
@@ -133,7 +147,7 @@ return (
       <div className="max-w-6xl mx-auto px-6 pt-28 space-y-12 relative z-10">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 pb-6">
+        <div className="flex items-center justify-between border-b border-zinc-200 pb-6 flex-wrap gap-4">
           <div className="space-y-1">
             <button
               onClick={() => onNavigate("landing")}
@@ -143,7 +157,35 @@ return (
               <span>Back to home</span>
             </button>
             <h1 className="text-3xl font-extrabold text-zinc-950 tracking-tight">App Architecture & Code Flow</h1>
-            <p className="text-sm text-zinc-500">Sikhein ki kaise URL input se lekar screen render tak, data flow hota hai.</p>
+            <p className="text-sm text-zinc-500">
+              {lang === "hi"
+                ? "Sikhein ki kaise URL input se lekar screen render tak, data flow hota hai."
+                : "Learn how data flows from URL input to screen rendering."}
+            </p>
+          </div>
+
+          {/* Language Selector */}
+          <div className="flex items-center gap-1 bg-zinc-100 p-1 rounded-xl border border-zinc-200">
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                lang === "en"
+                  ? "bg-zinc-950 text-white shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+              }`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => setLang("hi")}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                lang === "hi"
+                  ? "bg-zinc-950 text-white shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+              }`}
+            >
+              Hinglish
+            </button>
           </div>
         </div>
 
@@ -254,7 +296,11 @@ return (
           </div>
           
           <div className="text-xs text-zinc-600 leading-relaxed font-medium space-y-2">
-            <p>System flows ka flowchart code (Mermaid notation) aur flow sequence graphical flow architecture diya gaya hai:</p>
+            <p>
+              {lang === "hi"
+                ? "System flows ka flowchart code (Mermaid notation) aur flow sequence graphical flow architecture diya gaya hai:"
+                : "Below is the system flow chart code (Mermaid notation) and the sequence of graphical flow architecture:"}
+            </p>
           </div>
 
           <pre className="p-4 bg-zinc-950 text-indigo-200 font-mono text-xs rounded-xl overflow-x-auto leading-relaxed border border-zinc-800">

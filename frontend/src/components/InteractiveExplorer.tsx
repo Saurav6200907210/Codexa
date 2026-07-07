@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Folder, FolderOpen, FileCode, ChevronRight, Terminal, Info, CornerDownRight } from "lucide-react";
 
 interface FileNode {
@@ -87,6 +87,45 @@ export default function InteractiveExplorer() {
     "src/app/api": true,
     "src/app/api/analyze": true,
   });
+
+  // Flat list of nodes for auto cycling
+  const getFlatNodes = (nodes: FileNode[]): FileNode[] => {
+    const list: FileNode[] = [];
+    const traverse = (n: FileNode) => {
+      list.push(n);
+      if (n.children) n.children.forEach(traverse);
+    };
+    nodes.forEach(traverse);
+    return list;
+  };
+
+  const flatNodes = getFlatNodes(MOCK_FILES);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedNode((current) => {
+        const idx = flatNodes.findIndex((n) => n.path === current.path);
+        const nextIdx = (idx + 1) % flatNodes.length;
+        const nextNode = flatNodes[nextIdx];
+
+        // Automatically expand parents of the next selected node
+        const parts = nextNode.path.split("/");
+        if (parts.length > 1) {
+          const parentPaths: Record<string, boolean> = {};
+          let currentPath = "";
+          for (let i = 0; i < parts.length - 1; i++) {
+            currentPath = currentPath ? `${currentPath}/${parts[i]}` : parts[i];
+            parentPaths[currentPath] = true;
+          }
+          setExpandedFolders((prev) => ({ ...prev, ...parentPaths }));
+        }
+
+        return nextNode;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleFolder = (path: string) => {
     setExpandedFolders((prev) => ({ ...prev, [path]: !prev[path] }));
@@ -183,8 +222,8 @@ export default function InteractiveExplorer() {
         </div>
 
         <div className="text-[10px] text-gray-500 flex items-center gap-1 mt-4">
-          <CornerDownRight className="w-3.5 h-3.5" />
-          <span>Click any node in the list to reveal simulated repository breakdowns.</span>
+          <CornerDownRight className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+          <span>Autoplay active: Cycles files automatically or click any node to explore.</span>
         </div>
       </div>
     </div>

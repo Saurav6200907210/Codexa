@@ -16,6 +16,7 @@ export default function App() {
   const [page, setPage] = useState<"landing" | "analysis" | "architecture">("landing");
   const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(null);
   const [recent, setRecent] = useState<RecentItem[]>([]);
+  const [lang, setLang] = useState<"en" | "hi">("hi");
 
   useEffect(() => {
     // Fetch recent items from the Express backend
@@ -42,9 +43,9 @@ export default function App() {
           onNavigate={setPage}
         />
       ) : page === "analysis" ? (
-        <AnalysisPage data={analysisData} onNavigate={setPage} />
+        <AnalysisPage data={analysisData} onNavigate={setPage} lang={lang} setLang={setLang} />
       ) : (
-        <ArchitecturePage onNavigate={setPage} />
+        <ArchitecturePage onNavigate={setPage} lang={lang} setLang={setLang} />
       )}
     </main>
   );
