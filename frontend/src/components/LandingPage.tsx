@@ -84,7 +84,8 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
     setLoadingStep(1);
 
     try {
-      const baseUrl = import.meta.env.VITE_API_URL || "";
+      const rawUrl = import.meta.env.VITE_API_URL || "";
+      const baseUrl = rawUrl.endsWith("/") ? rawUrl.slice(0, -1) : rawUrl;
       const res = await fetch(`${baseUrl}/api/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
