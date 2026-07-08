@@ -10,11 +10,8 @@ interface DataFlowAnimationProps {
 }
 
 export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlowAnimationProps) {
-  // Zoom & Pan states
-  const [scale, setScale] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  // Auto scale state
+  const [scale, setScale] = useState(0.95);
 
   // Interactive states
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({
@@ -23,8 +20,6 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
   });
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [clickedNode, setClickedNode] = useState<string | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Extract repo name from URL or use a default one
   const getRepoName = () => {
@@ -43,35 +38,17 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
 
   const repoName = getRepoName();
 
-  // Reset viewport zoom & pan
-  const handleReset = () => {
-    setScale(0.95);
-    setPan({ x: 0, y: 0 });
-  };
-
   useEffect(() => {
-    handleReset();
-  }, [loading]);
-
-  // Pan handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    // Only pan if clicking on empty space or dragging wrapper
-    if ((e.target as HTMLElement).closest(".interactive-node")) return;
-    setIsDragging(true);
-    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    setPan({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+    const handleResize = () => {
+      if (window.innerWidth < 350) setScale(0.7);
+      else if (window.innerWidth < 420) setScale(0.78);
+      else if (window.innerWidth < 500) setScale(0.88);
+      else setScale(0.95);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const toggleNodeExpand = (nodeId: string) => {
     setExpandedNodes(prev => ({
@@ -79,10 +56,6 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
       [nodeId]: !prev[nodeId]
     }));
   };
-
-  // Zoom helpers
-  const zoomIn = () => setScale(prev => Math.min(prev + 0.1, 1.5));
-  const zoomOut = () => setScale(prev => Math.max(prev - 0.1, 0.6));
 
   return (
     <div className="w-full rounded-2xl border border-zinc-200 bg-white shadow-xl overflow-hidden text-xs select-none relative flex flex-col h-[560px]">
@@ -108,21 +81,15 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
 
       {/* Main Canvas Area */}
       <div 
-        ref={containerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        className={`flex-1 relative overflow-hidden bg-zinc-50/40 cursor-grab ${isDragging ? "cursor-grabbing" : ""}`}
+        className="flex-1 overflow-hidden bg-zinc-50/40 flex items-center justify-center p-4"
       >
         {/* Dynamic Zoomed Viewport Wrapper */}
         <div 
           style={{
-            transform: `translate(${pan.x}px, ${pan.y}px) scale(${scale})`,
-            transformOrigin: "center center",
-            transition: isDragging ? "none" : "transform 0.15s ease-out"
+            transform: `scale(${scale})`,
+            transformOrigin: "center center"
           }}
-          className="absolute inset-0 flex flex-col items-center justify-center p-8 min-w-[600px]"
+          className="flex flex-col items-center justify-center w-[400px] shrink-0"
         >
           {loading ? (
             /* ========================================================
@@ -219,7 +186,7 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
             /* ========================================================
                ACTIVE INTERACTIVE ARCHITECTURE GRAPH VIEWPORT
                ======================================================== */
-            <div className="relative flex flex-col items-center w-full min-h-[440px] z-10 py-6">
+            <div className="relative flex flex-col items-center w-[400px] mx-auto min-h-[440px] z-10 py-6">
               
               {/* Dynamic Connecting Curved Lines (Bezier SVG) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minHeight: "440px" }}>
@@ -497,38 +464,6 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
           </div>
         )}
       </div>
-
-      {/* Floating Canvas Viewport Controls */}
-      <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1 bg-white/95 border border-zinc-200 p-1 rounded-xl shadow-md backdrop-blur-md shrink-0">
-        <button 
-          onClick={zoomIn} 
-          title="Zoom In"
-          className="w-7 h-7 rounded-lg hover:bg-zinc-100 flex items-center justify-center text-zinc-600 transition-colors cursor-pointer border-0 bg-transparent"
-        >
-          <ZoomIn className="w-4 h-4" />
-        </button>
-        <button 
-          onClick={zoomOut} 
-          title="Zoom Out"
-          className="w-7 h-7 rounded-lg hover:bg-zinc-100 flex items-center justify-center text-zinc-600 transition-colors cursor-pointer border-0 bg-transparent"
-        >
-          <ZoomOut className="w-4 h-4" />
-        </button>
-        <button 
-          onClick={handleReset} 
-          title="Reset View"
-          className="w-7 h-7 rounded-lg hover:bg-zinc-100 flex items-center justify-center text-zinc-600 transition-colors cursor-pointer border-0 bg-transparent"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
-      {/* Interactive Controls Guide */}
-      <div className="absolute bottom-4 right-4 z-20 bg-white/95 border border-zinc-200 px-3 py-1.5 rounded-xl shadow-md backdrop-blur-md text-[9px] text-zinc-500 font-bold shrink-0 pointer-events-none flex items-center gap-1">
-        <Maximize2 className="w-3 h-3 text-zinc-400" />
-        <span>Drag canvas to pan | Zoom with controls</span>
-      </div>
-
     </div>
   );
 }
