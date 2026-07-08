@@ -13,8 +13,30 @@ interface RecentItem {
 }
 
 export default function App() {
-  const [page, setPage] = useState<"landing" | "analysis" | "architecture">("landing");
-  const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(null);
+  const [page, setPage] = useState<"landing" | "analysis" | "architecture">(() => {
+    if (typeof window !== "undefined") {
+      const savedPage = localStorage.getItem("reposamjho_page");
+      if (savedPage === "landing" || savedPage === "analysis" || savedPage === "architecture") {
+        return savedPage;
+      }
+    }
+    return "landing";
+  });
+
+  const [analysisData, setAnalysisData] = useState<AnalysisResult | null>(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem("reposamjho_analysis");
+      if (savedData) {
+        try {
+          return JSON.parse(savedData);
+        } catch {
+          return null;
+        }
+      }
+    }
+    return null;
+  });
+
   const [recent, setRecent] = useState<RecentItem[]>([]);
   const [lang, setLang] = useState<"en" | "hi">("hi");
 
@@ -36,18 +58,42 @@ export default function App() {
     fetchRecent();
   }, [page]);
 
+  const handleNavigate = (newPage: "landing" | "analysis" | "architecture") => {
+    setPage(newPage);
+    localStorage.setItem("reposamjho_page", newPage);
+    if (newPage === "landing") {
+      setAnalysisData(null);
+      localStorage.removeItem("reposamjho_analysis");
+    }
+  };
+
+  const handleSetAnalysis = (data: AnalysisResult) => {
+    setAnalysisData(data);
+    localStorage.setItem("reposamjho_analysis", JSON.stringify(data));
+  };
+
   return (
     <main className="min-h-screen bg-gray-950 text-gray-150">
       {page === "landing" ? (
         <LandingPage
           recent={recent}
-          onSetAnalysis={setAnalysisData}
-          onNavigate={setPage}
+          onSetAnalysis={handleSetAnalysis}
+          onNavigate={handleNavigate}
         />
       ) : page === "analysis" ? (
-        <AnalysisPage data={analysisData} onNavigate={setPage} lang={lang} setLang={setLang} />
+        <AnalysisPage
+          data={analysisData}
+          onNavigate={handleNavigate}
+          lang={lang}
+          setLang={setLang}
+        />
       ) : (
-        <ArchitecturePage onNavigate={setPage} lang={lang} setLang={setLang} data={analysisData} />
+        <ArchitecturePage
+          onNavigate={handleNavigate}
+          lang={lang}
+          setLang={setLang}
+          data={analysisData}
+        />
       )}
     </main>
   );
