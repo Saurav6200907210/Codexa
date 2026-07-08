@@ -529,16 +529,16 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
         <Reveal>
           <div className="glass-card rounded-2xl p-6 sm:p-8 bg-white border border-zinc-200">
             <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
+              <div className="min-w-0 flex-1">
                 <a
                   href={repo.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-2xl font-extrabold text-zinc-950 hover:text-cyan-600 sm:text-3xl"
+                  className="text-xl sm:text-2xl md:text-3xl font-extrabold text-zinc-950 hover:text-cyan-600 break-all sm:break-normal"
                 >
                   {repo.fullName} ↗
                 </a>
-                <p className="mt-2 max-w-2xl text-zinc-600 text-sm leading-relaxed">
+                <p className="mt-2 max-w-2xl text-zinc-650 text-xs sm:text-sm leading-relaxed">
                   {repo.description || "Is repo ki koi description available nahi hai."}
                 </p>
               </div>
@@ -650,7 +650,7 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
               <div className="glass-card h-full rounded-xl p-5 bg-white border border-zinc-200">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{f.emoji}</span>
-                  <code className="font-mono text-xs font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-100">
+                  <code className="font-mono text-[10px] sm:text-xs font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-100 break-all">
                     {f.path}/
                   </code>
                   <span className="ml-auto rounded-full bg-zinc-100 border border-zinc-200 px-2 py-0.5 text-[10px] text-zinc-500 font-semibold">
@@ -688,7 +688,7 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
             <Reveal key={file.path} delay={i * 40}>
               <div className="glass-card rounded-xl p-5 bg-white border border-zinc-200">
                 <div className="flex flex-wrap items-center gap-2">
-                  <code className="font-mono text-xs font-bold text-zinc-900 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200">{file.path}</code>
+                  <code className="font-mono text-[10px] sm:text-xs font-bold text-zinc-900 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200 break-all">{file.path}</code>
                   <span className="rounded bg-emerald-50 border border-emerald-250 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                     {file.role}
                   </span>
@@ -881,10 +881,10 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       </h4>
                       <p className="text-xs text-zinc-500 mt-0.5">Project configs setup and initialization.</p>
                       <div className="mt-2 text-xs text-zinc-600 space-y-1">
-                        <div className="flex flex-wrap items-center gap-1.5 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150">
+                        <div className="flex flex-wrap items-center gap-1.5 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 overflow-hidden">
                           {configFiles.map((cfg) => (
-                            <div key={cfg} className="flex items-center gap-1.5">
-                              <span className="text-zinc-900 font-bold">📄 {cfg}</span>
+                            <div key={cfg} className="flex items-center gap-1.5 break-all">
+                              <span className="text-zinc-900 font-bold break-all">📄 {cfg}</span>
                             </div>
                           ))}
                         </div>
@@ -903,9 +903,9 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                         {isHinglish ? "Database models aur connection connection logic define karna." : "Define database models and connection logic."}
                       </p>
                       <div className="mt-2 grid md:grid-cols-2 gap-4">
-                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1">
+                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 overflow-x-auto">
                           <span className="text-zinc-800 font-bold">Database Files:</span>
-                          {dbFiles.map(df => <div key={df} className="pl-2">📄 {df}</div>)}
+                          {dbFiles.map(df => <div key={df} className="pl-2 break-all">📄 {df}</div>)}
                         </div>
                         <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
                           <div>
@@ -930,9 +930,9 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                         {isHinglish ? "Business functions, modules utilities, middleware hooks aur calculations." : "Business functions, utility modules, helper algorithms, and calculation utilities."}
                       </p>
                       <div className="mt-2 grid md:grid-cols-2 gap-4">
-                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                        <div className="font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto overflow-x-auto">
                           <span className="text-zinc-800 font-bold">Logic Files:</span>
-                          {coreFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
+                          {coreFiles.map(cf => <div key={cf} className="pl-2 break-all">📄 {cf}</div>)}
                         </div>
                         <div className="text-xs text-zinc-600 space-y-1.5 flex flex-col justify-center">
                           <div>
@@ -956,9 +956,9 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       <p className="text-xs text-zinc-500 mt-0.5">
                         {isHinglish ? "API request routes setup karna backend database connectivity ke sath." : "Set up API routes and server endpoints connected to the database."}
                       </p>
-                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto overflow-x-auto">
                         <span className="text-zinc-800 font-bold">Routing Handlers:</span>
-                        {apiFiles.map(af => <div key={af} className="pl-2">✓ {af}</div>)}
+                        {apiFiles.map(af => <div key={af} className="pl-2 break-all">✓ {af}</div>)}
                       </div>
                     </div>
                   )}
@@ -973,8 +973,8 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       <p className="text-xs text-zinc-500 mt-0.5">
                         {isHinglish ? "Universal layouts components, navbar header headers aur main structure templates." : "Universal layouts, base app components, navigation header, and main structure templates."}
                       </p>
-                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-0.5">
-                        {layoutFiles.map(lf => <div key={lf}>📄 {lf}</div>)}
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-0.5 overflow-x-auto">
+                        {layoutFiles.map(lf => <div key={lf} className="break-all">📄 {lf}</div>)}
                       </div>
                     </div>
                   )}
@@ -989,9 +989,9 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       <p className="text-xs text-zinc-500 mt-0.5">
                         {isHinglish ? "Isolate UI features, reusable modals, buttons aur display tables." : "Isolated user interface features, reusable modals, buttons, forms, and display tables."}
                       </p>
-                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2.5 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto overflow-x-auto">
                         <span className="text-zinc-800 font-bold">Interface Components:</span>
-                        {componentFiles.map(cf => <div key={cf} className="pl-2">📄 {cf}</div>)}
+                        {componentFiles.map(cf => <div key={cf} className="pl-2 break-all">📄 {cf}</div>)}
                       </div>
                     </div>
                   )}
@@ -1006,9 +1006,9 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       <p className="text-xs text-zinc-500 mt-0.5">
                         {isHinglish ? "Specific pages views folder structure aur global context providers state." : "Specific page views and layouts, folders structure, and global state providers."}
                       </p>
-                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto">
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[250px] overflow-y-auto overflow-x-auto">
                         <span className="text-zinc-800 font-bold">Client Views:</span>
-                        {pageFiles.map(pf => <div key={pf} className="pl-2">🗺️ {pf}</div>)}
+                        {pageFiles.map(pf => <div key={pf} className="pl-2 break-all">🗺️ {pf}</div>)}
                       </div>
                     </div>
                   )}
@@ -1023,8 +1023,8 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
                       <p className="text-xs text-zinc-500 mt-0.5">
                         {isHinglish ? "Images, SVGs assets files aur base CSS styling rules sets." : "Images, SVGs, static asset files, and base CSS/styling rules."}
                       </p>
-                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[200px] overflow-y-auto">
-                        {otherFiles.map(of => <div key={of}>📄 {of}</div>)}
+                      <div className="mt-2 font-mono text-[10px] bg-zinc-50 p-2 rounded border border-zinc-150 space-y-1 max-h-[200px] overflow-y-auto overflow-x-auto">
+                        {otherFiles.map(of => <div key={of} className="break-all">📄 {of}</div>)}
                       </div>
                     </div>
                   )}
