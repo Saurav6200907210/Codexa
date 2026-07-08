@@ -326,7 +326,8 @@ return (
 
             {/* Connector 3: Branching Path */}
             <div className="relative w-full h-12 flex justify-center my-0">
-              <svg className="w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
+              {/* Desktop path */}
+              <svg className="hidden sm:block w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
                 <path d="M 200 0 L 200 16" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
                 <path d="M 200 16 L 80 16 L 80 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
                 <path d="M 200 16 L 320 16 L 320 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
@@ -334,6 +335,12 @@ return (
                 <circle cx="80" cy="24" r="3.5" fill="#06b6d4" />
                 <circle cx="320" cy="24" r="5" fill="#22d3ee" className="animate-ping" />
                 <circle cx="320" cy="24" r="3.5" fill="#06b6d4" />
+              </svg>
+              {/* Mobile path */}
+              <svg className="sm:hidden w-full h-full" viewBox="0 0 100 48" fill="none" preserveAspectRatio="none">
+                <path d="M 50 0 L 50 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <circle cx="50" cy="24" r="5" fill="#22d3ee" className="animate-ping" />
+                <circle cx="50" cy="24" r="3.5" fill="#06b6d4" />
               </svg>
             </div>
 
@@ -354,6 +361,9 @@ return (
                 </div>
               </div>
 
+              {/* Mobile straight line connector when cards stack */}
+              <div className="sm:hidden w-0.5 h-6 border-l border-dashed border-zinc-300 my-0" />
+
               {/* Card 4b: Right Pipeline (Docker or Gemini) */}
               <div className="w-full sm:w-[220px] bg-white border border-zinc-200 rounded-2xl p-3 flex items-center gap-3 hover:shadow-md hover:border-zinc-300 transition-all duration-300">
                 <div className="w-10 h-10 rounded-xl bg-cyan-500 flex items-center justify-center text-white shadow-md shrink-0">
@@ -372,11 +382,18 @@ return (
 
             {/* Connector 4: Merge Path */}
             <div className="relative w-full h-12 flex justify-center my-0">
-              <svg className="w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
+              {/* Desktop path */}
+              <svg className="hidden sm:block w-full max-w-[400px] h-full" viewBox="0 0 400 48" fill="none" preserveAspectRatio="none">
                 <path d="M 80 0 L 80 32 L 200 32 L 200 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
                 <path d="M 320 0 L 320 32 L 200 32 L 200 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
                 <circle cx="200" cy="32" r="5.5" fill="#22d3ee" className="animate-ping" />
                 <circle cx="200" cy="32" r="4" fill="#06b6d4" />
+              </svg>
+              {/* Mobile path */}
+              <svg className="sm:hidden w-full h-full" viewBox="0 0 100 48" fill="none" preserveAspectRatio="none">
+                <path d="M 50 0 L 50 48" stroke="#d4d4d8" strokeWidth="2" strokeDasharray="4 4" />
+                <circle cx="50" cy="24" r="5" fill="#22d3ee" className="animate-ping" />
+                <circle cx="50" cy="24" r="3.5" fill="#06b6d4" />
               </svg>
             </div>
 

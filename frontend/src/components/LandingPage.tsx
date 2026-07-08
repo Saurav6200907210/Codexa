@@ -160,24 +160,24 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
           
           <motion.h1 
             variants={fadeInUp}
-            className="text-4xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-zinc-950"
+            className="text-3xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05] text-zinc-950"
           >
-            Understand Any <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-950 via-zinc-800 to-indigo-600">GitHub Repository</span> <br />
+            Understand Any <br className="hidden sm:inline" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-950 via-zinc-800 to-indigo-600">GitHub Repository</span> <br className="hidden sm:inline" />
             in Minutes.
           </motion.h1>
           
           <motion.p 
             variants={fadeInUp}
-            className="text-sm md:text-base text-zinc-500 max-w-lg leading-relaxed"
+            className="text-xs sm:text-sm md:text-base text-zinc-500 max-w-lg leading-relaxed"
           >
             Paste any public GitHub repository URL, and watch RepoSamjho explain code flows, 
             folder layouts, database structures, and setup instructions in simple, beginner-friendly language.
           </motion.p>
 
           <motion.div variants={fadeInUp} className="max-w-xl space-y-3">
-            <div className="flex flex-col sm:flex-row gap-3 p-2 bg-white border border-zinc-200 rounded-2xl shadow-lg focus-within:border-zinc-400 focus-within:ring-2 focus-within:ring-zinc-100 transition-all">
-              <div className="flex-1 flex items-center gap-2.5 px-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 p-1.5 sm:p-2 bg-white border border-zinc-200 rounded-2xl shadow-lg focus-within:border-zinc-400 focus-within:ring-2 focus-within:ring-zinc-100 transition-all">
+              <div className="flex-1 flex items-center gap-2.5 px-3 py-2 sm:py-0">
                 <Search className="w-4 h-4 text-zinc-400" />
                 <input
                   type="text"
@@ -276,7 +276,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
       {/* Bento Grid */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-24 relative z-10 border-t border-zinc-100">
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[180px]"
+          className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-auto md:auto-rows-[180px]"
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}

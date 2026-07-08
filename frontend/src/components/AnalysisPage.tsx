@@ -151,12 +151,12 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
               <span>Back to home</span>
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
               {/* Language Selector */}
               <div className="flex items-center gap-1 bg-zinc-100 p-1 rounded-xl border border-zinc-200">
                 <button
                   onClick={() => setLang("en")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
                     lang === "en"
                       ? "bg-zinc-950 text-white shadow-sm"
                       : "text-zinc-500 hover:text-zinc-900 bg-transparent"
@@ -166,7 +166,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
                 </button>
                 <button
                   onClick={() => setLang("hi")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
                     lang === "hi"
                       ? "bg-zinc-950 text-white shadow-sm"
                       : "text-zinc-500 hover:text-zinc-900 bg-transparent"
@@ -176,8 +176,8 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200">
-                <span>{displayData.repo.fullName}</span>
+              <div className="flex items-center gap-2 text-xs text-zinc-600 font-mono bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200 truncate max-w-[150px] sm:max-w-xs" title={displayData.repo.fullName}>
+                <span className="truncate">{displayData.repo.fullName}</span>
               </div>
             </div>
           </div>

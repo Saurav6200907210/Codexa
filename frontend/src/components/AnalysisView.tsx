@@ -1085,10 +1085,10 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
           <div className="flex items-start gap-3 mb-4 shrink-0">
             <span className="text-2xl mt-1">📄</span>
             <div>
-              <h3 className="text-lg font-extrabold text-zinc-950 font-mono truncate max-w-[500px]">
+              <h3 className="text-sm sm:text-lg font-extrabold text-zinc-950 font-mono truncate pr-8 sm:pr-0" title={filename}>
                 {filename}
               </h3>
-              <code className="text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
+              <code className="text-[9px] sm:text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
                 {selectedFile}
               </code>
             </div>
