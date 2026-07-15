@@ -1,8 +1,40 @@
 import { useState } from "react";
-import type { AnalysisResult } from "../types";
+import type { AnalysisResult, TreeNode } from "../types";
 import { Reveal } from "./Reveal";
 import { Rich } from "./Rich";
 import { FileTree } from "./FileTree";
+
+function buildCustomTree(rootNode: TreeNode): TreeNode {
+  const newChildren: TreeNode[] = [];
+
+  // 1. Get all top-level files from the "frontend" directory
+  const frontendNode = rootNode.children?.find(c => c.name === "frontend");
+  if (frontendNode && frontendNode.children) {
+    frontendNode.children.forEach(child => {
+      if (child.type === "file") {
+        newChildren.push(child);
+      }
+    });
+  }
+
+  // 2. Get the "src" folder from the root
+  const srcNode = rootNode.children?.find(c => c.name === "src");
+  if (srcNode) {
+    newChildren.push(srcNode);
+  }
+
+  // 3. Get all top-level files from the root
+  rootNode.children?.forEach(child => {
+    if (child.type === "file") {
+      newChildren.push(child);
+    }
+  });
+
+  return {
+    ...rootNode,
+    children: newChildren
+  };
+}
 
 function SectionTitle({ n, title, sub }: { n: string; title: string; sub: string }) {
   return (
@@ -686,14 +718,22 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
         <div className="space-y-4">
           {data.files.map((file, i) => (
             <Reveal key={file.path} delay={i * 40}>
-              <div className="glass-card rounded-xl p-5 bg-white border border-zinc-200">
+              <div 
+                onClick={() => setSelectedFile(file.path)}
+                className="glass-card rounded-xl p-5 bg-white border border-zinc-200 cursor-pointer hover:border-cyan-500 hover:shadow-md transition-all group"
+              >
                 <div className="flex flex-wrap items-center gap-2">
-                  <code className="font-mono text-[10px] sm:text-xs font-bold text-zinc-900 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200 break-all">{file.path}</code>
+                  <code className="font-mono text-[10px] sm:text-xs font-bold text-zinc-900 bg-zinc-100 group-hover:bg-cyan-50 group-hover:text-cyan-900 px-2 py-0.5 rounded border border-zinc-200 group-hover:border-cyan-200 transition-colors break-all">
+                    {file.path}
+                  </code>
                   <span className="rounded bg-emerald-50 border border-emerald-250 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                     {file.role}
                   </span>
-                  <span className="rounded bg-zinc-50 border border-zinc-200 px-2 py-0.5 text-[10px] text-zinc-600 font-bold">
+                  <span className="rounded bg-zinc-50 border border-zinc-200 px-2 py-0.5 text-[10px] text-zinc-650 font-bold">
                     {file.language}
+                  </span>
+                  <span className="ml-auto text-[10px] text-zinc-400 font-bold group-hover:text-cyan-600 transition-colors flex items-center gap-1">
+                    Click to explain 🔍
                   </span>
                 </div>
                 {file.summary && (
@@ -721,7 +761,7 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
 
       {/* 6. Languages + tree */}
       <section id="explorer" className="scroll-mt-24">
-        <SectionTitle n="🗂️" title="Poora File Structure" sub="Languages ka mix aur complete folder tree." />
+        <SectionTitle n="🗂️" title="File Wise Information" sub="Har individual file ke detailed analysis aur visual structure." />
         <div className="grid gap-6 lg:grid-cols-5">
           <Reveal className="lg:col-span-2">
             <div className="glass-card rounded-xl p-5 bg-white border border-zinc-200">
@@ -748,7 +788,7 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
             </div>
           </Reveal>
           <Reveal className="lg:col-span-3" delay={100}>
-            <FileTree tree={data.tree} onFileClick={setSelectedFile} />
+            <FileTree tree={buildCustomTree(data.tree)} onFileClick={setSelectedFile} />
           </Reveal>
         </div>
       </section>

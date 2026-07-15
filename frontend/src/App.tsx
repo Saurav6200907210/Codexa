@@ -65,6 +65,8 @@ export default function App() {
       setAnalysisData(null);
       localStorage.removeItem("reposamjho_analysis");
     }
+    // Scroll window to top on page change
+    window.scrollTo(0, 0);
   };
 
   const handleSetAnalysis = (data: AnalysisResult) => {

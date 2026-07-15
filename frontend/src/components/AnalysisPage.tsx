@@ -101,7 +101,7 @@ ${displayData.folders.map(f => `- **${f.path}**: ${f.purpose} (${f.fileCount} fi
                 { id: "workflow", label: "Request Workflow" },
                 { id: "folders", label: "Folder Structure" },
                 { id: "files", label: "Important Code Files" },
-                { id: "explorer", label: "Interactive File Tree" },
+                { id: "explorer", label: "File Wise Information" },
                 { id: "learn-deeply", label: "Learn Deeply" },
               ].map((item) => (
                 <button

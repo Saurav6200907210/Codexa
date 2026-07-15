@@ -18,7 +18,7 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
   }, []);
 
   const scrollToSection = (id: string) => {
-    if (onNavigate) {
+    if (onNavigate && currentPage === "landing") {
       onNavigate("landing");
       setTimeout(() => {
         const el = document.getElementById(id);
@@ -66,6 +66,7 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
               ⚙️ App Flow Architecture
             </button>
           )}
+
           {currentPage === "landing" && (
             <>
               <button
@@ -106,6 +107,7 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
               ⚙️ Flow
             </button>
           )}
+
           <a
             href="https://github.com/Saurav6200907210/Codexa.git"
             target="_blank"
