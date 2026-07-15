@@ -30,10 +30,17 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
     }
   };
 
+  const isLanding = currentPage === "landing";
+  const showScrolledStyles = scrolled || !isLanding;
+
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 md:transition-all md:duration-500 bg-white/90 border-b border-zinc-100 backdrop-blur-xl md:bg-transparent md:border-b-0 md:backdrop-blur-none ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 md:transition-all md:duration-500 bg-white/90 border-b border-zinc-100 backdrop-blur-xl ${
+        !showScrolledStyles
+          ? "md:bg-transparent md:border-b-0 md:backdrop-blur-none"
+          : ""
+      } ${
+        showScrolledStyles
           ? "md:py-4 md:bg-white/90 md:border-b md:border-zinc-100 md:backdrop-blur-xl"
           : "md:py-6"
       }`}
