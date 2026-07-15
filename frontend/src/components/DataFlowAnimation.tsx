@@ -335,7 +335,7 @@ export default function DataFlowAnimation({ loading, loadingStep, url }: DataFlo
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-extrabold text-zinc-955 text-xs">Express API Gateway</div>
-                  <div className="text-[9px] text-zinc-500 mt-0.5 font-semibold">Port: 3001 | Express</div>
+                  <div className="text-[9px] text-zinc-500 mt-0.5 font-semibold">Port: 3006 | Express</div>
                 </div>
                 <span className="text-[8px] text-zinc-400 font-bold shrink-0">{expandedNodes.api ? "Collapse" : "Expand"}</span>
               </div>
