@@ -59,12 +59,14 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
               ⚙️ App Flow Architecture
             </button>
           )}
-          <button
-            onClick={() => scrollToSection("features")}
-            className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
-          >
-            Features
-          </button>
+          {currentPage === "landing" && (
+            <button
+              onClick={() => scrollToSection("features")}
+              className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+            >
+              Features
+            </button>
+          )}
           <button
             onClick={() => scrollToSection("how-it-works")}
             className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
