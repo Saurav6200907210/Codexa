@@ -48,6 +48,25 @@ export default function FileInfoPage({ onNavigate, lang, setLang, data }: FileIn
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const isHinglish = lang === "hi";
 
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="space-y-4 max-w-sm glass-card p-6 rounded-2xl border border-zinc-200">
+          <p className="text-zinc-500 text-sm">No analysis result loaded. Please start from the landing page.</p>
+          <button
+            onClick={() => onNavigate("landing")}
+            className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2 px-4 rounded-xl text-xs cursor-pointer border-0"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const { repo, stats, projectType } = data;
+  const maxLang = Math.max(1, ...stats.languages.map((l) => l.count));
+
   const getFileDetailedExplanation = (path: string): { title: string; content: string }[] => {
     const filename = path.split("/").pop() || path;
     const nameLower = filename.toLowerCase();
@@ -294,6 +313,91 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
   };
 
   return (
-    <div>File Info Page Shell</div>
+    <div className="min-h-screen bg-white text-zinc-800 pb-20 relative">
+      <div className="cyber-grid" />
+      <Navbar onNavigate={onNavigate} currentPage="file-info" />
+
+      <div className="max-w-6xl mx-auto px-6 pt-28 space-y-12 relative z-10">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-zinc-200 pb-6 flex-wrap gap-4">
+          <div className="space-y-1">
+            <button
+              onClick={() => onNavigate("analysis")}
+              className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 transition-colors cursor-pointer bg-transparent border-0 mb-2"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Analysis (Overview)</span>
+            </button>
+            <h1 className="text-3xl font-extrabold text-zinc-950 tracking-tight">File Wise Information</h1>
+            <p className="text-sm text-zinc-500">
+              {isHinglish
+                ? "Repository ke files aur folders ka structured analysis aur details."
+                : "Structured analysis and details of the repository files and folders."}
+            </p>
+          </div>
+
+          {/* Language Selector */}
+          <div className="flex items-center gap-1 bg-zinc-100 p-1 rounded-xl border border-zinc-200">
+            <button
+              onClick={() => setLang("en")}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                lang === "en"
+                  ? "bg-zinc-950 text-white shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+              }`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => setLang("hi")}
+              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer border-0 ${
+                lang === "hi"
+                  ? "bg-zinc-950 text-white shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-900 bg-transparent"
+              }`}
+            >
+              Hinglish
+            </button>
+          </div>
+        </div>
+
+        {/* Tree and Languages Grid */}
+        <div className="grid gap-6 lg:grid-cols-5 items-start">
+          {/* Languages Mix */}
+          <div className="lg:col-span-2">
+            <div className="glass-card rounded-2xl p-6 bg-white border border-zinc-200">
+              <h3 className="mb-4 font-bold text-zinc-900 text-sm">Languages Mix</h3>
+              <div className="space-y-3">
+                {stats.languages.length === 0 && (
+                  <p className="text-xs text-zinc-500">Koi code language detect nahi hui.</p>
+                )}
+                {stats.languages.map((l) => (
+                  <div key={l.name}>
+                    <div className="mb-1 flex justify-between text-xs text-zinc-650">
+                      <span>{l.name}</span>
+                      <span>{l.count} files</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-zinc-100">
+                      <div
+                        className="h-full rounded-full bg-zinc-950"
+                        style={{ width: `${(l.count / maxLang) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive File Tree */}
+          <div className="lg:col-span-3">
+            <FileTree tree={buildCustomTree(data.tree)} onFileClick={setSelectedFile} />
+          </div>
+        </div>
+
+      </div>
+      <div>File Explainer Modal Placeholder</div>
+    </div>
   );
 }
