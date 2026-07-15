@@ -25,7 +25,7 @@ interface LandingPageProps {
 
 const FAQ_ITEMS = [
   {
-    q: "Kya RepoSamjho private repositories support karta hai?",
+    q: "Kya Codexa private repositories support karta hai?",
     a: "Nahi, abhi hum sirf public GitHub repositories ko support karte hain. Private repositories ka support future update mein aayega.",
   },
   {
@@ -171,7 +171,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
             variants={fadeInUp}
             className="text-xs sm:text-sm md:text-base text-zinc-500 max-w-lg leading-relaxed"
           >
-            Paste any public GitHub repository URL, and watch RepoSamjho explain code flows, 
+            Paste any public GitHub repository URL, and watch Codexa explain code flows, 
             folder layouts, database structures, and setup instructions in simple, beginner-friendly language.
           </motion.p>
 
@@ -245,7 +245,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-950">How RepoSamjho Works</h2>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-950">How Codexa Works</h2>
           <p className="text-xs text-zinc-400 mt-2">Follow our dynamic 4-step pipeline to extract logical code architecture.</p>
         </motion.div>
 

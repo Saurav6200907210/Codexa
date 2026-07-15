@@ -52,7 +52,7 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
             <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-white font-bold" />
           </div>
           <span className="text-base sm:text-xl font-extrabold tracking-tight text-zinc-950 group-hover:text-zinc-800 transition-colors">
-            Repo<span>Samjho</span>
+            Codexa
           </span>
         </button>
 
