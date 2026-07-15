@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LandingPage from "./components/LandingPage";
 import AnalysisPage from "./components/AnalysisPage";
 import ArchitecturePage from "./components/ArchitecturePage";
+import FileInfoPage from "./components/FileInfoPage";
 import type { AnalysisResult } from "./types";
 
 interface RecentItem {
@@ -13,10 +14,10 @@ interface RecentItem {
 }
 
 export default function App() {
-  const [page, setPage] = useState<"landing" | "analysis" | "architecture">(() => {
+  const [page, setPage] = useState<"landing" | "analysis" | "architecture" | "file-info">(() => {
     if (typeof window !== "undefined") {
       const savedPage = localStorage.getItem("reposamjho_page");
-      if (savedPage === "landing" || savedPage === "analysis" || savedPage === "architecture") {
+      if (savedPage === "landing" || savedPage === "analysis" || savedPage === "architecture" || savedPage === "file-info") {
         return savedPage;
       }
     }
@@ -58,7 +59,7 @@ export default function App() {
     fetchRecent();
   }, [page]);
 
-  const handleNavigate = (newPage: "landing" | "analysis" | "architecture") => {
+  const handleNavigate = (newPage: "landing" | "analysis" | "architecture" | "file-info") => {
     setPage(newPage);
     localStorage.setItem("reposamjho_page", newPage);
     if (newPage === "landing") {
@@ -89,8 +90,15 @@ export default function App() {
           lang={lang}
           setLang={setLang}
         />
-      ) : (
+      ) : page === "architecture" ? (
         <ArchitecturePage
+          onNavigate={handleNavigate}
+          lang={lang}
+          setLang={setLang}
+          data={analysisData}
+        />
+      ) : (
+        <FileInfoPage
           onNavigate={handleNavigate}
           lang={lang}
           setLang={setLang}

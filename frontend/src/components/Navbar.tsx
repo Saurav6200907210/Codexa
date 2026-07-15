@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Sparkles, Terminal } from "lucide-react";
 
 interface NavbarProps {
-  onNavigate?: (page: "landing" | "analysis" | "architecture") => void;
-  currentPage?: "landing" | "analysis" | "architecture";
+  onNavigate?: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
+  currentPage?: "landing" | "analysis" | "architecture" | "file-info";
 }
 
 export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
@@ -59,12 +59,24 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
         {/* Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-500">
           {currentPage !== "landing" && (
-            <button
-              onClick={() => onNavigate?.("architecture")}
-              className="hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold text-indigo-500"
-            >
-              ⚙️ App Flow Architecture
-            </button>
+            <>
+              {currentPage !== "architecture" && (
+                <button
+                  onClick={() => onNavigate?.("architecture")}
+                  className="hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold text-indigo-500"
+                >
+                  ⚙️ App Flow Architecture
+                </button>
+              )}
+              {currentPage !== "file-info" && (
+                <button
+                  onClick={() => onNavigate?.("file-info")}
+                  className="hover:text-cyan-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold text-cyan-500"
+                >
+                  📁 File Wise Information
+                </button>
+              )}
+            </>
           )}
 
           {currentPage === "landing" && (
@@ -100,12 +112,24 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
         {/* Action Button & GitHub */}
         <div className="flex items-center gap-2 sm:gap-4">
           {currentPage !== "landing" && (
-            <button
-              onClick={() => onNavigate?.("architecture")}
-              className="md:hidden hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 text-xs font-bold text-indigo-500"
-            >
-              ⚙️ Flow
-            </button>
+            <>
+              {currentPage !== "architecture" && (
+                <button
+                  onClick={() => onNavigate?.("architecture")}
+                  className="md:hidden hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 text-xs font-bold text-indigo-500"
+                >
+                  ⚙️ Flow
+                </button>
+              )}
+              {currentPage !== "file-info" && (
+                <button
+                  onClick={() => onNavigate?.("file-info")}
+                  className="md:hidden hover:text-cyan-600 transition-colors cursor-pointer bg-transparent border-0 text-xs font-bold text-cyan-500"
+                >
+                  📁 Files
+                </button>
+              )}
+            </>
           )}
 
           <a
