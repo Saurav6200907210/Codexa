@@ -73,20 +73,20 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
               >
                 How it Works
               </button>
+              <button
+                onClick={() => scrollToSection("demo")}
+                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+              >
+                Demo
+              </button>
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+              >
+                FAQ
+              </button>
             </>
           )}
-          <button
-            onClick={() => scrollToSection("demo")}
-            className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
-          >
-            Demo
-          </button>
-          <button
-            onClick={() => scrollToSection("faq")}
-            className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
-          >
-            FAQ
-          </button>
         </div>
 
         {/* Action Button & GitHub */}
