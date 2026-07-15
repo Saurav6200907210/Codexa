@@ -397,7 +397,135 @@ If this recipe card goes missing, the chef gets confused and the dish cannot be 
         </div>
 
       </div>
-      <div>File Explainer Modal Placeholder</div>
+
+      {/* Explainer Modal */}
+      {selectedFile && (() => {
+        const sections = getFileDetailedExplanation(selectedFile);
+        const filename = selectedFile.split("/").pop() || selectedFile;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm transition-opacity">
+            <div className="glass-card w-full max-w-4xl bg-white border border-zinc-200 rounded-2xl shadow-2xl p-6 relative overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh]">
+              <div className="absolute top-4 right-4">
+                <button
+                  onClick={() => setSelectedFile(null)}
+                  className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-100 hover:text-zinc-750 transition-colors cursor-pointer border-0 bg-transparent text-lg font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Header */}
+              <div className="flex items-start gap-3 mb-4 shrink-0">
+                <span className="text-2xl mt-1">📄</span>
+                <div>
+                  <h3 className="text-sm sm:text-lg font-extrabold text-zinc-950 font-mono truncate pr-8 sm:pr-0" title={filename}>
+                    {filename}
+                  </h3>
+                  <code className="text-[9px] sm:text-[10px] text-zinc-400 block break-all font-mono mt-0.5">
+                    {selectedFile}
+                  </code>
+                </div>
+              </div>
+
+              {/* Tabs / Badges */}
+              <div className="flex flex-wrap gap-2 mb-4 shrink-0">
+                <span className="rounded-full bg-cyan-50 border border-cyan-200 px-3 py-1 text-[10px] font-bold text-cyan-700">
+                  {selectedFile.split(".").pop()?.toUpperCase()} File
+                </span>
+                <span className="rounded-full bg-zinc-100 border border-zinc-200 px-3 py-1 text-[10px] font-bold text-zinc-650">
+                  Detailed Code Explainer
+                </span>
+              </div>
+
+              {/* Content sections layout with two panels: Sidebar Index & Content */}
+              <div className="flex gap-6 overflow-hidden flex-1 min-h-0">
+                {/* Left Sidebar Table of Contents */}
+                <div className="hidden md:block w-64 border-r border-zinc-200 pr-4 overflow-y-auto shrink-0 space-y-1.5 py-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2">Sections Index</div>
+                  {sections.map((sec, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        const el = document.getElementById(`sec-${idx}`);
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-650 hover:bg-zinc-50 hover:text-zinc-950 transition-colors truncate block border-0 bg-transparent cursor-pointer"
+                    >
+                      {sec.title}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Right Scrollable Content panel */}
+                <div className="flex-1 overflow-y-auto pr-2 space-y-6 scroll-smooth py-1">
+                  {sections.map((sec, idx) => (
+                    <div id={`sec-${idx}`} key={idx} className="bg-zinc-50/50 p-5 rounded-xl border border-zinc-150 shadow-sm transition hover:shadow-md">
+                      <h4 className="text-sm font-extrabold text-zinc-950 flex items-center gap-2 mb-3 pb-2 border-b border-zinc-200">
+                        {sec.title}
+                      </h4>
+                      <div className="text-xs text-zinc-750 leading-relaxed font-sans whitespace-pre-wrap">
+                        {sec.content.split("\n").map((line, lineIdx) => {
+                          if (line.trim().startsWith("```")) return null;
+                          if (line.startsWith("• ")) {
+                            return (
+                              <div key={lineIdx} className="flex gap-2 items-start mt-1.5">
+                                <span className="text-cyan-600 font-bold shrink-0">•</span>
+                                <span><Rich text={line.slice(2)} /></span>
+                              </div>
+                            );
+                          }
+                          if (line.startsWith("✓ ")) {
+                            return (
+                              <div key={lineIdx} className="flex gap-2 items-start mt-1.5">
+                                <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                                <span><Rich text={line.slice(2)} /></span>
+                              </div>
+                            );
+                          }
+                          if (line.startsWith("  * ") || line.startsWith("  • ")) {
+                            return (
+                              <div key={lineIdx} className="flex gap-2 items-start mt-1 pl-4">
+                                <span className="text-zinc-400 font-bold shrink-0">◦</span>
+                                <span><Rich text={line.slice(4)} /></span>
+                              </div>
+                            );
+                          }
+                          if (line.trim() === "") {
+                            return <div key={lineIdx} className="h-2" />;
+                          }
+                          if (line.includes("→") || line.includes("↓") || line.includes("▼") || line.startsWith(" ") || line.startsWith("📄") || line.startsWith("✓")) {
+                            return (
+                              <div key={lineIdx} className="font-mono text-[11px] bg-zinc-900 text-cyan-400 px-3 py-2 rounded-lg my-2 overflow-x-auto whitespace-pre border border-zinc-800">
+                                {line.replace(/`/g, "")}
+                              </div>
+                            );
+                          }
+                          return (
+                            <p key={lineIdx} className="mt-1">
+                              <Rich text={line} />
+                            </p>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer action */}
+              <div className="border-t border-zinc-100 pt-4 mt-4 flex justify-end shrink-0">
+                <button
+                  onClick={() => setSelectedFile(null)}
+                  className="bg-zinc-950 hover:bg-zinc-800 text-white font-bold py-2.5 px-6 rounded-xl text-xs cursor-pointer border-0 transition-colors"
+                >
+                  Close View
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
     </div>
   );
 }
