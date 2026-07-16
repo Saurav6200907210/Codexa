@@ -104,3 +104,66 @@ Analyze a repository using its public URL.
     { "url": "https://github.com/vercel/next.js" }
     ```
 *   **Response**: Returns the complete structured analysis payload containing tech-stack, summaries, and directory metadata.
+
+---
+
+## ⚙️ Installation & Setup
+
+Follow these steps to run Codexa locally:
+
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+*   [Node.js](https://nodejs.org/) (v18 or higher)
+*   [Docker](https://www.docker.com/) (for PostgreSQL database container)
+
+### 2. Database Setup (PostgreSQL)
+Start the PostgreSQL container using Docker Compose:
+```bash
+docker compose up -d
+```
+This spins up a database named `app_db` at `127.0.0.1:5432` with username `postgres` and password `postgres`.
+
+### 3. Backend Setup
+1. Open a new terminal and navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up the `.env` file in the `backend` directory (a default is provided):
+   ```env
+   DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/app_db
+   PORT=3006
+   # Optionally enable Redis:
+   # REDIS_URL=redis://127.0.0.1:6379
+   ```
+4. Push the database schema using Drizzle Kit:
+   ```bash
+   npm run db:push
+   ```
+5. Start the backend developer server:
+   ```bash
+   npm run dev
+   ```
+
+### 4. Frontend Setup
+1. Open a new terminal and navigate to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the Vite development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 📝 License
+This project is open-source and available under the MIT License. Feel free to fork and build upon it!
