@@ -53,3 +53,54 @@ graph TD
 | **ORM** | Drizzle ORM | Type-safe queries and schema migrations |
 | **Caching** | Redis | Temporary performance caching of analyze results |
 | **DevOps** | Docker Compose | Local database setup |
+
+---
+
+## 📁 Repository Directory Structure
+
+```text
+Codexa/
+├── backend/                  # Express API Backend
+│   ├── db.ts                 # Database Connection Setup
+│   ├── schema.ts             # Drizzle Schema Definitions
+│   ├── github.ts             # GitHub API Integration Client
+│   ├── knowledge.ts          # Language map & Hinglish folder purposes
+│   ├── analyzer.ts           # Heuristic Analysis Logic
+│   ├── redis.ts              # Redis Caching Setup
+│   └── server.ts             # Main API Server Entrypoint
+│
+├── frontend/                 # React Vite Client
+│   ├── src/
+│   │   ├── components/       # UI Components
+│   │   │   ├── LandingPage.tsx       # Search, FAQ, Recent analyses
+│   │   │   ├── AnalysisView.tsx      # Main dashboard stats & lists
+│   │   │   ├── ArchitecturePage.tsx  # Dynamic component map
+│   │   │   └── DataFlowAnimation.tsx # Canvas flow particle system
+│   │   ├── lib/              # Frontend Utilities
+│   │   └── App.tsx           # Page Routing and State Manager
+│
+├── docker-compose.yml        # PostgreSQL service container definition
+└── package.json              # Main workspace workspace references
+```
+
+---
+
+## ⚡ API Endpoints
+
+All endpoints are hosted by default on port `3001` (or custom `PORT` specified in backend configuration):
+
+### 1. `GET /api/health`
+Check if the server is up and responsive.
+*   **Response**: `{"ok": true}`
+
+### 2. `GET /api/recent`
+Fetch the 8 most recently analyzed unique public repositories.
+*   **Response**: `{"recent": [{ "id": 1, "fullName": "owner/repo", ... }]}`
+
+### 3. `POST /api/analyze`
+Analyze a repository using its public URL.
+*   **Request Body**:
+    ```json
+    { "url": "https://github.com/vercel/next.js" }
+    ```
+*   **Response**: Returns the complete structured analysis payload containing tech-stack, summaries, and directory metadata.
