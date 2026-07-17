@@ -1077,42 +1077,20 @@ mindmap
 ```mermaid
 graph TD
 
-Repository
+    A["📦 Repository"] --> B["📂 src"]
+    A --> C["📁 public"]
+    A --> D["📄 package.json"]
+    A --> E["📘 README.md"]
 
---> src
+    B --> F["🧩 Components"]
+    B --> G["📄 Pages"]
+    B --> H["🛠️ Lib"]
+    B --> I["🖼️ Assets"]
 
---> public
-
---> package.json
-
---> README.md
-
-src
-
---> components
-
---> pages
-
---> lib
-
---> assets
-
-components
-
---> UI Components
-
-pages
-
---> Screens
-
-lib
-
---> Utilities
-
-assets
-
---> Images
-
+    F --> J["🎨 UI Components"]
+    G --> K["📱 Screens"]
+    H --> L["⚙️ Utilities"]
+    I --> M["🖼️ Images"]
 ```
 
 ---
@@ -1289,49 +1267,27 @@ G --> J
 # 📦 Technology Detection
 
 ```mermaid
-
 mindmap
-
-root((Codexa))
-
-Frontend
-
-React
-
-Next.js
-
-Vue
-
-Angular
-
-Backend
-
-Express
-
-Node.js
-
-Language
-
-TypeScript
-
-JavaScript
-
-Configuration
-
-package.json
-
-tsconfig.json
-
-vite.config.ts
-
-tailwind.config.js
-
-Database
-
-PostgreSQL
-
-Redis
-
+  root((Codexa))
+    Frontend
+      React
+      Next.js
+      Vue
+      Angular
+    Backend
+      Express
+      Node.js
+    Language
+      TypeScript
+      JavaScript
+    Configuration
+      package.json
+      tsconfig.json
+      vite.config.ts
+      tailwind.config.js
+    Database
+      PostgreSQL
+      Redis
 ```
 
 ---
