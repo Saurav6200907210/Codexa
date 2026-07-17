@@ -271,30 +271,35 @@ Understand Codebase : 5 : Developer
 # 🧠 Intelligent Analysis Engine
 
 ```mermaid
-mindmap
+flowchart LR
 
-root((Codexa))
+A(("🧠<br/>Codexa"))
 
-Repository
+A --> B["📂 Repository"]
+A --> C["📁 Folder Structure"]
+A --> D["🏗️ Architecture"]
+A --> E["💻 Technology Detection"]
+A --> F["⚙️ Configuration"]
+A --> G["📊 Statistics"]
+A --> H["🤖 AI Summary"]
+A --> I["❤️ Repository Health"]
+A --> J["📈 Interactive Dashboard"]
+A --> K["🌐 Visual Explorer"]
 
-Folder Structure
+style A fill:#7C3AED,stroke:#A855F7,stroke-width:5px,color:#fff
 
-Architecture
+style B fill:#2563EB,stroke:#60A5FA,color:#fff
+style C fill:#06B6D4,stroke:#67E8F9,color:#fff
+style D fill:#14B8A6,stroke:#5EEAD4,color:#fff
+style E fill:#F59E0B,stroke:#FBBF24,color:#fff
+style F fill:#8B5CF6,stroke:#C4B5FD,color:#fff
+style G fill:#F97316,stroke:#FDBA74,color:#fff
+style H fill:#22C55E,stroke:#86EFAC,color:#fff
+style I fill:#EC4899,stroke:#F9A8D4,color:#fff
+style J fill:#3B82F6,stroke:#93C5FD,color:#fff
+style K fill:#0EA5E9,stroke:#7DD3FC,color:#fff
 
-Technology Detection
-
-Configuration
-
-Statistics
-
-AI Summary
-
-Repository Health
-
-Interactive Dashboard
-
-Visual Explorer
-
+linkStyle default stroke:#7C3AED,stroke-width:3px
 ```
 
 ---
@@ -550,35 +555,20 @@ class L output
 
 ```mermaid
 mindmap
-
-root((Codexa))
-
-Repository
-
-Metadata
-
-Stars
-
-Forks
-
-Description
-
-Language
-
-Folder Tree
-
-Configuration
-
-Framework
-
-Dependencies
-
-Architecture
-
-Summary
-
-Dashboard
-
+  root((Codexa))
+    📂 Repository
+      📋 Metadata
+        ⭐ Stars
+        🍴 Forks
+        📝 Description
+        💻 Language
+      📁 Folder Tree
+      ⚙️ Configuration
+      🚀 Framework
+      📦 Dependencies
+      🏗️ Architecture
+      🤖 AI Summary
+      📊 Dashboard
 ```
 
 ---
@@ -1057,49 +1047,27 @@ class GitHub github
 
 ```mermaid
 mindmap
-
-root((Technology Detection))
-
-Frontend
-
-React
-
-Next.js
-
-Vue
-
-Angular
-
-Backend
-
-Express
-
-NestJS
-
-Django
-
-Laravel
-
-Language
-
-JavaScript
-
-TypeScript
-
-Configuration
-
-package.json
-
-tsconfig.json
-
-vite.config
-
-Database
-
-PostgreSQL
-
-Redis
-
+  root((💻 Technology Detection))
+    🎨 Frontend
+      React
+      Next.js
+      Vue
+      Angular
+    ⚙️ Backend
+      Express
+      NestJS
+      Django
+      Laravel
+    📝 Language
+      JavaScript
+      TypeScript
+    🔧 Configuration
+      package.json
+      tsconfig.json
+      vite.config
+    🗄️ Database
+      PostgreSQL
+      Redis
 ```
 
 ---
