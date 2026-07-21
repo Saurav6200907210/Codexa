@@ -1,110 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #ffffff;
-  --foreground: #09090b;
-  --card-bg: #ffffff;
-  --border: rgba(9, 9, 11, 0.08);
-  --border-strong: rgba(9, 9, 11, 0.15);
-  --cyan: #0891b2;
-  --emerald: #059669;
-  --slate-text: #71717a;
+  --bg-main: #FAFBFC;
+  --card-bg: #FFFFFF;
+  --text-primary: #111827;
+  --text-secondary: #64748B;
+  --border-color: #E5E7EB;
+  --accent-blue: #2563EB;
+  --accent-green: #10B981;
+  --accent-orange: #F59E0B;
+  --accent-red: #EF4444;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #ffffff;
+  background-color: #FAFBFC;
+  color-scheme: light;
 }
 
 body {
-  background-color: #ffffff;
-  color: #09090b;
+  background-color: #FAFBFC;
+  color: #111827;
   min-height: 100vh;
   overflow-x: hidden;
-  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Webkit scrollbar for clean light look */
+/* Custom Scrollbar - GitHub/Vercel Minimal */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.5);
+  background: #FAFBFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(9, 9, 11, 0.1);
+  background: #CBD5E1;
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(9, 9, 11, 0.25);
+  background: #94A3B8;
 }
 
-/* Light Cyber Grid Background */
-.cyber-grid {
+/* Technical Grid & Dot Patterns */
+.tech-grid {
   position: absolute;
   inset: 0;
-  background-size: 40px 40px;
+  background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(9, 9, 11, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(9, 9, 11, 0.02) 1px, transparent 1px);
-  opacity: 0.85;
+    linear-gradient(to right, rgba(229, 231, 235, 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 231, 235, 0.6) 1px, transparent 1px);
   pointer-events: none;
 }
 
-/* Soft Light Spotlight */
-.radial-spotlight {
-  background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(9, 9, 11, 0.015), transparent 45%);
-}
-
-/* Glassmorphism Cards with Elegant Shadow */
-.glass-card {
-  background: #ffffff;
-  border: 1px solid rgba(9, 9, 11, 0.08);
-  box-shadow: 0 4px 20px -2px rgba(9, 9, 11, 0.02), 0 2px 6px -1px rgba(9, 9, 11, 0.02);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(9, 9, 11, 0.15);
-  box-shadow: 0 10px 30px -10px rgba(9, 9, 11, 0.08);
-  transform: translateY(-2px);
-}
-
-/* Accent borders */
-.glow-border {
-  position: relative;
-}
-
-.glow-border::before {
-  content: '';
+.tech-dots {
   position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(9, 9, 11, 0.12), transparent 60%, rgba(9, 9, 11, 0.08));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  inset: 0;
+  background-image: radial-gradient(rgba(100, 116, 139, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
   pointer-events: none;
-  opacity: 0.8;
 }
 
-.text-gradient {
-  color: #09090b;
+/* Mouse spotlight overlay */
+.radial-spotlight {
+  background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(37, 99, 235, 0.035), transparent 55%);
 }
 
-/* Premium Buttons */
-.glow-btn {
-  position: relative;
-  overflow: hidden;
+/* GitHub/Vercel Style Card */
+.dev-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px -4px rgba(0, 0, 0, 0.02);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glow-btn:hover {
-  opacity: 0.9;
+.dev-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px) scale(1.01) rotate(0.5deg);
+}
+
+/* Primary GitHub-style Button */
+.btn-github-primary {
+  background-color: #111827;
+  color: #FFFFFF;
+  border: 1px solid #111827;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-github-primary:hover {
+  background-color: #2563EB;
+  border-color: #2563EB;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.btn-github-primary:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Secondary Button */
+.btn-github-secondary {
+  background-color: #FFFFFF;
+  color: #111827;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-github-secondary:hover {
+  background-color: #F9FAFB;
+  border-color: #D1D5DB;
+  color: #000000;
   transform: translateY(-1px);
 }
 
@@ -117,5 +130,15 @@ body {
 .marquee-content {
   display: flex;
   width: max-content;
-  animation: marquee 25s linear infinite;
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+/* Animated SVG Packets for Pipeline */
+@keyframes packetMove {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sparkles, Terminal } from "lucide-react";
+import { ArrowRight, Terminal, Github } from "lucide-react";
 
 interface NavbarProps {
   onNavigate?: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
@@ -30,51 +30,56 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
     }
   };
 
-  const isLanding = currentPage === "landing";
-  const showScrolledStyles = scrolled || !isLanding;
-
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 md:transition-all md:duration-500 bg-white/90 border-b border-zinc-100 backdrop-blur-xl ${
-        !showScrolledStyles
-          ? "md:bg-transparent md:border-b-0 md:backdrop-blur-none"
-          : ""
-      } ${
-        showScrolledStyles
-          ? "md:py-4 md:bg-white/90 md:border-b md:border-zinc-100 md:backdrop-blur-xl"
-          : "md:py-6"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3.5 ${
+        scrolled
+          ? "bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-xs"
+          : "bg-transparent border-b border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-        {/* Logo */}
-        <button onClick={() => onNavigate?.("landing")} className="flex items-center gap-1.5 group cursor-pointer bg-transparent border-0 text-left p-0">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-zinc-950 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-            <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-white font-bold" />
+        {/* Brand Logo */}
+        <button
+          onClick={() => onNavigate?.("landing")}
+          className="flex items-center gap-2.5 group cursor-pointer bg-transparent border-0 text-left p-0"
+        >
+          <div className="w-8 h-8 rounded-md bg-gray-900 flex items-center justify-center text-white group-hover:bg-blue-600 transition-colors">
+            <Terminal className="w-4 h-4 stroke-[2.5]" />
           </div>
-          <span className="text-base sm:text-xl font-extrabold tracking-tight text-zinc-950 group-hover:text-zinc-800 transition-colors">
-            Codexa
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-bold tracking-tight text-gray-900 font-sans">
+              Codexa
+            </span>
+            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-gray-100 text-gray-600 border border-gray-200 font-mono">
+              v1.0
+            </span>
+          </div>
         </button>
 
-        {/* Links */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-500">
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
           {currentPage !== "landing" && (
             <>
               <button
                 onClick={() => onNavigate?.("architecture")}
-                className={`hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold ${
-                  currentPage === "architecture" ? "text-indigo-500" : "text-zinc-500 hover:text-zinc-950"
+                className={`transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1.5 ${
+                  currentPage === "architecture"
+                    ? "text-gray-900 font-bold border-b-2 border-gray-900 pb-0.5"
+                    : "hover:text-gray-900"
                 }`}
               >
-                ⚙️ App Flow Architecture
+                <span>⚙️ App Flow Architecture</span>
               </button>
               <button
                 onClick={() => onNavigate?.("file-info")}
-                className={`hover:text-cyan-600 transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1 font-bold ${
-                  currentPage === "file-info" ? "text-cyan-500" : "text-zinc-500 hover:text-zinc-950"
+                className={`transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-1.5 ${
+                  currentPage === "file-info"
+                    ? "text-gray-900 font-bold border-b-2 border-gray-900 pb-0.5"
+                    : "hover:text-gray-900"
                 }`}
               >
-                📁 File Wise Information
+                <span>📁 File Wise Information</span>
               </button>
             </>
           )}
@@ -83,48 +88,52 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
             <>
               <button
                 onClick={() => scrollToSection("features")}
-                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+                className="hover:text-gray-900 transition-colors cursor-pointer bg-transparent border-0 relative group py-1"
               >
-                Features
+                <span>Features</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-200" />
               </button>
               <button
                 onClick={() => scrollToSection("how-it-works")}
-                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+                className="hover:text-gray-900 transition-colors cursor-pointer bg-transparent border-0 relative group py-1"
               >
-                How it Works
+                <span>How it Works</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-200" />
               </button>
               <button
                 onClick={() => scrollToSection("demo")}
-                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+                className="hover:text-gray-900 transition-colors cursor-pointer bg-transparent border-0 relative group py-1"
               >
-                Demo
+                <span>Demo</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-200" />
               </button>
               <button
                 onClick={() => scrollToSection("faq")}
-                className="hover:text-zinc-950 transition-colors cursor-pointer bg-transparent border-0"
+                className="hover:text-gray-900 transition-colors cursor-pointer bg-transparent border-0 relative group py-1"
               >
-                FAQ
+                <span>FAQ</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-200" />
               </button>
             </>
           )}
         </div>
 
-        {/* Action Button & GitHub */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
           {currentPage !== "landing" && (
             <>
               <button
                 onClick={() => onNavigate?.("architecture")}
-                className={`md:hidden hover:text-indigo-600 transition-colors cursor-pointer bg-transparent border-0 text-xs font-bold ${
-                  currentPage === "architecture" ? "text-indigo-500 font-extrabold" : "text-zinc-500"
+                className={`md:hidden transition-colors cursor-pointer bg-transparent border-0 text-xs font-semibold ${
+                  currentPage === "architecture" ? "text-gray-900 font-bold" : "text-gray-600"
                 }`}
               >
                 ⚙️ Flow
               </button>
               <button
                 onClick={() => onNavigate?.("file-info")}
-                className={`md:hidden hover:text-cyan-600 transition-colors cursor-pointer bg-transparent border-0 text-xs font-bold ${
-                  currentPage === "file-info" ? "text-cyan-500 font-extrabold" : "text-zinc-500"
+                className={`md:hidden transition-colors cursor-pointer bg-transparent border-0 text-xs font-semibold ${
+                  currentPage === "file-info" ? "text-gray-900 font-bold" : "text-gray-600"
                 }`}
               >
                 📁 Files
@@ -136,20 +145,19 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
             href="https://github.com/Saurav6200907210/Codexa.git"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 transition-all text-zinc-600 hover:text-zinc-900"
+            aria-label="GitHub Repository"
+            className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-gray-700 hover:text-gray-900 shadow-xs"
           >
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-              <path d="M9 18c-4.51 2-5-2-7-2"></path>
-            </svg>
+            <Github className="w-4 h-4" />
           </a>
+
           {currentPage === "landing" && (
             <button
               onClick={() => scrollToSection("hero")}
-              className="glow-btn bg-zinc-950 hover:bg-zinc-800 text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm shadow-md flex items-center gap-1 sm:gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer border-0"
+              className="btn-github-primary px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 cursor-pointer border-0"
             >
               <span>Get Started</span>
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white fill-white" />
+              <ArrowRight className="w-3.5 h-3.5 arrow-icon transition-transform duration-200" />
             </button>
           )}
         </div>
