@@ -50,7 +50,7 @@ Understand any public GitHub repository in seconds through interactive architect
 
 ### 🌐 Live Demo
 
-https://YOUR-LIVE-DEMO-LINK
+codexaa.pages.dev/
 
 ### 📖 Documentation
 
