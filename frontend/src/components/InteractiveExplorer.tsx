@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Folder, FolderOpen, FileCode, ChevronRight, Terminal, Info, CornerDownRight } from "lucide-react";
+import { Folder, FolderOpen, FileCode, ChevronRight, Terminal, Info, CornerDownRight, Code2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FileNode {
   name: string;
@@ -15,32 +16,26 @@ const MOCK_FILES: FileNode[] = [
     name: "src",
     type: "folder",
     path: "src",
-    explanation: "Core logic containing all web application assets, styles, database connects, and server endpoints.",
+    explanation: "Core codebase directory containing App Router files, Drizzle connectors, and API routes.",
     children: [
       {
         name: "app",
         type: "folder",
         path: "src/app",
-        explanation: "Next.js App router directories housing the layout, templates, APIs, and client views.",
+        explanation: "Next.js App router containing server layout views and backend API routes.",
         children: [
           {
             name: "api",
             type: "folder",
             path: "src/app/api",
-            explanation: "REST framework routing folder containing route.ts backend controllers.",
+            explanation: "REST endpoint controller folder handling GitHub tree scanning.",
             children: [
-              {
-                name: "analyze",
-                type: "folder",
-                path: "src/app/api/analyze",
-                explanation: "Repository analyzer backend parser handler.",
-              },
               {
                 name: "route.ts",
                 type: "file",
                 path: "src/app/api/analyze/route.ts",
-                explanation: "POST route parser that extracts metadata and invokes Drizzle DB hooks.",
-                code: `export async function POST(req: Request) {\n  const { url } = await req.json();\n  // AI analyzes code here...\n  return Response.json({ success: true });\n}`,
+                explanation: "POST route handler executing GitHub API parsing and Gemini AI heuristic logic.",
+                code: `export async function POST(req: Request) {\n  const { url } = await req.json();\n  const tree = await fetchGitHubTree(url);\n  const analysis = await gemini.analyze(tree);\n  return Response.json({ success: true, result: analysis });\n}`,
               },
             ],
           },
@@ -48,8 +43,8 @@ const MOCK_FILES: FileNode[] = [
             name: "layout.tsx",
             type: "file",
             path: "src/app/layout.tsx",
-            explanation: "Root template file where HTML wrapper, fonts, and global metadata is injected.",
-            code: `export default function RootLayout({\n  children,\n}: { children: React.ReactNode }) {\n  return (\n    <html>\n      <body>{children}</body>\n    </html>\n  );\n}`,
+            explanation: "Root HTML structure wrapper injecting global metadata, styles, and providers.",
+            code: `export default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang="en">\n      <body className="antialiased">{children}</body>\n    </html>\n  );\n}`,
           },
         ],
       },
@@ -57,14 +52,14 @@ const MOCK_FILES: FileNode[] = [
         name: "db",
         type: "folder",
         path: "src/db",
-        explanation: "Database schema files, drizzle connectors, and custom migration scripts.",
+        explanation: "Database schema mappings and Drizzle ORM PostgreSQL configuration.",
         children: [
           {
             name: "schema.ts",
             type: "file",
             path: "src/db/schema.ts",
-            explanation: "Drizzle definitions detailing table maps, structures, datatypes, and indices.",
-            code: `import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";\n\nexport const analyses = pgTable("analyses", {\n  id: serial("id").primaryKey(),\n  repo: text("repo").notNull(),\n});`,
+            explanation: "Drizzle table schema definition for persistent analysis records.",
+            code: `import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";\n\nexport const analyses = pgTable("analyses", {\n  id: serial("id").primaryKey(),\n  fullName: text("full_name").notNull(),\n  summary: text("summary"),\n  createdAt: timestamp("created_at").defaultNow(),\n});`,
           },
         ],
       },
@@ -74,8 +69,8 @@ const MOCK_FILES: FileNode[] = [
     name: "package.json",
     type: "file",
     path: "package.json",
-    explanation: "Manifest package describing all production/dev dependencies, version tags, and package scripts.",
-    code: `{\n  "name": "reposamjho",\n  "dependencies": {\n    "next": "latest",\n    "drizzle-orm": "latest"\n  }\n}`,
+    explanation: "Project manifest detailing dependencies, version tags, and build scripts.",
+    code: `{\n  "name": "codexa",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "next dev",\n    "build": "next build"\n  }\n}`,
   },
 ];
 
@@ -85,10 +80,8 @@ export default function InteractiveExplorer() {
     src: true,
     "src/app": true,
     "src/app/api": true,
-    "src/app/api/analyze": true,
   });
 
-  // Flat list of nodes for auto cycling
   const getFlatNodes = (nodes: FileNode[]): FileNode[] => {
     const list: FileNode[] = [];
     const traverse = (n: FileNode) => {
@@ -108,7 +101,6 @@ export default function InteractiveExplorer() {
         const nextIdx = (idx + 1) % flatNodes.length;
         const nextNode = flatNodes[nextIdx];
 
-        // Automatically expand parents of the next selected node
         const parts = nextNode.path.split("/");
         if (parts.length > 1) {
           const parentPaths: Record<string, boolean> = {};
@@ -122,7 +114,7 @@ export default function InteractiveExplorer() {
 
         return nextNode;
       });
-    }, 4000);
+    }, 4500);
 
     return () => clearInterval(interval);
   }, []);
@@ -143,30 +135,30 @@ export default function InteractiveExplorer() {
             setSelectedNode(node);
             if (isFolder) toggleFolder(node.path);
           }}
-          style={{ paddingLeft: `${depth * 12 + 8}px` }}
-          className={`flex items-center gap-1.5 py-1.5 px-2.5 rounded-lg cursor-pointer transition-colors text-xs ${
+          style={{ paddingLeft: `${depth * 14 + 10}px` }}
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded cursor-pointer transition-all text-xs font-mono ${
             isSelected
-              ? "bg-indigo-500/10 text-indigo-300 border-l-2 border-indigo-500 font-semibold"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+              ? "bg-blue-600 text-white font-bold"
+              : "text-gray-400 hover:text-white hover:bg-gray-800/50"
           }`}
         >
           {isFolder ? (
             <>
               <ChevronRight
                 className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                  isExpanded ? "rotate-90" : ""
+                  isExpanded ? "rotate-90 text-gray-300" : "text-gray-500"
                 }`}
               />
               {isExpanded ? (
-                <FolderOpen className="w-4 h-4 text-yellow-500" />
+                <FolderOpen className="w-4 h-4 text-blue-400" />
               ) : (
-                <Folder className="w-4 h-4 text-yellow-600" />
+                <Folder className="w-4 h-4 text-gray-400" />
               )}
             </>
           ) : (
             <>
               <div className="w-3.5" />
-              <FileCode className="w-4 h-4 text-indigo-400" />
+              <FileCode className="w-4 h-4 text-blue-400" />
             </>
           )}
           <span className="truncate">{node.name}</span>
@@ -182,48 +174,85 @@ export default function InteractiveExplorer() {
   };
 
   return (
-    <div className="grid grid-cols-12 rounded-2xl border border-white/10 bg-gray-950/80 shadow-2xl backdrop-blur-xl overflow-hidden font-mono min-h-[420px]">
-      <div className="col-span-12 md:col-span-5 p-4 border-b md:border-b-0 md:border-r border-white/5 bg-gray-950/40">
-        <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-3">
-          <Terminal className="w-4 h-4 text-indigo-400" />
-          <span className="text-xs font-bold text-gray-300">EXPLORER</span>
+    <div className="rounded-2xl border border-gray-800 bg-[#0D1117] shadow-xl overflow-hidden font-mono min-h-[440px] text-gray-200">
+      {/* VS Code / Cursor Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#161B22] border-b border-gray-800">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
+          <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
+          <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
         </div>
-        <div className="space-y-0.5 max-h-[350px] overflow-y-auto pr-1">
-          {MOCK_FILES.map((node) => renderNode(node))}
+        <div className="flex items-center gap-2 text-xs text-gray-400">
+          <Code2 className="w-3.5 h-3.5 text-blue-400" />
+          <span>Cursor IDE Interactive Sandbox</span>
         </div>
+        <div className="w-12" />
       </div>
 
-      <div className="col-span-12 md:col-span-7 flex flex-col justify-between bg-black/20 p-5">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b border-white/5 pb-2 mb-2">
-            <span className="text-[10px] text-gray-500 uppercase tracking-wider">Node Explainer</span>
-            <span className="text-xs font-bold text-white bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
-              {selectedNode.name}
+      <div className="grid grid-cols-12 min-h-[380px]">
+        {/* Left Explorer */}
+        <div className="col-span-12 md:col-span-4 p-4 border-b md:border-b-0 md:border-r border-gray-800 bg-[#0D1117]/80">
+          <div className="flex items-center gap-2 border-b border-gray-800 pb-2.5 mb-3">
+            <Terminal className="w-4 h-4 text-blue-400" />
+            <span className="text-[11px] font-bold tracking-wider text-gray-400 uppercase">
+              FILES EXPLORER
             </span>
           </div>
-
-          <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-950/40 to-pink-950/20 border border-indigo-500/20 space-y-2">
-            <div className="flex items-start gap-2 text-indigo-300">
-              <Info className="w-5 h-5 mt-0.5 shrink-0" />
-              <div className="text-xs">
-                <span className="font-semibold text-white block mb-1">AI Explanation (Hinglish):</span>
-                {selectedNode.explanation}
-              </div>
-            </div>
+          <div className="space-y-0.5 max-h-[320px] overflow-y-auto pr-1">
+            {MOCK_FILES.map((node) => renderNode(node))}
           </div>
-
-          {selectedNode.code && (
-            <div className="rounded-xl border border-white/5 bg-black/40 p-4 relative overflow-x-auto max-h-[180px]">
-              <pre className="text-[11px] text-gray-300 leading-relaxed font-semibold">
-                <code>{selectedNode.code}</code>
-              </pre>
-            </div>
-          )}
         </div>
 
-        <div className="text-[10px] text-gray-500 flex items-center gap-1 mt-4">
-          <CornerDownRight className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
-          <span>Autoplay active: Cycles files automatically or click any node to explore.</span>
+        {/* Right Code Area */}
+        <div className="col-span-12 md:col-span-8 flex flex-col justify-between p-5 bg-[#0D1117]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedNode.path}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-gray-800 pb-2.5">
+                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Path: <span className="text-white font-mono">{selectedNode.path}</span>
+                </span>
+                <span className="px-2.5 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                  {selectedNode.type}
+                </span>
+              </div>
+
+              {/* AI Explanation Box */}
+              <div className="p-3.5 rounded-xl bg-blue-950/30 border border-blue-500/30 space-y-1.5">
+                <div className="flex items-start gap-2.5 text-blue-300">
+                  <Info className="w-4.5 h-4.5 mt-0.5 shrink-0" />
+                  <div className="text-xs">
+                    <span className="font-bold text-white block mb-1">
+                      AI Explanation (Hinglish):
+                    </span>
+                    <p className="text-gray-300 font-sans leading-relaxed">
+                      {selectedNode.explanation}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Code Snippet Box */}
+              {selectedNode.code && (
+                <div className="rounded-xl border border-gray-800 bg-black/60 p-3.5 relative overflow-x-auto max-h-[190px]">
+                  <pre className="text-xs text-gray-300 leading-relaxed font-mono">
+                    <code>{selectedNode.code}</code>
+                  </pre>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="text-[11px] text-gray-500 flex items-center gap-1.5 mt-4 pt-3 border-t border-gray-800">
+            <CornerDownRight className="w-3.5 h-3.5 text-blue-400" />
+            <span>Autoplay Active • Select any file to inspect details</span>
+          </div>
         </div>
       </div>
     </div>
