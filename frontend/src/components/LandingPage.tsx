@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import DataFlowAnimation from "./DataFlowAnimation";
 import TechMarquee from "./TechMarquee";
 import InteractiveExplorer from "./InteractiveExplorer";
+import Footer from "./Footer";
 import { 
   ArrowRight, Search, Key, Layers, Map, Database, Github, ChevronDown, CheckCircle2, ShieldCheck, Terminal
 } from "lucide-react";
@@ -165,7 +166,7 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FAFBFC] overflow-hidden pb-24 text-gray-900 selection:bg-blue-600 selection:text-white">
+    <div className="relative min-h-screen bg-[#FAFBFC] overflow-hidden text-gray-900 selection:bg-blue-600 selection:text-white">
       {/* Grid & Dots Overlay */}
       <div className="tech-grid" />
       <div className="tech-dots" />
@@ -531,6 +532,9 @@ export default function LandingPage({ recent, onSetAnalysis, onNavigate }: Landi
           })}
         </div>
       </section>
+
+      {/* Minimal Compact Developer Footer */}
+      <Footer onNavigate={onNavigate} />
 
       {/* Loading Modal */}
       <AnimatePresence>
