@@ -8,6 +8,8 @@ export default function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="w-full bg-white border-t border-gray-200/80 py-12 relative z-10 text-center font-sans">
       <div className="max-w-4xl mx-auto px-6 flex flex-col items-center justify-center space-y-6">
+        
+        {/* Brand Logo */}
         <button
           onClick={() => onNavigate?.("landing")}
           className="flex items-center gap-2 group cursor-pointer bg-transparent border-0 p-0"
@@ -20,13 +22,14 @@ export default function Footer({ onNavigate }: FooterProps) {
           </span>
         </button>
 
+        {/* Built By Tag */}
         <div className="text-xs sm:text-sm text-gray-600 font-medium flex items-center gap-1.5">
           <span>Built by</span>
           <a
             href="https://github.com/Saurav6200907210"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 underline underline-offset-4"
+            className="font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 underline underline-offset-4 decoration-gray-300 hover:decoration-blue-600"
           >
             Saurav Kumar
           </a>
@@ -56,6 +59,12 @@ export default function Footer({ onNavigate }: FooterProps) {
             <span>LinkedIn</span>
           </a>
         </div>
+
+        {/* Bottom Bar Copyright */}
+        <div className="pt-2 text-xs text-gray-500 font-mono">
+          © 2026 Codexa. All rights reserved.
+        </div>
+
       </div>
     </footer>
   );
