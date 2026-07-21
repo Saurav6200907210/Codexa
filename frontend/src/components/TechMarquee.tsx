@@ -1,47 +1,47 @@
-const TECHNOLOGIES = [
-  "React",
-  "Next.js",
-  "Node.js",
-  "Express",
-  "TypeScript",
-  "TailwindCSS",
+import { motion } from "framer-motion";
+
+const TECH_BADGES = [
   "Docker",
   "Kubernetes",
-  "MongoDB",
+  "AWS",
+  "Terraform",
   "PostgreSQL",
   "Redis",
   "Prisma",
+  "Go",
   "Python",
   "Java",
-  "Go",
-  "Rust",
-  "Terraform",
-  "AWS",
+  "React",
+  "Next.js",
+  "TypeScript",
 ];
 
 export default function TechMarquee() {
-  const techList = [...TECHNOLOGIES, ...TECHNOLOGIES, ...TECHNOLOGIES];
+  const list = [...TECH_BADGES, ...TECH_BADGES, ...TECH_BADGES];
 
   return (
-    <div className="w-full overflow-hidden py-10 bg-black/40 border-y border-white/5 relative">
-      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-gray-950 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-950 to-transparent z-10 pointer-events-none" />
+    <div className="w-full py-9 bg-gray-50/80 border-y border-gray-200/80 relative overflow-hidden">
+      {/* Side Fade Overlays */}
+      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#FAFBFC] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#FAFBFC] to-transparent z-10 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 mb-6">
-        <h3 className="text-center text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-          Trusted Technologies & Frameworks Supported
-        </h3>
+      <div className="max-w-7xl mx-auto px-6 mb-4 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 font-mono">
+          SUPPORTED ECOSYSTEMS & TOOLS
+        </p>
       </div>
 
       <div className="flex overflow-hidden w-full relative">
-        <div className="marquee-content gap-3 flex items-center">
-          {techList.map((tech, idx) => (
-            <div
+        <div className="marquee-content gap-3 flex items-center py-1">
+          {list.map((tech, idx) => (
+            <motion.div
               key={idx}
-              className="px-5 py-2 rounded-xl bg-white text-zinc-950 flex items-center justify-center font-bold text-xs shadow-md border border-white"
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-800 text-xs font-semibold shadow-xs flex items-center gap-2 shrink-0 cursor-pointer hover:border-blue-500 hover:text-blue-600 transition-all font-mono"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
               <span>{tech}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
