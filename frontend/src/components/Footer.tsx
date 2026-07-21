@@ -1,4 +1,4 @@
-import { Terminal, Github, Heart } from "lucide-react";
+import { Terminal, Github, Linkedin } from "lucide-react";
 
 interface FooterProps {
   onNavigate?: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
@@ -29,6 +29,31 @@ export default function Footer({ onNavigate }: FooterProps) {
             className="font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200 underline underline-offset-4"
           >
             Saurav Kumar
+          </a>
+        </div>
+
+        {/* Minimal Social Links */}
+        <div className="flex items-center justify-center gap-6 text-xs sm:text-sm font-medium text-gray-600">
+          <a
+            href="https://github.com/Saurav6200907210"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-blue-600 hover:scale-105 transition-all duration-200 group"
+          >
+            <Github className="w-4 h-4 group-hover:text-blue-600 transition-colors duration-200" />
+            <span>GitHub</span>
+          </a>
+
+          <span className="text-gray-300">•</span>
+
+          <a
+            href="https://www.linkedin.com/in/SAURAV-LINKEDIN"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-blue-600 hover:scale-105 transition-all duration-200 group"
+          >
+            <Linkedin className="w-4 h-4 group-hover:text-blue-600 transition-colors duration-200" />
+            <span>LinkedIn</span>
           </a>
         </div>
       </div>
