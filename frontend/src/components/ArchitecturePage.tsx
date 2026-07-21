@@ -4,7 +4,7 @@ import { ArrowLeft, BookOpen, Terminal, Cpu, Database, Eye, Globe, ChevronRight,
 import { AnalysisResult } from "../types";
 
 interface ArchitecturePageProps {
-  onNavigate: (page: "landing" | "analysis" | "architecture") => void;
+  onNavigate: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
   lang: "en" | "hi";
   setLang: (lang: "en" | "hi") => void;
   data: AnalysisResult | null;

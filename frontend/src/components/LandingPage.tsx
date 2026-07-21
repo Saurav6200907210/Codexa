@@ -20,7 +20,7 @@ interface RecentItem {
 interface LandingPageProps {
   recent: RecentItem[];
   onSetAnalysis: (data: AnalysisResult) => void;
-  onNavigate: (page: "landing" | "analysis" | "architecture") => void;
+  onNavigate: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
 }
 
 const FAQ_ITEMS = [

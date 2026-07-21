@@ -9,7 +9,7 @@ import { translateToEnglish } from "../lib/translator";
 
 interface AnalysisPageProps {
   data: AnalysisResult | null;
-  onNavigate: (page: "landing" | "analysis" | "architecture") => void;
+  onNavigate: (page: "landing" | "analysis" | "architecture" | "file-info") => void;
   lang: "en" | "hi";
   setLang: (lang: "en" | "hi") => void;
 }
