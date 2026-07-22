@@ -1,0 +1,50 @@
+version: 2
+
+updates:
+  # Frontend
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "daily"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+
+    open-pull-requests-limit: 10
+
+    commit-message:
+      prefix: "deps(client)"
+
+    labels:
+      - dependencies
+      - frontend
+
+  # Backend
+  - package-ecosystem: "npm"
+    directory: "/server"
+    schedule:
+      interval: "daily"
+      time: "06:15"
+      timezone: "Asia/Kolkata"
+
+    open-pull-requests-limit: 10
+
+    commit-message:
+      prefix: "deps(server)"
+
+    labels:
+      - dependencies
+      - backend
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "06:30"
+      timezone: "Asia/Kolkata"
+
+    commit-message:
+      prefix: "ci"
+
+    labels:
+      - github-actions
