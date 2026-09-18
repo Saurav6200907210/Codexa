@@ -1,6 +1,9 @@
 import type { RepoMeta } from "./types";
 
 const API = "https://api.github.com";
+const GITHUB_HOSTS = new Set(["github.com", "www.github.com"]);
+const REPO_SEGMENT_RE = /^[A-Za-z0-9_.-]+$/;
+const BRANCH_SEGMENT_RE = /^[A-Za-z0-9._/-]+$/;
 
 function headers(): HeadersInit {
   const h: Record<string, string> = {
@@ -11,6 +14,10 @@ function headers(): HeadersInit {
   const token = process.env.GITHUB_TOKEN;
   if (token) h.Authorization = `Bearer ${token}`;
   return h;
+}
+
+function isValidRepoSegment(v: string): boolean {
+  return v.length > 0 && REPO_SEGMENT_RE.test(v);
 }
 
 export interface ParsedRepo {
@@ -26,15 +33,22 @@ export function parseRepoUrl(input: string): ParsedRepo | null {
   // Plain "owner/repo"
   const shorthand = trimmed.match(/^([\w.-]+)\/([\w.-]+)$/);
   if (shorthand) {
-    return { owner: shorthand[1], repo: shorthand[2].replace(/\.git$/, "") };
+    const owner = shorthand[1];
+    const repo = shorthand[2].replace(/\.git$/, "");
+    if (!isValidRepoSegment(owner) || !isValidRepoSegment(repo)) return null;
+    return { owner, repo };
   }
 
   try {
     const url = new URL(trimmed.startsWith("http") ? trimmed : `https://${trimmed}`);
-    if (!url.hostname.includes("github.com")) return null;
+    const host = url.hostname.toLowerCase();
+    if (!GITHUB_HOSTS.has(host)) return null;
     const parts = url.pathname.split("/").filter(Boolean);
     if (parts.length < 2) return null;
-    return { owner: parts[0], repo: parts[1].replace(/\.git$/, "") };
+    const owner = parts[0];
+    const repo = parts[1].replace(/\.git$/, "");
+    if (!isValidRepoSegment(owner) || !isValidRepoSegment(repo)) return null;
+    return { owner, repo };
   } catch {
     return null;
   }
@@ -99,9 +113,20 @@ export async function fetchRawFile(
   branch: string,
   path: string
 ): Promise<string | null> {
+  if (!isValidRepoSegment(owner) || !isValidRepoSegment(repo)) return null;
+  if (!branch || !BRANCH_SEGMENT_RE.test(branch) || branch.includes("..") || branch.startsWith("/")) return null;
+  if (!path || path.includes("..") || path.startsWith("/") || path.includes("\\") || path.includes("//")) return null;
+
+  const encodedPath = path
+    .split("/")
+    .filter(Boolean)
+    .map((s) => encodeURIComponent(s))
+    .join("/");
+  if (!encodedPath) return null;
+
   try {
     const res = await fetch(
-      `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${path}`,
+      `https://raw.githubusercontent.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${encodedPath}`,
       { cache: "no-store" }
     );
     if (!res.ok) return null;
